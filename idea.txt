@@ -1,0 +1,27 @@
+casillas
+tablero con casillas de diferentes colores
+llegar de un extremo al otro
+el usuario dirige la direccion y la accion
+
+direcciones
+arriba
+abajo
+izq
+der
+
+acciones
+z color azul
+x color rojo
+zx color morado
+c1 agarrar
+c2 soltar
+
+obstaculos
+casillas de colores (azul,rojo,morado)
+casillas de colores con numeros (necesario hacer la accion necesaria x veces)
+casilla de reto (muerte instantanea si falla, time limit)
+candados (bloquean zonas)
+
+objetos
+llaves (desbloquean zonas)
+coleccionables (gemas o alguna vaina)
