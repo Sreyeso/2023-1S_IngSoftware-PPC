@@ -10,10 +10,10 @@ class Level {
   }
 
   createLayout() {
-    for (let i = 0; i < this.cols; i++) {
+    for (let i = 0; i < this.rows; i++) {
       let row = [];
-      for (let j = 0; j < this.rows; j++) {
-        let temp = this.rawLayout[i * this.rows + j];
+      for (let j = 0; j < this.cols; j++) {
+        let temp = this.rawLayout[i * this.cols + j];
         let tile = new Tile(int(temp[0]), int(temp[1]), temp[2]);
         row.push(tile);
       }
@@ -22,8 +22,8 @@ class Level {
   }
 
   draw() {
-    for (let i = 0; i < this.cols; i++) {
-      for (let j = 0; j < this.rows; j++) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
         let x = (1/3)*width + (j * this.size);
         let y = (1/3)*height+ (i * this.size);
         let tile = this.layout[i][j];

@@ -1,7 +1,7 @@
 class Tile {
-
   constructor(type) {
     this.color;
+    this.type=type;
     this.initialize(type);
   }
 
