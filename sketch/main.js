@@ -5,19 +5,21 @@ let lvl;
 let player;
 let vel;
 
+// Graphic assets
+let img0;
+let img1;
+
+let gif0;
+let gif1;
+
 function preload() { 
-  /*
-  soundFormats('wav');
-  s_zeta= loadSound('media/z.wav');
-  s_equis= loadSound('media/x.wav');
-  s_fin= loadSound('media/fin.wav');
-  s_normal= loadSound('media/normal.wav');
-  s_miss= loadSound('media/combobreak.wav');
-  tutogame=loadImage('media/tutorialgame.png');
-  tutoedit=loadImage('media/tutorialeditor.png');
-  lvls =loadJSON('levels/levels.json');
-  */
+  img0=loadImage('media/grass.png');
+  img1=loadImage('media/dirt.png');
+
+  gif0=loadImage('media/coin.gif');
+  gif1=loadImage('media/gem.gif');
 }
+
 function windowResized() {
   width = windowWidth;
   height = windowHeight;
@@ -29,12 +31,12 @@ function setup() {
   height = windowHeight;
   lvl = new Level (6,10,
     [
-    "0","0","0","0","0","0","0","0","0","0",
-    "0","1","0","0","0","0","5","0","0","0",
-    "0","0","0","0","0","0","0","0","0","0",
-    "0","0","3","0","0","0","0","0","5","0",
-    "0","0","0","0","0","0","0","0","0","0",
-    "2","2","2","2","2","2","2","2","2","2"],
+    "5","5","5","5","5","5","5","5","5","5",
+    "5","5","5","5","5","5","5","5","5","5",
+    "5","5","5","3","5","5","4","5","5","5",
+    "5","5","5","5","5","5","5","5","5","5",
+    "1","1","1","1","1","1","1","1","1","1",
+    "0","0","0","0","0","0","0","0","0","0"],
     70
   );
   player = {
@@ -67,7 +69,7 @@ function handleCollisions() {
   // loop through the grid array and check for collisions
   for (let i = 0; i < lvl.rows; i++) {
     for (let j = 0; j < lvl.cols; j++) {
-      if (lvl.layout[i][j].type == 2) { // solid tile
+      if (lvl.layout[i][j].type == 1) { // solid tile
         // calculate the bounding box of the tile
         let tileLeft = (1/3)*width + (j * lvl.size);
         let tileRight = (1/3)*width +(j * lvl.size + lvl.size);

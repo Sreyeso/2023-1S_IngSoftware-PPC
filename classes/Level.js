@@ -31,6 +31,7 @@ class Level {
           noStroke();
           fill(tile.color);
           rect(x, y, this.size, this.size);
+          if (tile.image!=null) {image(tile.image, x, y,this.size,this.size);}
         pop();
       }
     }
