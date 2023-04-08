@@ -25,13 +25,7 @@ export default class App extends Component {
         // use parent to render canvas in this ref (without that p5 render this canvas outside your component)
     };
     draw = p5 => {
-        p5.fill(234, 31, 81);
-        p5.noStroke();
-        p5.rect(50, 50, 250, 250);
-        p5.fill(255);
-        p5.textStyle(p5.BOLD);
-        p5.textSize(140);
-        p5.text("p5*", 60, 250);
+        p5.background('tomato');
     };
 
     render() {
