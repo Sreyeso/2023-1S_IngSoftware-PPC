@@ -96,7 +96,8 @@ export default class Coso extends Component {
 
       preload = p5 => {
         p5.loadImage("https://art.pixilart.com/sr29f986e1c0554.png",s=>{grass=s});
-        p5.loadImage("https://art.pixilart.com/sr2eb1f201a0f54.png",s=>{dirt=s});
+        //p5.loadImage("https://art.pixilart.com/sr2eb1f201a0f54.png",s=>{dirt=s});
+        p5.loadImage("/sprites/dirt.png",s=>{dirt=s});
         p5.loadImage("https://art.pixilart.com/sr23b57c326b49a.gif",s=>{coin=s});
         p5.loadImage("https://art.pixilart.com/sr2e94c7bca31f8.gif",s=>{gem=s});
         p5.loadImage("https://art.pixilart.com/sr2c159e6312df2.png",s=>{cloud_l=s});
