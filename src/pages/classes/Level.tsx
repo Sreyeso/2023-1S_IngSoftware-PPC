@@ -9,6 +9,8 @@ export default class Level {
   layout: Tile[][];
   p: p5;
   images:any[];
+  levelWidth:number;
+  levelHeight:number;
 
   constructor(rows: number, cols: number, rawlayout: number[], size: number, p: p5,images: any[]) {
     this.rows = rows;
@@ -18,6 +20,8 @@ export default class Level {
     this.layout = []; 
     this.p = p;
     this.images=images;
+    this.levelWidth=this.cols*this.size;
+    this.levelHeight=this.rows*this.size;
     this.createLayout();
   }
 
@@ -33,11 +37,11 @@ export default class Level {
     }
   }
 
-  draw() {
+  draw(xOffset:number,yOffset:number) {
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
-        let x = (1/3)*this.p.width + (j * this.size);
-        let y = (1/3)*this.p.height+ (i * this.size);
+        let x = xOffset + (j * this.size);
+        let y = yOffset+ (i * this.size);
         let tile = this.layout[i][j];
         this.p.push();
           this.p.noStroke();

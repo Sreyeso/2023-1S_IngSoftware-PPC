@@ -47,12 +47,22 @@ let stone:any;
 let spikes:any;
 let error:any;
 
+let xOffset:number;
+let yOffset:number;
+let prevxOffset:number;
+let prevyOffset:number;
 
 export default class Coso extends Component {
 
     windowResized = p5 =>  {
         width = p5.windowWidth;
         height = p5.windowHeight;
+        xOffset = (width - lvl.levelWidth) / 2;
+        yOffset = (height - lvl.levelHeight) / 2;
+        this.movePlayer(xOffset-prevxOffset,yOffset-prevyOffset);
+        p5.resizeCanvas(width,height);
+        prevxOffset=xOffset;
+        prevyOffset=yOffset;
       }
 
     movePlayer = (dx: number, dy: number) => {
@@ -65,7 +75,7 @@ export default class Coso extends Component {
         player.y += dy;
       }
 
-    handleCollisions= () => {
+    handleCollisions= (xOffset:number,yOffset:number) => {
         // calculate the player's bounding box
         let playerLeft = player.x;
         let playerRight = player.x + player.width;
@@ -77,10 +87,10 @@ export default class Coso extends Component {
           for (let j = 0; j < lvl.cols; j++) {
             if (lvl.layout[i][j].type == 0) { // solid tile
               // calculate the bounding box of the tile
-              let tileLeft = (1/3)*width + (j * lvl.size);
-              let tileRight = (1/3)*width +(j * lvl.size + lvl.size);
-              let tileTop = (1/3)*height+ (i * lvl.size);
-              let tileBottom = (1/3)*height+(i * lvl.size + lvl.size);
+              let tileLeft = xOffset + (j * lvl.size);
+              let tileRight = xOffset +(j * lvl.size + lvl.size);
+              let tileTop = yOffset+ (i * lvl.size);
+              let tileBottom = yOffset+(i * lvl.size + lvl.size);
       
               // check if the player's bounding box overlaps with the tile's bounding box
               if (playerLeft < tileRight && playerRight > tileLeft && playerTop < tileBottom && playerBottom > tileTop) {
@@ -95,22 +105,21 @@ export default class Coso extends Component {
       }
 
       preload = p5 => {
-        p5.loadImage("https://art.pixilart.com/sr29f986e1c0554.png",s=>{grass=s});
-        //p5.loadImage("https://art.pixilart.com/sr2eb1f201a0f54.png",s=>{dirt=s});
+        p5.loadImage("/sprites/grass.png",s=>{grass=s});
         p5.loadImage("/sprites/dirt.png",s=>{dirt=s});
         p5.loadImage("https://art.pixilart.com/sr23b57c326b49a.gif",s=>{coin=s});
         p5.loadImage("https://art.pixilart.com/sr2e94c7bca31f8.gif",s=>{gem=s});
-        p5.loadImage("https://art.pixilart.com/sr2c159e6312df2.png",s=>{cloud_l=s});
-        p5.loadImage("https://art.pixilart.com/sr2bc6f8384372a.png",s=>{cloud_r=s});
+        p5.loadImage("/sprites/cloud_l.png",s=>{cloud_l=s});
+        p5.loadImage("/sprites/cloud_r.png",s=>{cloud_r=s});
         p5.loadImage("https://art.pixilart.com/sr25fa2ac0990a3.gif",s=>{flowers=s});
-        p5.loadImage("https://art.pixilart.com/sr2a39c0606f47d.png",s=>{pine_small=s});
-        p5.loadImage("https://art.pixilart.com/sr209c98e5a8eba.png",s=>{pine_big_down=s});
-        p5.loadImage("https://art.pixilart.com/sr2cde46bcdf53c.png",s=>{pine_big_up=s});
-        p5.loadImage("https://art.pixilart.com/sr25fe1849198a3.png",s=>{tree_small=s});
-        p5.loadImage("https://art.pixilart.com/sr2b444e168cf5b.png",s=>{tree_big_down=s});
-        p5.loadImage("https://art.pixilart.com/sr237a4e3fbb418.png",s=>{tree_big_up=s});
-        p5.loadImage("https://art.pixilart.com/sr215d2807ffe12.png",s=>{stone=s});
-        p5.loadImage("https://art.pixilart.com/sr24b9234e23159.png",s=>{spikes=s});
+        p5.loadImage("/sprites/pine_small.png",s=>{pine_small=s});
+        p5.loadImage("/sprites/pine_big_down.png",s=>{pine_big_down=s});
+        p5.loadImage("/sprites/pine_big_up.png",s=>{pine_big_up=s});
+        p5.loadImage("/sprites/tree_small.png",s=>{tree_small=s});
+        p5.loadImage("/sprites/tree_big_down.png",s=>{tree_big_down=s});
+        p5.loadImage("/sprites/tree_big_up.png",s=>{tree_big_up=s});
+        p5.loadImage("/sprites/stone.png",s=>{stone=s});
+        p5.loadImage("/sprites/spikes.png",s=>{spikes=s});
         p5.loadImage("https://steamuserimages-a.akamaihd.net/ugc/934934926476985171/5182552889AF62A2AE66B8C79CD41D1FF66B03AD/?imw=512&imh=511&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true",s=>{error=s});
       }
 
@@ -118,9 +127,10 @@ export default class Coso extends Component {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
         p5.frameRate(60);
         p5.background("tomato");
-        
+
         width = p5.windowWidth;
         height = p5.windowHeight;
+
         lvl = new Level(
           10,
           20,
@@ -135,14 +145,18 @@ export default class Coso extends Component {
             -1, 6,-1, 7, 8,-1,-1,-1,-1,14,-1, 0, 1, 1, 1, 1, 1, 1, 0, 6,
              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
              1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-          30,
+          40,
           p5,
           //0     1    2    3    4        5        6        7          8             9          10         11            12        13    14    15
           [grass,dirt,coin,gem,cloud_l,cloud_r,flowers,pine_small,pine_big_down,pine_big_up,tree_small,tree_big_down,tree_big_up,stone,spikes,error]
         );
+        xOffset = (width - lvl.levelWidth) / 2;
+        yOffset = (height - lvl.levelHeight) / 2;
+        prevxOffset=xOffset;
+        prevyOffset=yOffset;
         player = {
-          x: (1 / 3) * width + (lvl.cols / 2) * lvl.size,
-          y: (1 / 3) * height,
+          x: xOffset + (lvl.cols / 2) * lvl.size,
+          y: yOffset,
           width: 20,
           height: 20,
           prevX: 0,
@@ -151,19 +165,17 @@ export default class Coso extends Component {
     };
 
     draw = p5 => {
-        this.windowResized;
         p5.background('tomato');
-
-        lvl.draw();
+        lvl.draw(xOffset,yOffset);
         p5.push();
             p5.fill('red');
             p5.rect(player.x, player.y, player.width, player.height);
         p5.pop();
         this.movePlayer(0,2);
-        this.handleCollisions();
+        this.handleCollisions(xOffset,yOffset);
     };
 
     render() {
-        return <Sketch preload={this.preload} setup={ this.setup } draw = { this.draw } />;
+        return <Sketch preload={this.preload} windowResized={this.windowResized}setup={ this.setup } draw = { this.draw } />;
     }
 }
