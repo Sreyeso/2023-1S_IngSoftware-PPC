@@ -1,25 +1,20 @@
 import p5 from 'p5';
 
+// Define a class for each tile
 export default class Tile {
-  type: number;
-  color: string;
-  image: p5.Image | null;
+  code: string;
+  image: p5.Image;
+  p: p5;
 
-  constructor(type: number) {
-    this.type = type;
-    this.color = "";
-    this.image = null;
-    this.initialize(type);
+  // Constructor for the Tile class
+  constructor(code: string, image: p5.Image, p5: p5) {
+    this.code = code; // Each tile has a unique code to identify it
+    this.image = image; // The image used to display the tile
+    this.p = p5; // The p5 instance used to draw the tile
   }
-
-  initialize(type: number) {
-    if      (type===0) {this.color = "firebrick";}
-    else if (type===1) {this.color = "darkkhaki";}
-    else if (type===2) {this.color = "white";}
-    else if (type===3) {this.color = "chartreuse";}
-    else if (type===4) {this.color = "aquamarine";}
-    else if (type===-1) {this.color = "lightskyblue";}
-    else if (type===6) {this.color = "lightsteelblue";}
-    else              {this.color = "purple";}
+  
+  // Method to draw the tile at a given position and size
+  draw(x: number, y: number, tile_size: number) {
+    this.p.image(this.image, x, y, tile_size, tile_size); // Draw the tile image at the given position and size
   }
 }
