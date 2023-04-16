@@ -20,7 +20,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 const graphicnames: string[] = ["grass.png", "dirt.png", "coin.gif", "gem.gif", "cloud_l.png",
                                 "cloud_r.png", "flowers.gif", "pine_small.png", "pine_big_down.png", 
                                 "pine_big_up.png", "tree_small.png", "tree_big_down.png", "tree_big_up.png", 
-                                "stone.png", "spikes.png","empty.png", "error.png"];
+                                "stone.png", "spikes.png","empty.png", "error.png","neco.png"];
 const graphics: p5.Image[] = []; // Array where all the game-related graphical assets are stored
 
 //Graphical control variables
@@ -32,6 +32,14 @@ let prevyOffset:number;
 //Main game objects
 let lvl:Level;
 let player:Player;
+
+//Debug control
+const debug:boolean=true;
+/*
+Things that the debug does:
+- Show hitboxes
+- 
+*/
 
 export default class App extends Component {
 
@@ -85,54 +93,37 @@ export default class App extends Component {
         yOffset = (p5.windowHeight - lvl.levelHeight) / 2;
         prevxOffset=xOffset;
         prevyOffset=yOffset;
-
-        //Position the player in the tempate level
-        player = new Player(20,20,xOffset + (lvl.cols / 2) * lvl.tile_size,yOffset,p5);
+        //Position the player in the template level
+        player = new Player(20,20,xOffset + (9) * lvl.tile_size,yOffset,graphics[17],p5);
     };
 
     draw = (p5:p5) => {
         p5.background('tomato');
-
         //Draw the elements of the game
-        lvl.draw(xOffset,yOffset);
+        lvl.draw(xOffset,yOffset,debug);
         player.draw();
-        
-
-        //Call the functionality of the game
-        player.movePlayer(0,2);
-        this.handleCollisions(player,xOffset,yOffset);
-    };
-
-    handleCollisions= (player:Player,xOffset:number,yOffset:number) => {
-      // calculate the player's bounding box
-      let playerLeft = player.x;
-      let playerRight = player.x + player.width;
-      let playerTop = player.y;
-      let playerBottom = player.y + player.height;
-    
-      // loop through the grid array and check for collisions
-      for (let i = 0; i < lvl.rows; i++) {
-        for (let j = 0; j < lvl.cols; j++) {
-          if (lvl.layout[i][j].code == "gra") { // grass tile
-            // calculate the bounding box of the tile
-            let tileLeft = xOffset + (j * lvl.tile_size);
-            let tileRight = xOffset +(j * lvl.tile_size + lvl.tile_size);
-            let tileTop = yOffset+ (i * lvl.tile_size);
-            let tileBottom = yOffset+(i * lvl.tile_size + lvl.tile_size);
-    
-            // check if the player's bounding box overlaps with the tile's bounding box
-            if (playerLeft < tileRight && playerRight > tileLeft && playerTop < tileBottom && playerBottom > tileTop) {
-              // there is a collision!
-              // reset the player's position to their previous position
-              player.x = player.prevX;
-              player.y = player.prevY;
-            }
-          }
+        lvl.handleCollisions(player,xOffset,yOffset);
+        //Enable pllayer movement
+        if(player.isAlive){
+          player.update();
+          player.keyMovement();
+        }else{
+          p5.push();
+            p5.noStroke();
+            p5.fill(200,125);//Gray out the screen
+            p5.rect(xOffset, yOffset, lvl.levelWidth, lvl.levelHeight); 
+          p5.pop();
         }
-      }
+        
     };
+
+    keyPressed = (p5:p5) => {
+      if (p5.keyCode == p5.UP_ARROW) {
+        player.isJumping=true;
+      } 
+    }
 
     render() {
-        return <Sketch preload={this.preload} windowResized={this.windowResized}setup={ this.setup } draw = { this.draw } />;
+        return <Sketch preload={this.preload} windowResized={this.windowResized} setup={ this.setup } keyPressed={this.keyPressed} draw = { this.draw } />;
     };
 }
