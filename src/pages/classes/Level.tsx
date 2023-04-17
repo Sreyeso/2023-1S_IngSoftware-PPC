@@ -1,7 +1,7 @@
 import p5 from 'p5';
 import Tile from './Tile';
 import Player from './Player';
-
+const DEBUG = true;
 export default class Level {
   rows: number;
   cols: number;
@@ -128,22 +128,34 @@ export default class Level {
                   // determine the direction of the collision
                   let direction;
                   
+                  //DEBUG
+                  if (DEBUG) console.log('OW: '+overlapWidth);
+                  if (DEBUG) console.log('OH: '+overlapHeight);
+                  if (DEBUG) console.log('Nya');
+                  if (DEBUG) console.log('');
+
+
                   if (overlapWidth < overlapHeight) {
-                    direction = overlapLeft < newPlayerLeft ? "left" : "right";
+                    //Esas const son el bandaid al bugazo, cambiar a un porcentaje basado en las tiles
+                    direction = overlapLeft-10 < newPlayerLeft ? "left" : "right";
                   } else {
-                    direction = overlapTop < newPlayerTop ? "up" : "down";
+                    direction = overlapTop < newPlayerTop+10 ? "up" : "down";
                   }
 
                 // adjust the player's position based on the overlap and direction of the collision
                 switch (direction) {
                   case "left":
+                    if (DEBUG) console.log('Nya');
                     player.x += overlapWidth - player.vx;
                     break;
                   case "right":
+                    if (DEBUG) console.log('Goode');
                     player.x -= overlapWidth - player.vx;
                     break;
                   case "up":
+                    if (DEBUG) console.log('Bure');
                     player.y += overlapHeight - player.vy;
+                    player.vy = 0;
                     break;
                   case "down":
                     player.y -= overlapHeight - player.vy;
