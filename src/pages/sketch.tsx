@@ -20,7 +20,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 const graphicnames: string[] = ["grass.png", "dirt.png", "coin.gif", "gem.gif", "cloud_l.png",
                                 "cloud_r.png", "flowers.gif", "pine_small.png", "pine_big_down.png", 
                                 "pine_big_up.png", "tree_small.png", "tree_big_down.png", "tree_big_up.png", 
-                                "stone.png", "spikes.png","empty.png", "error.png","neco.png"];
+                                "stone.png", "spikes.png","empty.png", "error.png","pro.gif"];
 const graphics: p5.Image[] = []; // Array where all the game-related graphical assets are stored
 
 //Graphical control variables
@@ -34,7 +34,7 @@ let lvl:Level;
 let player:Player;
 
 //Debug control
-const debug:boolean=true;
+const debug:boolean=false;
 /*
 Things that the debug does:
 - Show hitboxes
