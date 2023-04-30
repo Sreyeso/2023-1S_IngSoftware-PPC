@@ -7,6 +7,7 @@ import p5 from 'p5';
 //Class imports
 import Level from "./classes/Level";
 import Player from "./classes/Player";
+import GameLogic from "./classes/GameLogic";
 
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
     require('p5/lib/addons/p5.sound'); // Sound library imported after react-p5 is loaded
@@ -20,7 +21,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 const graphicnames: string[] = ["grass.png", "dirt.png", "coin.gif", "gem.gif", "cloud_l.png",
                                 "cloud_r.png", "flowers.gif", "pine_small.png", "pine_big_down.png", 
                                 "pine_big_up.png", "tree_small.png", "tree_big_down.png", "tree_big_up.png", 
-                                "stone.png", "spikes.png","empty.png", "error.png","pro.gif"];
+                                "stone.png", "spikes.png","empty.png", "error.png","pro.gif","barrier.png"];
 const graphics: p5.Image[] = []; // Array where all the game-related graphical assets are stored
 
 //Graphical control variables
@@ -34,7 +35,7 @@ let lvl:Level;
 let player:Player;
 
 //Debug control
-const debug:boolean=false;
+const debug:boolean=true;
 /*
 Things that the debug does:
 - Show hitboxes
@@ -71,30 +72,40 @@ export default class App extends Component {
         p5.background("tomato");
 
         //Initial declaration of a template level
-        lvl = new Level(
-          10,20,
-          [   "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-              "000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-              "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-              "000","000","000","000","000","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000",
-              "000","000","000","000","000","000","sto","sto","sto","000","000","000","000","tbu","coi","gem","pbu","000","000","000",
-              "000","000","000","000","000","000","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000",
-              "000","000","000","000","tbu","000","000","000","000","000","000","000","gra","gra","gra","gra","gra","000","000","000",
-              "000","flo","000","psm","tbd","000","000","000","000","spi","000","gra","dir","dir","dir","dir","dir","gra","000","flo",
-              "gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra",
-              "dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir"],
-          40,
-          graphics,
+        lvl = new Level({rows:12,cols:21,
+          rawLayout:[ "111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111",
+                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                      "111","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                      "111","000","000","000","000","000","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000",
+                      "111","000","000","000","000","000","000","000","000","000","sto","000","000","000","tbu","coi","gem","pbu","000","000","000",
+                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000",
+                      "111","000","000","000","000","tbu","000","000","000","000","000","000","000","gra","gra","gra","gra","gra","000","000","000",
+                      "111","000","flo","spi","psm","tbd","000","000","000","000","000","000","gra","dir","dir","dir","dir","dir","gra","000","flo",
+                      "111","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra",
+                      "111","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir",
+                      "111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111"],
+            tile_size:70,
+          images:graphics},
           p5
         );
 
         //Initialize offset for this template level
-        xOffset = (p5.windowWidth - lvl.levelWidth) / 2;
-        yOffset = (p5.windowHeight - lvl.levelHeight) / 2;
+        xOffset = (p5.windowWidth - lvl.levelWidth-(1 * lvl.tile_size)) / 2;
+        yOffset = (p5.windowHeight - lvl.levelHeight-(1 * lvl.tile_size)) / 2;
         prevxOffset=xOffset;
         prevyOffset=yOffset;
         //Position the player in the template level
-        player = new Player(20,20,xOffset + (9) * lvl.tile_size,yOffset,graphics[17],p5);
+        player = new Player({width : lvl.tile_size*0.5,
+                            height : lvl.tile_size*0.5,
+                            gravity : lvl.tile_size*0.0098,
+                            jumpVelocity : -lvl.tile_size*0.2,
+                            speed : 5,
+                            jumps : 2,
+                            initialX : xOffset + (10) * lvl.tile_size,
+                            initialY : yOffset,
+                            image : graphics[17]},
+                            p5);
     };
 
     draw = (p5:p5) => {
@@ -102,7 +113,7 @@ export default class App extends Component {
         //Draw the elements of the game
         lvl.draw(xOffset,yOffset,debug);
         player.draw();
-        lvl.handleCollisions(player,xOffset,yOffset);
+        GameLogic.handleCollisions(player,lvl,xOffset,yOffset,debug);
         //Enable pllayer movement
         if(player.isAlive){
           player.update();
