@@ -1,0 +1,39 @@
+.ProvTitle{
+    text-align: center;
+    background-color:rgb(237, 120, 120);
+
+}
+
+.bg{
+    background-color: rgb(238, 206, 163);
+    background-image: url("/src/pages_imgs_Fondo_juego.jpg");
+}
+
+.logo{
+    text-align: center;
+}
+
+.bg h2{
+    text-decoration:black;
+}
+
+.gridInputs{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.gridInputs input{
+    padding: 7px;
+    border: 1px dashed;
+    
+}
+
+.Space{
+    margin-top: 3rem;
+}
+
+.main{
+
+}
