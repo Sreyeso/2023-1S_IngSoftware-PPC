@@ -5,7 +5,8 @@ export default class Player {
   // current position and size of the player
   x: number;
   y: number;
-  vx:number=0;
+  vleft:number=0;
+  vright:number=0;
   vy:number=0;
   width: number;
   height: number;
@@ -20,10 +21,13 @@ export default class Player {
   jumps:number;
   speed:number;
 
+  coins:number;
+  gems:number;
+
   // the p5 instance used for drawing
   p: p5;
 //
-  constructor(parameters:{width:number,height:number,gravity:number,jumpVelocity:number,jumps:number,speed:number,initialX:number,initialY:number,image:any}, p: p5) {
+  constructor(parameters:{width:number,height:number,gravity:number,jumpVelocity:number,jumps:number,speed:number,initialX:number,initialY:number,image:any,coins:number,gems:number}, p: p5) {
     // initialize position and size
     this.width = parameters.width || 20;
     this.height = parameters.height || 20;
@@ -34,10 +38,15 @@ export default class Player {
     this.defaultJumps=parameters.jumps || 1;
     this.speed=parameters.speed || this.gravity*7;
     this.jumps=0;
+    this.vleft=-this.speed;
+    this.vright=this.speed;
 
     this.x = this.prevX = parameters.initialX || 0;
     this.y = this.prevY = parameters.initialY || 0;
     this.image=parameters.image || null;
+
+    this.coins=parameters.coins || 0;
+    this.gems=parameters.gems || 0;
     // store the p5 instance
     this.p = p;
   }
@@ -60,7 +69,6 @@ export default class Player {
     this.vy += this.gravity;
     this.jump();
     // update the player's current position
-    this.x += this.vx;
     this.y += this.vy;
   }
 
@@ -77,7 +85,7 @@ export default class Player {
     this.p.push();
       this.p.fill('red');
       this.p.rect(this.x, this.y, this.width, this.height);
-      if(this.image){
+      if(this.image && this.isAlive){
         this.p.image(this.image,this.x, this.y, this.width, this.height);
       }
     this.p.pop();
@@ -85,10 +93,10 @@ export default class Player {
 
   keyMovement(){
       if(this.p.keyIsDown(this.p.LEFT_ARROW)){
-        this.movePlayer(-this.speed,0);
+        this.movePlayer(this.vleft,0);
       }
       if(this.p.keyIsDown(this.p.RIGHT_ARROW)){
-        this.movePlayer(this.speed,0);
+        this.movePlayer(this.vright,0);
       }
       // if(this.p.keyIsDown(this.p.UP_ARROW)){
       //   this.movePlayer(0,-3);

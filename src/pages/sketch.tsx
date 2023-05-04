@@ -36,11 +36,7 @@ let player:Player;
 
 //Debug control
 const debug:boolean=true;
-/*
-Things that the debug does:
-- Show hitboxes
-- 
-*/
+
 
 export default class App extends Component {
 
@@ -91,8 +87,8 @@ export default class App extends Component {
         );
 
         //Initialize offset for this template level
-        xOffset = (p5.windowWidth - lvl.levelWidth-(1 * lvl.tile_size)) / 2;
-        yOffset = (p5.windowHeight - lvl.levelHeight-(1 * lvl.tile_size)) / 2;
+        xOffset = (p5.windowWidth - lvl.levelWidth) / 2;
+        yOffset = (p5.windowHeight - lvl.levelHeight) / 2;
         prevxOffset=xOffset;
         prevyOffset=yOffset;
         //Position the player in the template level
@@ -103,29 +99,20 @@ export default class App extends Component {
                             speed : 5,
                             jumps : 2,
                             initialX : xOffset + (10) * lvl.tile_size,
-                            initialY : yOffset,
+                            initialY : yOffset + (1) * lvl.tile_size,
+                            coins:0,
+                            gems:0,
                             image : graphics[17]},
                             p5);
     };
 
     draw = (p5:p5) => {
         p5.background('tomato');
-        //Draw the elements of the game
-        lvl.draw(xOffset,yOffset,debug);
-        player.draw();
-        GameLogic.handleCollisions(player,lvl,xOffset,yOffset,debug);
-        //Enable pllayer movement
-        if(player.isAlive){
-          player.update();
-          player.keyMovement();
-        }else{
-          p5.push();
-            p5.noStroke();
-            p5.fill(200,125);//Gray out the screen
-            p5.rect(xOffset, yOffset, lvl.levelWidth, lvl.levelHeight); 
-          p5.pop();
-        }
-        
+        GameLogic.game(player,lvl,xOffset,yOffset,debug);
+        p5.push();
+          p5.textSize(lvl.tile_size);
+          p5.text("Monedas: "+player.coins+"               -                 Gemas: "+player.gems,xOffset+lvl.tile_size,yOffset+lvl.tile_size-15)
+        p5.pop();
     };
 
     keyPressed = (p5:p5) => {

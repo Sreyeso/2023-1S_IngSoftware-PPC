@@ -57,8 +57,6 @@ export default class Level {
             default: image=this.images[16]; break;
           }
         }
-        
-        
         // create a new tile with the code and image
         let tile = new Tile(code, image, this.p);
         row.push(tile);
@@ -68,22 +66,27 @@ export default class Level {
     }
   }
 
-  draw(xOffset: number, yOffset: number,debug:boolean) {
+  draw(xOffset: number, yOffset: number) {
     this.p.push();
-      this.p.noStroke();
-      this.p.fill("lightskyblue");
-    // draw the background of the level
-      this.p.rect(xOffset+this.tile_size, yOffset+this.tile_size, this.levelWidth-(1 * this.tile_size), this.levelHeight-(2 * this.tile_size));
+        this.p.fill("lightskyblue");
+        this.p.rect(xOffset+this.tile_size,yOffset+this.tile_size,this.levelWidth-this.tile_size,this.levelHeight-(2)*this.tile_size);
     this.p.pop();
     // draw each tile in the layout
-    for (let i = 1; i < this.rows-1; i++) {
-      for (let j = 1; j < this.cols; j++) {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
         let x = xOffset + (j * this.tile_size);
         let y = yOffset + (i * this.tile_size);
         let tile = this.layout[i][j];
-        tile.draw(x, y, this.tile_size,debug);
+        tile.draw(x, y, this.tile_size);
       }
     }
+  }
+
+  death(xOffset: number, yOffset: number){
+    this.p.push();
+        this.p.fill(125,125);
+        this.p.rect(xOffset+this.tile_size,yOffset+this.tile_size,this.levelWidth-this.tile_size,this.levelHeight-(2)*this.tile_size);
+    this.p.pop();
   }
 
 }

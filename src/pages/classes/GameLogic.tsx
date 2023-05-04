@@ -3,6 +3,20 @@ import Level from "./Level";
 
 export default class GameLogic {
 
+    static game(player: Player,level:Level,xOffset:number,yOffset:number,debug:boolean){
+        //Draw the elements of the game
+        level.draw(xOffset,yOffset);
+        player.draw();
+        this.handleCollisions(player,level,xOffset,yOffset,debug);
+        if(player.isAlive){
+            //Enable player movement
+            player.update();
+            player.keyMovement();
+        }else{
+            level.death(xOffset,yOffset);
+        }
+    }
+
     static detectSquareCollisions(player: Player,tileLeft:number,tileRight:number,tileTop:number,tileBottom:number,debug:boolean){
         // calculate the player's bounding box
         let playerLeft = player.x;
@@ -43,7 +57,7 @@ export default class GameLogic {
         return ["none"]
     }
 
-    static handleCollisions(player: Player, level: Level, xOffset: number, yOffset: number, debug: boolean) {
+    static handleCollisions(player: Player, level: Level, xOffset: number, yOffset: number ,debug: boolean) {
         // loop through the grid array and check for collisions
         let tileLeft:number;
         let tileRight:number;
@@ -66,18 +80,23 @@ export default class GameLogic {
                         dircol = this.detectSquareCollisions(player,tileLeft,tileRight,tileTop,tileBottom,debug);
                         switch(dircol[0]){
                             case("top"):
-                                player.y -= dircol[1] - player.vy;
-                                player.vy = 0;
-                                player.jumps = player.defaultJumps;
+                                player.y -= dircol[1];   //Get the player out of the tile
+                                player.vy = 0; //Reset vertical velocity
+                                player.movePlayer(0,-2+player.gravity); //Adjust for other collisions
+                                player.jumps = player.defaultJumps; //Reset jump count
                             break;
                             case("bottom"):
-                                player.y += dircol[1] - player.vy;
+                                player.y += dircol[1] + player.vy; //Get the player out of the tile
+                                player.vy=0; //Reset vertical velocity
+                                player.movePlayer(0,1);  //Adjust for other collisions
                             break;
                             case("left"):
-                                player.x -= dircol[1] - player.vx;
+                                player.x -= dircol[1]; //Get the player out of the tile
+                                player.movePlayer(player.vleft,0); //Adjust for other collisions
                             break;
                             case("right"):
-                                player.x += dircol[1] - player.vx;
+                                player.x += dircol[1]; //Get the player out of the tile
+                                player.movePlayer(player.vright,0); //Adjust for other collisions
                             break;
                         }
                     break;
@@ -106,11 +125,15 @@ export default class GameLogic {
 
                         // check if the player's bounding box overlaps with the tile's ellipse
                         if (player.x < centerX + radiusX && player.x+player.width > centerX - radiusX && player.y < centerY + radiusY && player.y+player.height > centerY - radiusY) {
+                            if(level.layout[i][j].code=="coi"){
+                                player.coins++;
+                            }else{
+                                player.gems++;
+                            }
                             level.layout[i][j].code = "000";
                             if(level.images!=null){
                                 level.layout[i][j].image = level.images[15];
                             }
-                            
                         }
                     break;
 
