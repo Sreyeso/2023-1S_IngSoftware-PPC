@@ -3,25 +3,9 @@ import Image from 'next/image'
 import Head from 'next/head'
 
 let input_fields = [
-    {
-        text: "Usuario"
-    },
-    {
-        text: "Correo"
-    },   
-    {
-        text: "Género"
-    },   
-    {
-        text: "Edad"
-    },         
-    {
-        text: "Contraseña"
-    },
-    {
-        text: "Repetir Contraseña"
-    },   
-]
+    "Usuario", "Correo", "Género", "País", "Contraseña",
+    "Repetir Contraseña"
+];
 
 const log_butt = '/buttons/LOG-IN.png';
 const join_butt = '/buttons/JOIN.png';
@@ -37,26 +21,29 @@ export default function Join (){
             <main>
                 <h1 className = {styles.ProvTitle}>Creando Página Registro</h1>
                 <div className = {styles.bg}                >
-                    <div className = {styles.logo}>
-                        <Image
-                        src="/pages_imgs/logo_PPC.png"
-                        alt="Logo de PPC Games"
-                        width={200}
-                        height={300}
-                        priority                    
-                    />
-                    <h2>Únete a PPC Games</h2>
-                    <div className = {styles.gridInputs}>
-                        {input_fields.map((inp)=>{
-                            return <Input {...inp}></Input>
-                        })}
-                    <div className={styles.Space}></div>
-                    </div>
-                    <PPCButts url={log_butt}/>
-                    <PPCButts url={join_butt}/>
-                    </div>
+                    <div className = {styles.AllInside}>
+                        <div className = {styles.logo}>
+                            <Image
+                            src="/pages_imgs/logo_PPC.png"
+                            alt="Logo de PPC Games"
+                            width={200}
+                            height={300}
+                            priority                    
+                            />
+                        </div>
+                        <h2 className={styles.CenteredText}>Únete a PPC Games</h2>
+                        <form>
+                            <div className={styles.gridInputs}>
+                                {input_fields.map((inp)=>{
+                                    return <Input text={inp}></Input>
+                                })}
+                            </div>
+                            <div className={styles.LoginButton}>
+                                <PPCButts url={log_butt}/>
+                            </div>
+                        </form>
+                    </div>    
                 </div>
-
             </main>
         </div>
         
@@ -82,8 +69,7 @@ function PPCButts(props: object){
     return (
         <button
         onClick={handleClick}>
-            <img src={url}
-            alt = 'Loguearse'></img>
+            <img src={url} alt = 'Loguearse'></img>
         </button>
     );
 }
