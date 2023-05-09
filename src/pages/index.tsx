@@ -32,23 +32,6 @@ export default function Home() {
           </a>
 
         </div>
-
-        <div className={styles.grid}>
-          <a
-            href="\sketch"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Página de registro <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              UX/UI
-            </p>
-          </a>
-
-        </div>
       </main>
     </>
   )

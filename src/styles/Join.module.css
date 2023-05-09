@@ -1,16 +1,11 @@
-.ProvTitle{
-    text-align: center;
-    background-color:rgb(237, 120, 120);
-}
-
-.bg{
+.Background{
     position: relative;
 }
 
-.bg::before{
+.Background::before{
     content:'';
     background-image: url("../../public/pages_imgs/Fondo_juego.jpg");
-    opacity: 0.5;
+    opacity: 0.45;
     position: absolute;
     background-size: cover;
     inset: 0;
@@ -22,11 +17,16 @@
 
 .logo{
     text-align: center;
+    margin-top: 30px;
 }
 
-.bg h2{
-    text-decoration:black;
+.Background h2{
+    text-align: center;
+    font-size: 35px;
+    margin-top: 2rem;
 }
+
+
 
 .gridInputs{
     display: grid;
@@ -36,20 +36,36 @@
 }
 
 .gridInputs input{
-    padding: 7px;
-    border: 1px dashed;   
+    font-size: large;
+    padding: 10px;
+    border: solid 1px;   
     margin: 6px;
 }
-
-.Space{
-    top: 5rem;
-    margin: 20px;
-}
  
+.Butts{
+    background-image: url('../../public/buttons/JOIN.png');
+    background-size: cover;    
+    margin: 15px;
+    width: 200px;
+    height: 62px;
+    border: transparent;
+    background-color: transparent;
+}
+
+.Butts:hover{
+    box-shadow: 0 0 5px 1.3px rgba(0,0,0,50);
+}
+
+.Butts:active{
+    box-shadow: 0 0 8px 3px rgba(0,0,0,200);
+}
+
 .LoginButton {
-    background-size: cover;
     display:flex;
     justify-content: center;
-    align-items: center;
     margin: 15px;
+}
+
+.AllInside footer{
+    text-align: right;
 }
