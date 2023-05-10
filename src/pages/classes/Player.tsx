@@ -20,6 +20,7 @@ export default class Player {
   defaultJumps:number;
   jumps:number;
   speed:number;
+  rightCollisionFlag:boolean=false;
 
   coins:number;
   gems:number;

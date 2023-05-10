@@ -21,7 +21,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 const graphicnames: string[] = ["grass.png", "dirt.png", "coin.gif", "gem.gif", "cloud_l.png",
                                 "cloud_r.png", "flowers.gif", "pine_small.png", "pine_big_down.png", 
                                 "pine_big_up.png", "tree_small.png", "tree_big_down.png", "tree_big_up.png", 
-                                "stone.png", "spikes.png","empty.png", "error.png","pro.gif","barrier.png"];
+                                "stone.png", "spikes.png","empty.png", "error.png","pro.gif"];
 const graphics: p5.Image[] = []; // Array where all the game-related graphical assets are stored
 
 //Graphical control variables
@@ -33,10 +33,11 @@ let prevyOffset:number;
 //Main game objects
 let lvl:Level;
 let player:Player;
+let testrawlayout:string[];
+let game1:GameLogic;
 
 //Debug control
 const debug:boolean=true;
-
 
 export default class App extends Component {
 
@@ -68,26 +69,35 @@ export default class App extends Component {
         p5.background("tomato");
 
         //Initial declaration of a template level
-        lvl = new Level({rows:12,cols:21,
-          rawLayout:[ "111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111",
-                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","000","000","000","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","000","000","000","000","000","000","000","sto","000","000","000","tbu","coi","gem","pbu","000","000","000",
-                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000",
-                      "111","000","000","000","000","tbu","000","000","000","000","000","000","000","gra","gra","gra","gra","gra","000","000","000",
-                      "111","000","flo","spi","psm","tbd","000","000","000","000","000","000","gra","dir","dir","dir","dir","dir","gra","000","flo",
-                      "111","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra",
-                      "111","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir",
-                      "111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111"],
-            tile_size:70,
+        lvl = new Level({rows:10,cols:21,
+          rawLayout:[ "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                      "000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                      "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                      "000","000","000","000","000","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000",
+                      "000","000","000","000","000","000","000","000","000","sto","000","000","000","tbu","coi","gem","pbu","000","000","000","000",
+                      "000","000","000","000","000","000","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000","000",
+                      "000","000","000","000","tbu","000","000","000","000","000","000","000","gra","gra","gra","gra","gra","000","000","000","000",
+                      "000","flo","spi","psm","tbd","000","000","000","000","000","000","gra","dir","dir","dir","dir","dir","gra","000","flo","000",
+                      "gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra","gra",
+                      "dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir"],
+            tile_size:60,
           images:graphics},
           p5
         );
 
+        testrawlayout=[ "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                        "000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
+                        "000","000","000","000","000","000","000","000","gem","gem","gem","000","000","000","000","000","000","000","000","000","000",
+                        "000","000","000","000","coi","000","000","000","000","spi","000","000","000","000","coi","coi","000","000","000","000","000",
+                        "000","000","000","000","000","000","000","000","sto","sto","sto","000","000","tbu","coi","coi","pbu","000","000","000","000",
+                        "000","000","000","gra","gra","gra","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000","000",
+                        "000","000","gra","dir","dir","dir","gra","spi","000","000","000","spi","gra","gra","gra","gra","gra","000","000","000","000",
+                        "000","gra","dir","dir","dir","dir","dir","gra","spi","spi","spi","gra","dir","dir","dir","dir","dir","gra","000","flo","000",
+                        "gra","dir","dir","dir","dir","dir","dir","dir","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra","gra",
+                        "dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir"];
+
         //Initialize offset for this template level
-        xOffset = (p5.windowWidth - lvl.levelWidth) / 2;
+        xOffset = (p5.windowWidth - lvl.levelWidth + lvl.tile_size)/ 2;
         yOffset = (p5.windowHeight - lvl.levelHeight) / 2;
         prevxOffset=xOffset;
         prevyOffset=yOffset;
@@ -104,14 +114,17 @@ export default class App extends Component {
                             gems:0,
                             image : graphics[17]},
                             p5);
+
+        game1= new GameLogic(player,lvl,2);
+        game1.setNextLevel(testrawlayout,1);
     };
 
     draw = (p5:p5) => {
         p5.background('tomato');
-        GameLogic.game(player,lvl,xOffset,yOffset,debug);
+        game1.game(xOffset,yOffset,debug);
         p5.push();
           p5.textSize(lvl.tile_size);
-          p5.text("Monedas: "+player.coins+"               -                 Gemas: "+player.gems,xOffset+lvl.tile_size,yOffset+lvl.tile_size-15)
+          p5.text("Monedas: "+player.coins+"               -                 Gemas: "+player.gems,xOffset+lvl.tile_size,yOffset+lvl.levelHeight+lvl.tile_size)
         p5.pop();
     };
 
