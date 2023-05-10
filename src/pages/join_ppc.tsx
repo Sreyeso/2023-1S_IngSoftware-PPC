@@ -1,12 +1,27 @@
 import styles from '../styles/Join.module.css';
 import Image from 'next/image'
 import Head from 'next/head'
-import axios from 'axios'
 
-let input_fields = [
-    "Usuario", "Correo", "Género", "País", "Contraseña",
-    "Repetir Contraseña"
+let input_fields = [ //Para poner los nombres por defecto de los campos,
+    //y el nombre de la correspondiente propiedad en user_to_send
+    ["Usuario", "username"],
+    ["Correo", "email"],
+    ["Género","gender"],
+    ["País","country"], 
+    ["Contraseña","password"],
+    ["Repetir Contraseña","rep_password"]
 ];
+
+let user_to_send = {
+    username:"",
+    email:"",
+    gender:"",
+    country:"",
+    password:"",
+    rep_password:"",
+}
+
+let url = '/api/handleJoinRequest'
 
 const log_butt = '/buttons/LOG-IN.png';
 const join_butt = '/buttons/JOIN.png';
@@ -20,7 +35,7 @@ export default function Join (){
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <main>          
-                <div className = {styles.Background}                >
+                <div className = {styles.Background}>
                     <div className = {styles.AllInside}>
                         <div className = {styles.logo}>
                             <Image
@@ -34,21 +49,28 @@ export default function Join (){
                         <h2>Únete a PPC Games</h2>
                         <form>
                             <div className={styles.gridInputs}>
-                                {input_fields.map((inp)=>{
-                                    return (<input 
+                                {input_fields.map((field, index)=>{
+                                    return (
+                                    <input 
+                                        key={index}
                                         type="text" 
-                                        placeholder={inp}
-                                        onSubmit={(e)=>e.preventDefault()}>                                                                                        
-                                    </input>);
+                                        placeholder={field[0]}
+                                        onChange={(e)=>{
+                                            e.preventDefault();
+                                            user_to_send[field[1]] = e.target.value;
+                                            //console.log(user_to_send)
+                                        }}>                                                                                        
+                                    </input>
+                                    );
                                 })}
                             </div>
                             <div className = {styles.LoginButton}>
-                                <PPCButts url={join_butt}/>
+                                <PPCButtons/>
                             </div>
-                            <footer>
-                                <h3>Copyright © PPC Team 2023</h3>
-                            </footer>
                         </form>
+                        <footer>
+                            <h3>Copyright © PPC Team 2023</h3>
+                        </footer>
                     </div>    
                 </div>
             </main>
@@ -57,18 +79,19 @@ export default function Join (){
     );
 }
 
-function PPCButts(props: object){
-    const { url } = props;
-    function handleClick(){
-        axios.get(`/api/handleJoinRequest`)
-        .then((res) => alert(res.data))
-        .then((res)=>console.log(res))
-        .catch((err) => alert(err));
-        
+function PPCButtons(props: object){
+    async function handleClick(){
+        const response = await fetch(url, {
+            method: "PUT",
+            body: JSON.stringify(user_to_send),
+        });
+        const json = await response.json();
+        console.log(json);
     }
     return (
-        <button type="button" onClick={handleClick} className={styles.Butts}>
-            
+        <button type="button"
+         onClick={handleClick} 
+         className={styles.Butts}>    
         </button>
     );
 }
