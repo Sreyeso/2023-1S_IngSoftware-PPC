@@ -12,7 +12,7 @@ let input_fields = [ //Para poner los nombres por defecto de los campos,
     ["Repetir Contraseña","rep_password"]
 ];
 
-let user_to_send = {
+let user_to_send:object = {
     username:"",
     email:"",
     gender:"",
