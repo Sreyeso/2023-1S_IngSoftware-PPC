@@ -25,23 +25,24 @@ export default class Level {
 
   selectImage(code:string){
     switch(code){
-      case("gra"): return this.images[0];
-      case("dir"): return this.images[1];
-      case("coi"): return this.images[2];
-      case("gem"): return this.images[3];
-      case("cll"): return this.images[4];
-      case("clr"): return this.images[5];
-      case("flo"): return this.images[6];
-      case("psm"): return this.images[7];
-      case("pbd"): return this.images[8];
-      case("pbu"): return this.images[9];
-      case("tsm"): return this.images[10];
-      case("tbd"): return this.images[11];
-      case("tbu"): return this.images[12];
-      case("sto"): return this.images[13];
-      case("spi"): return this.images[14];
-      case("000"): return this.images[15];
-      default: return this.images[16];
+      // level images order
+      case("000"): return this.images[0];   // 0 - 000 - empty tile
+      case("flo"): return this.images[1];   //1 - flo - floor tile
+      case("fil"): return this.images[2];   //2 - fil - filler tile (goes under the floor tile)
+      case("pla"): return this.images[3];   // 3 - pla - platform tile
+      case("spi"): return this.images[4];   // 4 - spi - spike tile
+      case("coi"): return this.images[5];   // 5 - coi - coin
+      case("gem"): return this.images[6];   // 6 - gem - gem
+      case("cll"): return this.images[7];   // 7 - cll - cloud left
+      case("clr"): return this.images[8];   // 8 - clr - cloud right
+      case("ds0"): return this.images[9];   // 9 - ds0 - decor small 0
+      case("ds1"): return this.images[10];  // 10 - ds1 - decor small 1
+      case("ds2"): return this.images[11];  // 11 - ds2 - decor small 2
+      case("d00"): return this.images[12];  // 12 - d00 - decor big 0 down
+      case("d01"): return this.images[13];  // 13 - d01 - decor big 0 up
+      case("d10"): return this.images[14];  // 14 - d10 - decor big 1 down
+      case("d11"): return this.images[15];  // 15 - d11 - decor big 1 up
+      default: return this.images[16];      // 16 - error tile
     }
   }
 
@@ -104,7 +105,7 @@ export default class Level {
     }
   }
 
-  death(xOffset: number, yOffset: number){
+  grayScreen(xOffset: number, yOffset: number){
     this.p.push();
         this.p.fill(125,125);
         this.p.rect(xOffset,yOffset,this.levelWidth-this.tile_size,this.levelHeight);

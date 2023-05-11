@@ -18,11 +18,12 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 //import Sketch from "react-p5";
 
 // Graphic assets
-const graphicnames: string[] = ["grass.png", "dirt.png", "coin.gif", "gem.gif", "cloud_l.png",
-                                "cloud_r.png", "flowers.gif", "pine_small.png", "pine_big_down.png", 
-                                "pine_big_up.png", "tree_small.png", "tree_big_down.png", "tree_big_up.png", 
-                                "stone.png", "spikes.png","empty.png", "error.png","pro.gif"];
-const graphics: p5.Image[] = []; // Array where all the game-related graphical assets are stored
+const player_names: string[] = ["default_ppc.png","la_creatura.png","love_letter.png","nyan_poptart.png","pollo.png","hypnotic_blue.gif","purple_toxic.png","sans.png"];
+const defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spi.png","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","error.png"];
+
+const player_Skins: p5.Image[] = [];
+const defaultLevel_Graphics: p5.Image[] = [];
+const desertLevel_Graphics: p5.Image[] = [];
 
 //Graphical control variables
 let xOffset:number;
@@ -31,10 +32,10 @@ let prevxOffset:number;
 let prevyOffset:number;
 
 //Main game objects
-let lvl:Level;
+let level:Level;
 let player:Player;
 let testrawlayout:string[];
-let game1:GameLogic;
+let game:GameLogic;
 
 //Debug control
 const debug:boolean=true;
@@ -42,16 +43,15 @@ const debug:boolean=true;
 export default class App extends Component {
 
       preload = (p5:p5) => {
-        for (let i = 0; i < graphicnames.length; i++) {
-          //Load all of the sprites into the graphics 
-          graphics[i] = p5.loadImage(`/sprites/${graphicnames[i]}`);
-        }
+        // Load graphical assets
+        for (let i = 0; i < defaultTile_names.length; i++) {defaultLevel_Graphics[i] = p5.loadImage(`/sprites/defaultLevel/${defaultTile_names[i]}`);}
+        for (let i = 0; i < player_names.length; i++) {player_Skins[i] = p5.loadImage(`/sprites/playerSkins/${player_names[i]}`);}
       };
 
       windowResized = (p5:p5) =>  {
         //Calculate new centering adjustment for the current level based on its size
-        xOffset = (p5.windowWidth - lvl.levelWidth) / 2;
-        yOffset = (p5.windowHeight - lvl.levelHeight) / 2;
+        xOffset = (p5.windowWidth - level.levelWidth) / 2;
+        yOffset = (p5.windowHeight - level.levelHeight) / 2;
 
         //Adjust the player accordingly based on the size changes
         player.movePlayer(xOffset-prevxOffset,yOffset-prevyOffset);
@@ -68,70 +68,71 @@ export default class App extends Component {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
         p5.background("tomato");
 
-        //Initial declaration of a template level
-        lvl = new Level({rows:10,cols:21,
+        //Initial declaration of the starting level
+        level = new Level({rows:10,cols:21,
           rawLayout:[ "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
                       "000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
                       "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
                       "000","000","000","000","000","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000",
-                      "000","000","000","000","000","000","000","000","000","sto","000","000","000","tbu","coi","gem","pbu","000","000","000","000",
-                      "000","000","000","000","000","000","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000","000",
-                      "000","000","000","000","tbu","000","000","000","000","000","000","000","gra","gra","gra","gra","gra","000","000","000","000",
-                      "000","flo","spi","psm","tbd","000","000","000","000","000","000","gra","dir","dir","dir","dir","dir","gra","000","flo","000",
-                      "gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra","gra",
-                      "dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir"],
+                      "000","000","000","000","000","000","000","000","000","pla","000","000","000","d01","coi","gem","d11","000","000","000","000",
+                      "000","000","000","000","000","000","000","000","000","000","000","000","000","d00","000","000","d10","000","000","000","000",
+                      "000","000","000","000","d01","000","000","000","000","000","000","000","flo","flo","flo","flo","flo","000","000","000","000",
+                      "000","ds0","spi","ds1","d00","000","000","ds2","000","000","000","flo","fil","fil","fil","fil","fil","flo","000","ds0","000",
+                      "flo","flo","flo","flo","flo","flo","flo","flo","flo","flo","flo","fil","fil","fil","fil","fil","fil","fil","flo","flo","flo",
+                      "fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil"],
             tile_size:60,
-          images:graphics},
+          images:defaultLevel_Graphics},
           p5
         );
 
+        //template 
         testrawlayout=[ "000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
                         "000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
                         "000","000","000","000","000","000","000","000","gem","gem","gem","000","000","000","000","000","000","000","000","000","000",
                         "000","000","000","000","coi","000","000","000","000","spi","000","000","000","000","coi","coi","000","000","000","000","000",
-                        "000","000","000","000","000","000","000","000","sto","sto","sto","000","000","tbu","coi","coi","pbu","000","000","000","000",
-                        "000","000","000","gra","gra","gra","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000","000",
-                        "000","000","gra","dir","dir","dir","gra","spi","000","000","000","spi","gra","gra","gra","gra","gra","000","000","000","000",
-                        "000","gra","dir","dir","dir","dir","dir","gra","spi","spi","spi","gra","dir","dir","dir","dir","dir","gra","000","flo","000",
-                        "gra","dir","dir","dir","dir","dir","dir","dir","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra","gra",
-                        "dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir"];
+                        "000","000","000","000","000","000","000","000","pla","pla","pla","000","000","d01","coi","coi","d11","000","000","000","000",
+                        "000","000","000","flo","flo","flo","000","000","000","000","000","000","000","d00","000","000","d10","000","000","000","000",
+                        "000","000","flo","fil","fil","fil","flo","spi","000","000","000","spi","flo","flo","flo","flo","flo","000","000","000","000",
+                        "000","flo","fil","fil","fil","fil","fil","flo","spi","spi","spi","flo","fil","fil","fil","fil","fil","flo","000","ds0","000",
+                        "flo","fil","fil","fil","fil","fil","fil","fil","flo","flo","flo","fil","fil","fil","fil","fil","fil","fil","flo","flo","flo",
+                        "fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil","fil"];
 
-        //Initialize offset for this template level
-        xOffset = (p5.windowWidth - lvl.levelWidth + lvl.tile_size)/ 2;
-        yOffset = (p5.windowHeight - lvl.levelHeight) / 2;
+        //Initialize offset for the level adjustments
+        xOffset = (p5.windowWidth - level.levelWidth + level.tile_size)/ 2;
+        yOffset = (p5.windowHeight - level.levelHeight) / 2;
         prevxOffset=xOffset;
         prevyOffset=yOffset;
-        //Position the player in the template level
-        player = new Player({width : lvl.tile_size*0.5,
-                            height : lvl.tile_size*0.5,
-                            gravity : lvl.tile_size*0.0098,
-                            jumpVelocity : -lvl.tile_size*0.2,
+
+        //Initial declaration of the player
+        player = new Player({width : level.tile_size*0.5,
+                            height : level.tile_size*0.5,
+                            gravity : level.tile_size*0.0098,
+                            jumpVelocity : -level.tile_size*0.2,
                             speed : 5,
                             jumps : 2,
-                            initialX : xOffset + (10) * lvl.tile_size,
-                            initialY : yOffset + (1) * lvl.tile_size,
+                            initialX : xOffset + (10) * level.tile_size,
+                            initialY : yOffset + (1) * level.tile_size,
                             coins:0,
                             gems:0,
-                            image : graphics[17]},
+                            image : player_Skins[5]},
                             p5);
 
-        game1= new GameLogic(player,lvl,2);
-        game1.setNextLevel(testrawlayout,1);
+        game = new GameLogic(player,level,2);
+        game.setNextLevel(testrawlayout,1);
     };
 
     draw = (p5:p5) => {
         p5.background('tomato');
-        game1.game(xOffset,yOffset,debug);
+        game.handleGame(xOffset,yOffset,debug);
         p5.push();
-          p5.textSize(lvl.tile_size);
-          p5.text("Monedas: "+player.coins+"               -                 Gemas: "+player.gems,xOffset+lvl.tile_size,yOffset+lvl.levelHeight+lvl.tile_size)
+          p5.textSize(level.tile_size);
+          p5.text("Monedas: "+player.coins+"               -                 Gemas: "+player.gems,xOffset+level.tile_size,yOffset+level.levelHeight+level.tile_size);
+          p5.text(game.pauseCooldown,xOffset+level.levelWidth-170,yOffset+70);
         p5.pop();
     };
 
     keyPressed = (p5:p5) => {
-      if (p5.keyCode == p5.UP_ARROW) {
-        player.isJumping=true;
-      } 
+      game.keyInteractions(p5.keyCode,p5);
     }
 
     render() {
