@@ -22,13 +22,10 @@ export default class Player {
   speed:number;
   rightCollisionFlag:boolean=false;
 
-  coins:number;
-  gems:number;
-
   // the p5 instance used for drawing
   p: p5;
 //
-  constructor(parameters:{width:number,height:number,gravity:number,jumpVelocity:number,jumps:number,speed:number,initialX:number,initialY:number,image:any,coins:number,gems:number}, p: p5) {
+  constructor(parameters:any|{width:number,height:number,gravity:number,jumpVelocity:number,jumps:number,speed:number,initialX:number,initialY:number,image:any}, p: p5) {
     // initialize position and size
     this.width = parameters.width || 20;
     this.height = parameters.height || 20;
@@ -46,8 +43,6 @@ export default class Player {
     this.y = this.prevY = parameters.initialY || 0;
     this.image=parameters.image || null;
 
-    this.coins=parameters.coins || 0;
-    this.gems=parameters.gems || 0;
     // store the p5 instance
     this.p = p;
   }
@@ -81,13 +76,13 @@ export default class Player {
     }
   }
 
-  // draw the player as a red rectangle (temporal)
   draw() {
     this.p.push();
-      this.p.fill('red');
-      this.p.rect(this.x, this.y, this.width, this.height);
       if(this.image && this.isAlive){
         this.p.image(this.image,this.x, this.y, this.width, this.height);
+      }else{
+        this.p.fill("red");
+        this.p.rect(this.x, this.y, this.width, this.height);
       }
     this.p.pop();
   }

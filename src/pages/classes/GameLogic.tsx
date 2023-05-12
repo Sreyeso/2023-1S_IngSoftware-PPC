@@ -4,34 +4,113 @@ import Tile from "./Tile"
 import p5 from 'p5';
 
 export default class GameLogic {
-    player:Player;
-    level:Level;
-    scrollSpeed:number;
+    player:Player|any;
+    level:Level|any;
+    levelGraphics:any[];
+    levelLayouts:any;
+    
+    xOffset:number=0;
+    yOffset:number=0;
+    prevxOffset:number=0;
+    prevyOffset:number=0;
+
+    generalAssets:any;
+
+    scrollSpeed:number|any;
+    nextLevel:Tile[][]|any;
     scroll:number=0;
-    nextLevel:Tile[][];
     pause:boolean=false;
     pauseCooldown:number=0;
-    joever:boolean;
+    joever:boolean=true;
 
-    constructor(player:Player,level:Level,initialScrollSpeed:number) {
-        this.player=player;
-        this.level=level;
-        this.scrollSpeed=initialScrollSpeed;
-        this.nextLevel=[];
-        this.joever=true;
+    coins:number;
+    gems:number;
+    playerSkin: p5.Image;
+
+    p:p5;
+
+    constructor(userData:any|{coins:number,gems:number,image:any},
+                gameDetails:any|{playerSizeModifier:number,gravityModifier:number,scrollSpeed:number},
+                generalAssets:any,levelGraphics:any[],levelLayouts:any,
+                p:p5) {
+
+        this.generalAssets=generalAssets;
+        this.levelGraphics=levelGraphics;
+        this.levelLayouts=levelLayouts;
+
+        this.coins=userData.coins;
+        this.gems=userData.gems;
+        this.playerSkin=userData.image;
+        this.p=p;                    
+        
+        this.level = new Level({
+            rows: 10, cols: 21, 
+            initialLayout: this.levelLayouts.defaultLevelLayouts[0],
+            tile_size: 60, 
+            images: this.levelGraphics[0]},
+            this.p);
+
+        this.player = new Player({
+            //Game defined
+            width   : this.level.tile_size*gameDetails.playerSizeModifier,
+            height  : this.level.tile_size*gameDetails.playerSizeModifier,
+            gravity : this.level.tile_size*gameDetails.gravityModifier,
+            initialX : this.xOffset + 2 * this.level.tile_size,
+            initialY : this.yOffset + 2 * this.level.tile_size,
+            
+            //Skin defined
+            jumpVelocity : -this.level.tile_size*0.2,
+            speed : 5,
+            jumps : 2,
+
+            //Player defined
+            image : this.playerSkin},
+            this.p);
+
+        //Graphical adjustments
+        this.xOffset =  (this.p.windowWidth - this.level.levelWidth) / 2;
+        this.yOffset =  (this.p.windowHeight - this.level.levelHeight) / 2;
+        this.prevxOffset = this.xOffset;
+        this.prevyOffset = this.yOffset;
+
+        this.scrollSpeed=gameDetails.scrollSpeed;
+
+        this.nextLevel=this.level.createLayout(this.levelLayouts.defaultWorldLayouts[0],this.levelGraphics[1]);
+
     }
 
-    handleGame(xOffset:number,yOffset:number,debug:boolean){
+    resize(){
+        //Calculate new centering adjustment for the current level based on its size
+        this.xOffset = (this.p.windowWidth - this.level.levelWidth) / 2;
+        this.yOffset = (this.p.windowHeight - this.level.levelHeight) / 2;
+        //Adjust the player accordingly based on the size changes
+        this.player.movePlayer(this.xOffset-this.prevxOffset,this.yOffset-this.prevyOffset);
+        //Save the new value of the offset
+        this.prevxOffset=this.xOffset;
+        this.prevyOffset=this.yOffset;
+    }
+
+    handleGame(debug:boolean){
         //DRAWING THE ELEMENTS OF THE GAME
-        this.level.drawBackground(xOffset,yOffset);
-        this.level.draw(xOffset+this.scroll,yOffset); //Dinamic, moves based on the scroll
-        this.level.drawCorners(xOffset,yOffset);
+        this.level.drawBackground(this.xOffset,this.yOffset);
+        this.level.draw(this.xOffset+this.scroll,this.yOffset); //Dynamic, moves based on the scroll
+        this.level.drawCorners(this.xOffset,this.yOffset);
         this.player.draw();
+
+        //Visually show pause cooldown
+        this.p.push();
+            this.p.fill("green");
+            this.p.noStroke();
+            this.p.rect(this.xOffset,
+                        this.yOffset+this.level.levelHeight,
+                        this.p.map(this.pauseCooldown,0,300,0,this.level.levelWidth-this.level.tile_size),
+                        this.level.tile_size*0.2);
+        this.p.pop();
 
         //COLLISIONS
         this.player.rightCollisionFlag=false; //set the collision on the right to false every frame if it isnt colliding with anything
-        this.handleCollisions(xOffset+this.scroll,yOffset,debug); //Dinamic, moves based on the scroll
-        this.handlePlayfieldCornerCollisions(xOffset,yOffset);
+        this.handleCollisions(this.xOffset+this.scroll,this.yOffset,debug); //Dynamic, moves based on the scroll
+        this.handlePlayfieldCornerCollisions();
 
         //MOVEMENT
         if(this.player.isAlive){ //If the player is dead game ends over all other things
@@ -43,10 +122,12 @@ export default class GameLogic {
                     this.player.movePlayer(-this.scrollSpeed,0); //Player movement due to the scrolling
                 }
             }else{
-                this.level.grayScreen(xOffset,yOffset);
+                this.level.tintScreen(this.xOffset,this.yOffset,"gray");
+                this.showGameInfo();
+                
             }
         }else{
-                this.level.grayScreen(xOffset,yOffset);
+                this.level.tintScreen(this.xOffset,this.yOffset,"black");
         }
 
         //SCROLLING
@@ -65,22 +146,60 @@ export default class GameLogic {
         if(this.pauseCooldown>0 && this.pause==false){ this.pauseCooldown-=1; }//Only decrease the timer if we have paused and the game is currently unpaused
     }
 
-    handlePlayfieldCornerCollisions(xOffset:number,yOffset:number){
+    showGameInfo(){
+        this.p.image(   
+                        this.generalAssets[0], //pause icon
+                        this.xOffset+(this.level.levelWidth/2)-this.level.tile_size,
+                        this.yOffset+(this.level.levelHeight/2)-2*this.level.tile_size,
+                        this.level.tile_size,
+                        this.level.tile_size
+                    );
+
+        this.p.image(   
+                        this.levelGraphics[0][5], //coin
+                        this.xOffset+(this.level.levelWidth/2)-2*this.level.tile_size,
+                        this.yOffset+(this.level.levelHeight/2)-1*this.level.tile_size,
+                        this.level.tile_size,
+                        this.level.tile_size
+                    );
+
+        this.p.image(   
+                        this.levelGraphics[0][6], //gem
+                        this.xOffset+(this.level.levelWidth/2)-2*this.level.tile_size,
+                        this.yOffset+(this.level.levelHeight/2)-0*this.level.tile_size,
+                        this.level.tile_size,
+                        this.level.tile_size
+                    );
+
+        this.p.push();
+            this.p.textSize(this.level.tile_size/2);
+            this.p.text(this.coins,
+                        this.xOffset+(this.level.levelWidth/2)+this.level.tile_size*0.35,
+                        this.yOffset+(this.level.levelHeight/2)-this.level.tile_size*0.35
+                        );
+            this.p.text(this.gems,
+                        this.xOffset+(this.level.levelWidth/2)+this.level.tile_size*0.35,
+                        this.yOffset+(this.level.levelHeight/2)+this.level.tile_size*0.75
+                        );
+        this.p.pop();
+    }
+
+    handlePlayfieldCornerCollisions(){
         // calculate the player's bounding box
         let playerLeft = this.player.x;
         let playerRight = this.player.x + this.player.width;
         let playerTop = this.player.y;
         let playerBottom = this.player.y + this.player.height;
 
-        if(playerLeft<xOffset){ //Left side
+        if(playerLeft<this.xOffset){ //Left side
             if(this.player.rightCollisionFlag){ this.player.isAlive=false; } //Squished by tile and (left) playfield border death trigger
-            this.player.x=xOffset;
-        }else if(playerRight>xOffset+this.level.levelWidth-this.level.tile_size){
-            this.player.x=(xOffset+this.level.levelWidth-this.level.tile_size)-this.player.width;
-        }else if(playerTop<yOffset){
-            this.player.y=yOffset;
+            this.player.x=this.xOffset;
+        }else if(playerRight>this.xOffset+this.level.levelWidth-this.level.tile_size){
+            this.player.x=(this.xOffset+this.level.levelWidth-this.level.tile_size)-this.player.width;
+        }else if(playerTop<this.yOffset){
+            this.player.y=this.yOffset;
             this.player.vy=0;
-        }else if(playerBottom>yOffset+this.level.levelHeight){
+        }else if(playerBottom>this.yOffset+this.level.levelHeight){
             this.player.isAlive=false; //death by falling out of the playfield
         }
     }
@@ -181,7 +300,7 @@ export default class GameLogic {
                         // calculate the bounding box of the tile
                         tileLeft = xOffset + (j * this.level.tile_size) + (0.1 * this.level.tile_size);
                         tileRight = xOffset + ((j + 1) * this.level.tile_size) - (0.1 * this.level.tile_size);
-                        tileTop = yOffset + (i * this.level.tile_size) + (0.4 * this.level.tile_size);
+                        tileTop = yOffset + (i * this.level.tile_size) + (0.6 * this.level.tile_size);
                         tileBottom = yOffset + ((i + 1) * this.level.tile_size);
 
                         dircol = this.detectSquareCollisions(tileLeft,tileRight,tileTop,tileBottom,debug);
@@ -202,14 +321,13 @@ export default class GameLogic {
                         // check if the player's bounding box overlaps with the tile's ellipse
                         if (this.player.x < centerX + radiusX && this.player.x+this.player.width > centerX - radiusX && this.player.y < centerY + radiusY && this.player.y+this.player.height > centerY - radiusY) {
                             if(this.level.layout[i][j].code=="coi"){
-                                this.player.coins++;
+                                this.coins++;
                             }else{
-                                this.player.gems++;
+                                this.gems++;
                             }
                             this.level.layout[i][j].code = "000";
-                            if(this.level.images!=null){
-                                this.level.layout[i][j].image = this.level.images[0];
-                            }
+                            this.level.layout[i][j].image = this.levelGraphics[0][0];
+                            
                         }
                     break;
 
@@ -243,12 +361,13 @@ export default class GameLogic {
         }
     }
 
-    keyInteractions(keyCode:number,p5:p5){
+    keyInteractions(keyCode:number){
         switch(keyCode){
-            case(p5.UP_ARROW):
+            case(this.p.UP_ARROW):
                 this.player.isJumping=true;
             break;
-            case(80): //p
+            case(80): // p
+            case(27): // esc
                 this.pauseGame();
             break;
         }

@@ -6,60 +6,53 @@ export default class Level {
   tile_size: number;
   layout: Tile[][];
   p: p5;
-  images: any[];
   levelWidth: number;
   levelHeight: number;
 
-  constructor(parameters:{rows: number, cols: number, rawLayout: string[],tile_size: number, images: any[]}, p: p5) {
+  constructor(parameters:any|{rows: number, cols: number, initialLayout: string[],tile_size: number,images:any}, p: p5) {
     this.rows = parameters.rows || 1;
     this.cols = parameters.cols || 1;
     this.tile_size = parameters.tile_size || 200;
-    this.layout = []; 
     this.p = p;
-    this.images = parameters.images || null;
     this.levelWidth = (this.cols) * this.tile_size;
     this.levelHeight = (this.rows) * this.tile_size;
-    // create the layout
-    this.layout=this.createLayout(parameters.rawLayout || ["000"]);
+    // create the  initial layout
+    this.layout=this.createLayout(parameters.initialLayout || ["000"],parameters.images);
   }
 
   selectImage(code:string){
     switch(code){
       // level images order
-      case("000"): return this.images[0];   // 0 - 000 - empty tile
-      case("flo"): return this.images[1];   //1 - flo - floor tile
-      case("fil"): return this.images[2];   //2 - fil - filler tile (goes under the floor tile)
-      case("pla"): return this.images[3];   // 3 - pla - platform tile
-      case("spi"): return this.images[4];   // 4 - spi - spike tile
-      case("coi"): return this.images[5];   // 5 - coi - coin
-      case("gem"): return this.images[6];   // 6 - gem - gem
-      case("cll"): return this.images[7];   // 7 - cll - cloud left
-      case("clr"): return this.images[8];   // 8 - clr - cloud right
-      case("ds0"): return this.images[9];   // 9 - ds0 - decor small 0
-      case("ds1"): return this.images[10];  // 10 - ds1 - decor small 1
-      case("ds2"): return this.images[11];  // 11 - ds2 - decor small 2
-      case("d00"): return this.images[12];  // 12 - d00 - decor big 0 down
-      case("d01"): return this.images[13];  // 13 - d01 - decor big 0 up
-      case("d10"): return this.images[14];  // 14 - d10 - decor big 1 down
-      case("d11"): return this.images[15];  // 15 - d11 - decor big 1 up
-      default: return this.images[16];      // 16 - error tile
+      case("000"): return 0;   // 0 - 000 - empty tile
+      case("flo"): return 1;   //1 - flo - floor tile
+      case("fil"): return 2;   //2 - fil - filler tile (goes under the floor tile)
+      case("pla"): return 3;   // 3 - pla - platform tile
+      case("spi"): return 4;   // 4 - spi - spike tile
+      case("coi"): return 5;   // 5 - coi - coin
+      case("gem"): return 6;   // 6 - gem - gem
+      case("cll"): return 7;   // 7 - cll - cloud left
+      case("clr"): return 8;   // 8 - clr - cloud right
+      case("ds0"): return 9;   // 9 - ds0 - decor small 0
+      case("ds1"): return 10;  // 10 - ds1 - decor small 1
+      case("ds2"): return 11;  // 11 - ds2 - decor small 2
+      case("d00"): return 12;  // 12 - d00 - decor big 0 down
+      case("d01"): return 13;  // 13 - d01 - decor big 0 up
+      case("d10"): return 14;  // 14 - d10 - decor big 1 down
+      case("d11"): return 15;  // 15 - d11 - decor big 1 up
+      case("sus"): return 16;  // 16 - sus - special filler tile (sus)
+      default: return 17;      // 17 - error tile
     }
   }
 
-  createLayout(rawLayout:string[]) {
+  createLayout(rawLayout:string[],images:any) {
     let matrix=[];
     for (let i = 0; i < this.rows; i++) {
       let row = [];
       for (let j = 0; j < this.cols; j++) {
         // get the code for the current tile
         let code = rawLayout[i * this.cols + j];
-        let image;
-        // use the appropriate image for the tile based on its code
-        if(this.images!=null){
-          image=this.selectImage(code);
-        }
         // create a new tile with the code and image
-        let tile = new Tile(code, image, this.p);
+        let tile = new Tile(code, images[this.selectImage(code)],this.p);
         row.push(tile);
       }
       // add the row of tiles to the matrix
@@ -105,9 +98,11 @@ export default class Level {
     }
   }
 
-  grayScreen(xOffset: number, yOffset: number){
+  tintScreen(xOffset: number, yOffset: number,color:string){
     this.p.push();
-        this.p.fill(125,125);
+        let tint = this.p.color(color);
+        tint.setAlpha(175);
+        this.p.fill(tint);
         this.p.rect(xOffset,yOffset,this.levelWidth-this.tile_size,this.levelHeight);
     this.p.pop();
   }
