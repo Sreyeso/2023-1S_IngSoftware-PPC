@@ -9,7 +9,7 @@ export default class Level {
   levelWidth: number;
   levelHeight: number;
 
-  constructor(parameters:any|{rows: number, cols: number, initialLayout: string[],tile_size: number,images:any}, p: p5) {
+  constructor(parameters:any|{rows: number, cols: number, initialLayout: string[],tile_size: number,initialImages:any}, p: p5) {
     this.rows = parameters.rows || 1;
     this.cols = parameters.cols || 1;
     this.tile_size = parameters.tile_size || 200;
@@ -17,30 +17,32 @@ export default class Level {
     this.levelWidth = (this.cols) * this.tile_size;
     this.levelHeight = (this.rows) * this.tile_size;
     // create the  initial layout
-    this.layout=this.createLayout(parameters.initialLayout || ["000"],parameters.images);
+    this.layout=this.createLayout(parameters.initialLayout,parameters.initialImages);
   }
 
   selectImage(code:string){
     switch(code){
-      // level images order
-      case("000"): return 0;   // 0 - 000 - empty tile
-      case("flo"): return 1;   //1 - flo - floor tile
-      case("fil"): return 2;   //2 - fil - filler tile (goes under the floor tile)
-      case("pla"): return 3;   // 3 - pla - platform tile
-      case("spi"): return 4;   // 4 - spi - spike tile
-      case("coi"): return 5;   // 5 - coi - coin
-      case("gem"): return 6;   // 6 - gem - gem
-      case("cll"): return 7;   // 7 - cll - cloud left
-      case("clr"): return 8;   // 8 - clr - cloud right
-      case("ds0"): return 9;   // 9 - ds0 - decor small 0
-      case("ds1"): return 10;  // 10 - ds1 - decor small 1
-      case("ds2"): return 11;  // 11 - ds2 - decor small 2
-      case("d00"): return 12;  // 12 - d00 - decor big 0 down
-      case("d01"): return 13;  // 13 - d01 - decor big 0 up
-      case("d10"): return 14;  // 14 - d10 - decor big 1 down
-      case("d11"): return 15;  // 15 - d11 - decor big 1 up
-      case("sus"): return 16;  // 16 - sus - special filler tile (sus)
-      default: return 17;      // 17 - error tile
+      case("000"): return 0;   //000 - empty tile
+      case("flo"): return 1;   //flo - floor tile
+      case("fil"): return 2;   //fil - filler tile (goes under the floor tile)
+      case("pla"): return 3;   //pla - platform tile
+      case("spb"): return 4;   //spb - spike tile bottom
+      case("spl"): return 5;   //spl - spike tile left
+      case("spr"): return 6;   //spr - spike tile right
+      case("spt"): return 7;   //spt - spike tile top
+      case("coi"): return 8;   //coi - coin
+      case("gem"): return 9;   //gem - gem
+      case("cll"): return 10;  //cll - cloud left
+      case("clr"): return 11;  //clr - cloud right
+      case("ds0"): return 12;  //ds0 - decor small 0
+      case("ds1"): return 13;  //ds1 - decor small 1
+      case("ds2"): return 14;  //ds2 - decor small 2
+      case("d00"): return 15;  //d00 - decor big 0 down
+      case("d01"): return 16;  //d01 - decor big 0 up
+      case("d10"): return 17;  //d10 - decor big 1 down
+      case("d11"): return 18;  //d11 - decor big 1 up
+      case("sus"): return 19;  //sus - special filler tile (sus)
+      default: return 20;      //error tile
     }
   }
 
@@ -59,15 +61,6 @@ export default class Level {
       matrix.push(row);
     }
     return matrix;
-  }
-
-  replaceLeftmostColumn(column:Tile[]){
-    if(column!=undefined){
-      for (let i = 0; i < this.rows; i++) {
-        this.layout[i].shift(); // Remove the leftmost element from each row
-        this.layout[i].push(column[i]); // insert a new element to the right of each row
-      }
-    }
   }
 
   drawBackground(xOffset: number, yOffset: number){
