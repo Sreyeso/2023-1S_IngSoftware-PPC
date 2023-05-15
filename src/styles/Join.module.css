@@ -1,7 +1,3 @@
-.Background{
-    position: relative;
-}
-
 .Background::before{
     content:'';
     background-image: url("../../public/pages_imgs/Fondo_juego.jpg");
@@ -17,7 +13,7 @@
 
 .logo{
     text-align: center;
-    margin-top: 30px;
+    margin-top: 2rem;
 }
 
 .Background h2{
@@ -29,19 +25,26 @@
 
 .gridInputs{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto auto;
+    row-gap: 30px;
+    column-gap: 5vw;
 }
 
 .gridInputs input{
+    width: 350px;
+    height: 35px;
     font-size: large;
     padding: 10px;
-    border: solid 1px;   
-    margin: 6px;
-}
+    border: solid 1px;  
+    justify-self: end;
+} 
+
+.gridInputs input:nth-child(even){
+    justify-self: start;
+} 
  
-.Butts{
+.Buttons{
     background-image: url('../../public/buttons/JOIN.png');
     background-size: cover;    
     margin: 15px;
@@ -51,22 +54,31 @@
     background-color: transparent;
 }
 
-.Butts:hover{
+.Buttons:hover{
     box-shadow: 0 0 5px 1.3px rgba(0,0,0,50);
 }
 
-.Butts:active{
+.Buttons:active{
     box-shadow: 0 0 8px 3px rgba(0,0,0,200);
 }
 
 .LoginButton {
     display:flex;
     justify-content: center;
-    margin: 15px;
+    margin-top: 23px;
+}
+
+.loginLink{
+    text-align: center;
+    font-family: cinzel-regular;
 }
 
 .AllInside footer{
-    text-align: right;
+    display:grid;
+    grid-template-columns: auto auto;
+    column-gap: 50vw;
+    margin-top: 30px;
+    text-align: center;
     font-family: cinzel-regular;
 }
 

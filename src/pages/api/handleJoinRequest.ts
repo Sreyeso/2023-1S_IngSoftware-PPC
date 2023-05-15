@@ -52,6 +52,7 @@ export default function handler(
 }
 
 function validate_data(user_received: ProperUser): [number,string]{
+ 
   //Validamos los datos, y devolvemos un código http junto con un mensaje para el cliente
 
   //Si alguno de los datos recibidos no es un String, convertirlo en un string
@@ -82,6 +83,22 @@ function validate_data(user_received: ProperUser): [number,string]{
 
   if(user_received.username.includes(" ")){
     return [409, "El nombre de usuario no puede contener espacios en blanco"];
+  }
+
+  if(user_received.username.length < 4){
+    return [409, "El nombre de usuario debe tener más de cuatro carácteres"];
+  }
+
+  //Validación del email:
+  const re: RegExp = /([a-z]|[A-Z]|\d|[!#$%&'*+-/=?^_`{|}~])+@/
+  const email_address = "s@"
+  console.log(user_received.email);
+  const valid_address = user_received.email.match(re);
+  if(!valid_address){
+    console.log("WOWW");
+    return [409,"Dirección de correo electrónico inválida"];
+  }else{
+    console.log(re);
   }
   
   users.push(user_received);

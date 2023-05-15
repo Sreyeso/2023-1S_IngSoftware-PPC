@@ -1,6 +1,7 @@
 import styles from '../styles/Join.module.css';
 import Image from 'next/image'
 import Head from 'next/head'
+import Link from 'next/link'
 
 let input_fields = [ //Para poner los nombres por defecto de los campos,
     //y el nombre de la correspondiente propiedad en user_to_send
@@ -50,17 +51,16 @@ export default function Join (){
                         <form>
                             <div className={styles.gridInputs}>
                                 {input_fields.map((field, index)=>{
-                                    return (
-                                    <input 
-                                        key={index}
-                                        type="text" 
-                                        placeholder={field[0]}
-                                        onChange={(e)=>{
-                                            e.preventDefault();
-                                            user_to_send[field[1]] = e.target.value;
-                                            //console.log(user_to_send)
-                                        }}>                                                                                        
-                                    </input>
+                                    return (                            
+                                        <input             
+                                            key={index}
+                                            type="text" 
+                                            placeholder={field[0]}
+                                            onChange={(e)=>{
+                                                e.preventDefault();
+                                                user_to_send[field[1]] = e.target.value;
+                                            }}>                                                                                        
+                                        </input>
                                     );
                                 })}
                             </div>
@@ -68,7 +68,13 @@ export default function Join (){
                                 <PPCButtons/>
                             </div>
                         </form>
+                        <div className={styles.loginLink}>
+                            <h3>
+                                <Link href="/">¿Ya tienes una cuenta? Inicia sesión acá</Link>
+                            </h3>
+                        </div>        
                         <footer>
+                            <h3>PPC - 2023</h3>
                             <h3>Copyright © PPC Team 2023</h3>
                         </footer>
                     </div>    
@@ -91,7 +97,7 @@ function PPCButtons(props: object){
     return (
         <button type="button"
          onClick={handleClick} 
-         className={styles.Butts}>    
+         className={styles.Buttons}>    
         </button>
     );
 }
