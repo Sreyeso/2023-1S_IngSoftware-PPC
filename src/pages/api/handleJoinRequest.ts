@@ -18,6 +18,13 @@ interface ProperUser{
 
 type KeyProperUser = keyof ProperUser
 
+const countries = [ //Provisional
+  "Albania", "Andorra", "Angola", "Bélgica", "Colombia", "España", "Myanmar"
+]
+const genders = [
+  "Femenino", "Masculino", "Otro"
+]
+
 let users = [] //Provisional. Arreglo con los usuarios creados
 
 const required_fields = [
@@ -29,7 +36,8 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
     if(req.method==="GET"){
-      res.status(200).json({ name: 'Rivers are green' })
+      const response = [countries, genders]  
+      res.status(200).end(JSON.stringify(response));
     }
     else if(req.method==="PUT"){
       let user_received;
@@ -52,7 +60,7 @@ export default function handler(
 }
 
 function validate_data(user_received: ProperUser): [number,string]{
- 
+  console.log(user_received);
   //Validamos los datos, y devolvemos un código http junto con un mensaje para el cliente
 
   //Si alguno de los datos recibidos no es un String, convertirlo en un string
@@ -74,25 +82,25 @@ function validate_data(user_received: ProperUser): [number,string]{
       return [409, "Se debe llenar todo el formulario"];
     };
   }
-
-  //let {username, email, gender, country, password, rep_password } = user_received;
   
   //Quitar los espacios en blanco en ambos extremos de usuario y mail:
   user_received.username = user_received.username.trim();
   user_received.email = user_received.email.trim();
 
-  if(user_received.username.includes(" ")){
+  let {username, email, gender, country, password, rep_password } = user_received;
+
+  if(username.includes(" ")){
     return [409, "El nombre de usuario no puede contener espacios en blanco"];
   }
 
-  if(user_received.username.length < 4){
+  if(username.length < 4){
     return [409, "El nombre de usuario debe tener más de cuatro carácteres"];
   }
 
   //Validación del email:
   const re: RegExp = /([a-z]|[A-Z]|\d|[!#$%&'*+-/=?^_`{|}~])+@/
   const email_address = "s@"
-  const valid_address = user_received.email.match(re);
+  const valid_address = email.match(re);
   if(!valid_address){
     console.log("WOWW");
     return [409,"Dirección de correo electrónico inválida"];
