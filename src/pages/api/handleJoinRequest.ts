@@ -92,7 +92,6 @@ function validate_data(user_received: ProperUser): [number,string]{
   //Validación del email:
   const re: RegExp = /([a-z]|[A-Z]|\d|[!#$%&'*+-/=?^_`{|}~])+@/
   const email_address = "s@"
-  console.log(user_received.email);
   const valid_address = user_received.email.match(re);
   if(!valid_address){
     console.log("WOWW");

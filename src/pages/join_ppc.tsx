@@ -75,7 +75,7 @@ export default function Join (){
                         </div>        
                         <footer>
                             <h3>PPC - 2023</h3>
-                            <h3>Copyright © PPC Team 2023</h3>
+                            <h3>Copyright © PPC Team Ltd</h3>
                         </footer>
                     </div>    
                 </div>
