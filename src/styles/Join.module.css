@@ -63,6 +63,10 @@
 .gridInputs select:nth-child(even){
     justify-self: start;
 } 
+
+.SubmitForm select{
+    text-decoration:antiquewhite; /*Not working*/
+}
  
 .Buttons{
     background-image: url('../../public/buttons/JOIN.png');
