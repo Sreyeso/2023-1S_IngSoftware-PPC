@@ -27,7 +27,8 @@
     text-align: center;
     font-family: cinzel-regular;
     font-size: 25px;
-    text-decoration: rgb(187, 62, 62);
+    margin-top: 40px;
+    
 }
 
 .gridInputs{
@@ -79,11 +80,13 @@
 }
 
 .Buttons:hover{
-    box-shadow: 0 0 5px 1.3px rgba(0,0,0,50);
+    /* box-shadow: 0 0 20px -10px rgba(0,0,0,150);  */
+    transform: scale(1.03)
 }
 
 .Buttons:active{
-    box-shadow: 0 0 8px 3px rgba(0,0,0,200);
+    filter: brightness(0.98);
+    transform: scale(1.08);
 }
 
 .LoginButton {

@@ -4,12 +4,12 @@ import Head from 'next/head'
 import Link from 'next/link'
 import {useEffect, useState} from 'react'
 
-let input_fields = [ //Para poner los nombres por defecto de los campos,
+let inputFields = [ //Para poner los nombres por defecto de los campos,
     //y el nombre de la correspondiente propiedad en user_to_send
     ["Usuario", "username","text"],
     ["Correo", "email","text"],
     ["Género","gender","select"],
-    ["País","country","select"], 
+    ["Región","country","select"], 
     ["Contraseña","password","password"],
     ["Repetir Contraseña","rep_password","password"]
 ];
@@ -27,9 +27,9 @@ type js_answer = {
     name:string
 }
 
-type msg_shower = {setMessageScreen: (js:js_answer)=>void}
+type msg_shower = {showMessageScreen: (js:js_answer)=>void}
 
-let url = '/api/handleJoinRequest'
+const url = '/api/handleJoinRequest'
 
 const join_butt = '/buttons/JOIN.png';
 
@@ -77,7 +77,7 @@ function SubmitForm(props: object){
     const [genders, setGenders] = useState([]);
     const [countries, setCountries] = useState([]);
 
-    function setMessageScreen (js: js_answer) {
+    function showMessageScreen (js: js_answer) {
         console.log(js);
         showError(js.name)
     }
@@ -87,10 +87,10 @@ function SubmitForm(props: object){
             method: "GET",
         });
         let responses = await response.json();
-        setCountries(responses[0])
-        setGenders(responses[1])
-
+        setCountries(responses[0]);
+        setGenders(responses[1]);
     }
+
     useEffect(() => {
         getOptions();
     }, []);
@@ -98,7 +98,7 @@ function SubmitForm(props: object){
     return (
         <form className={styles.SubmitForm}>
             <div className={styles.gridInputs}>
-                {input_fields.map((field, index)=>{
+                {inputFields.map((field, index)=>{
                     let optionsToDisplay: string[] = [];
                     if(field[2]==="select"){
                         if(field[1]==="gender"){
@@ -138,25 +138,25 @@ function SubmitForm(props: object){
             </div>
             <h3>{`¡${error}!`}</h3>
             <div className = {styles.LoginButton}>
-                <PPCButtons setMessageScreen = {setMessageScreen}/>
+                <PPCButtons showMessageScreen = {showMessageScreen}/>
             </div>            
         </form>
     )
 }
 
-function PPCButtons({setMessageScreen}:msg_shower){
-    async function handleClick(){
+function PPCButtons({showMessageScreen}:msg_shower){
+    async function sendNewUser(){
         const response = await fetch(url, {
             method: "PUT",
             body: JSON.stringify(user_to_send),
         });
         const json = await response.json();
-        setMessageScreen(json);
+        showMessageScreen(json);
         console.log(user_to_send)
     }
     return (
         <button type="button"
-         onClick={handleClick} 
+         onClick={sendNewUser} 
          className={styles.Buttons}>    
         </button>
     );
