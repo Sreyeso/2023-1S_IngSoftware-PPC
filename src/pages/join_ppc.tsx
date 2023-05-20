@@ -2,10 +2,11 @@ import styles from '../styles/Join.module.css';
 import Image from 'next/image'
 import Head from 'next/head'
 import Link from 'next/link'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
+import { join } from 'path';
 
 let inputFields = [ //Para poner los nombres por defecto de los campos,
-    //y el nombre de la correspondiente propiedad en user_to_send
+    //y el nombre de la correspondiente propiedad en userToSend
     ["Usuario", "username","text"],
     ["Correo", "email","text"],
     ["Género","gender","select"],
@@ -14,7 +15,7 @@ let inputFields = [ //Para poner los nombres por defecto de los campos,
     ["Repetir Contraseña","rep_password","password"]
 ];
 
-let user_to_send:object = {
+let userToSend: object = {
     username:"",
     email:"",
     gender:"",
@@ -23,15 +24,15 @@ let user_to_send:object = {
     rep_password:"",
 }
 
-type js_answer = {
+type jsAnswer = {
     name:string
 }
 
-type msg_shower = {showMessageScreen: (js:js_answer)=>void}
+type msg_shower = {showMessageScreen: (js:jsAnswer)=>void}
 
 const url = '/api/handleJoinRequest'
 
-const join_butt = '/buttons/JOIN.png';
+const joinButt = '/buttons/JOIN.png';
 
 export default function Join (){
     return (
@@ -42,15 +43,14 @@ export default function Join (){
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <main>          
-                <div className = {styles.Background}>
-                    <div className = {styles.AllInside}>
+                <div className = {styles.background}>
+                    <div className = {styles.allInside}>
                         <div className = {styles.logo}>
                             <Image
                             src="/pages_imgs/logo_PPC.png"
                             alt="Logo de PPC Games"
                             width={200}
                             height={300}
-                            priority                    
                             />
                         </div>
                         <h2>Únete a PPC Games</h2>
@@ -72,12 +72,12 @@ export default function Join (){
     );
 }
 
-function SubmitForm(props: object){
+function SubmitForm(){
     const [error, showError] = useState("Llena el formulario");
     const [genders, setGenders] = useState([]);
     const [countries, setCountries] = useState([]);
 
-    function showMessageScreen (js: js_answer) {
+    function showMessageScreen (js: jsAnswer) {
         console.log(js);
         showError(js.name)
     }
@@ -96,7 +96,7 @@ function SubmitForm(props: object){
     }, []);
 
     return (
-        <form className={styles.SubmitForm}>
+        <form className={styles.submitForm}>
             <div className={styles.gridInputs}>
                 {inputFields.map((field, index)=>{
                     let optionsToDisplay: string[] = [];
@@ -108,15 +108,15 @@ function SubmitForm(props: object){
                             optionsToDisplay = optionsToDisplay.concat(countries);                        
                         }
                         return(
-                            
                             <select 
                                 name={field[0]} 
+                                className = {styles.selection}
                                 key={index} onChange={(e) => {
                                     e.preventDefault();
-                                    user_to_send[field[1]] = e.target.value;                            
+                                    userToSend[field[1]] = e.target.value;                            
                                 }}
                             >
-                                <option value="" disabled selected>{field[0]}</option>
+                                <option value="" className={styles.defaultSelectOption} disabled selected>{field[0]}</option>
                                 {optionsToDisplay.map(function(option, index2){
                                     return (<option value={option} key={index2+1}>{option}</option>);
                                 })}
@@ -130,34 +130,39 @@ function SubmitForm(props: object){
                             placeholder={field[0]}
                             onChange={(e)=>{
                                 e.preventDefault();
-                                user_to_send[field[1]] = e.target.value;                            
+                                userToSend[field[1]] = e.target.value;                            
                             }}>                                                                                        
                         </input>
                     );
                 })}
             </div>
             <h3>{`¡${error}!`}</h3>
-            <div className = {styles.LoginButton}>
-                <PPCButtons showMessageScreen = {showMessageScreen}/>
+            <div className = {styles.buttonDiv}>
+                <LoginButton showMessageScreen = {showMessageScreen}/>
             </div>            
         </form>
     )
 }
 
-function PPCButtons({showMessageScreen}:msg_shower){
+function LoginButton({showMessageScreen}:msg_shower){
+    //Cuando se presiona el botón, se envía al servidor lo
+    //que haya en el objeto userToSend
     async function sendNewUser(){
         const response = await fetch(url, {
             method: "PUT",
-            body: JSON.stringify(user_to_send),
+            body: JSON.stringify(userToSend),
         });
         const json = await response.json();
         showMessageScreen(json);
-        console.log(user_to_send)
+        console.log(userToSend)
     }
     return (
-        <button type="button"
-         onClick={sendNewUser} 
-         className={styles.Buttons}>    
+        <button 
+            type="button"
+            onClick={sendNewUser} 
+            className={styles.button}
+        >
+            <img src = {joinButt}></img>    
         </button>
     );
 }

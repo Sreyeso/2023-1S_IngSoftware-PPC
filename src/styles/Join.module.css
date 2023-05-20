@@ -1,4 +1,4 @@
-.Background::before{
+.background::before{
     content:'';
     background-image: url("../../public/pages_imgs/Fondo_juego.jpg");
     opacity: 0.25;
@@ -7,7 +7,9 @@
     inset: 0;
 }
 
-.AllInside{
+.allInside{ /*Aislamos los componentes de adentro para evitar
+    que la opacidad de la imagen de fondo de la página se aplique
+    a otros elementos*/
     isolation: isolate;
 }
 
@@ -16,14 +18,14 @@
     margin-top: 2rem;
 }
 
-.Background h2{
+.background h2{
     text-align: center;
     font-family: cinzel-bold;
     font-size: 35px;
     margin-top: 2rem;
 }
 
-.SubmitForm h3{
+.submitForm h3{
     text-align: center;
     font-family: cinzel-regular;
     font-size: 25px;
@@ -61,38 +63,65 @@
     justify-self: end;
 }
 
+/* .gridInputs select:invalid{
+    text-decoration: #999999;
+    color:aliceblue
+} */
+
 .gridInputs select:nth-child(even){
     justify-self: start;
 } 
 
-.SubmitForm select{
-    text-decoration:antiquewhite; /*Not working*/
+.defaultSelectOption{
+    text-decoration: #999999;
+}
+
+.selection[value=""] {
+/* .selection:invalid { */
+/* .allInside ::select{     */
+/* .select.selector{ */
+/* .select * { */
+    color:aliceblue;
+    text-decoration: #999999;
+}
+
+.gridInputs input:hover{
+    border:solid 3px;
+}
+
+.gridInputs select:hover{
+    border:solid 3px;
+}
+
+
+
+.buttonDiv {
+    display:flex;
+    justify-content: center;
+    margin-top: 23px;
 }
  
-.Buttons{
-    background-image: url('../../public/buttons/JOIN.png');
-    background-size: cover;    
+.button{
     margin: 15px;
-    width: 200px;
-    height: 62px;
     border: transparent;
     background-color: transparent;
 }
 
-.Buttons:hover{
-    /* box-shadow: 0 0 20px -10px rgba(0,0,0,150);  */
-    transform: scale(1.03)
+.button img{
+    width: 200px;
+    height: 62px;
 }
 
-.Buttons:active{
+.button:hover{
+    /* box-shadow: 0 0 20px -10px rgba(0,0,0,150);  */
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.button:active{
     filter: brightness(0.98);
     transform: scale(1.08);
-}
-
-.LoginButton {
-    display:flex;
-    justify-content: center;
-    margin-top: 23px;
+    cursor: pointer;
 }
 
 .loginLink{
@@ -118,7 +147,7 @@
     text-decoration:line-through;
 }
 
-.AllInside footer{
+.allInside footer{
     display:grid;
     grid-template-columns: auto auto;
     column-gap: 50vw;

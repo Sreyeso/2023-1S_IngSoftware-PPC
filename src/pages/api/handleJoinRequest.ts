@@ -29,8 +29,8 @@ const regions = [
 ]
 const genders = ["Femenino", "Masculino", "Otro"]
 const insults = [
-"Malparido",
-"Hijueputa",
+"malparido",
+"hijueputa",
 "puta",
 "perra",
 "zorra",
@@ -141,12 +141,13 @@ function validate_data(userReceived: ProperUser): [number,string]{
     return [409, "El nombre de usuario no puede contener espacios en blanco"];
   }
 
-  if(username.length < 4){
-    return [409, "El nombre de usuario debe tener más de cuatro carácteres"];
+  if(username.length < 4 || username.length > 20){
+    return [409, "El nombre de usuario debe tener entre de cuatro y veinte carácteres"];
   }
 
   for(let insult=0; insult<insults.length; ++insult){
-    if(username.includes(insults[insult])){
+    let aux_username = username.toLowerCase();
+    if(aux_username.includes(insults[insult])){
       return [409, "El nombre de usuario contiene algún insulto"]
     }
   }
@@ -166,13 +167,12 @@ function validate_data(userReceived: ProperUser): [number,string]{
   if(!passwordFormat.test(password)){
     return [409, "La contraseña debe tener al menos un dígito, una mayúscula y un carácter especial"]
   }
-  
 
   if(password !== rep_password){
     return [409, "Las contraseñas deben coincidir"];
   }
   
   users.push(userReceived);
-  return [200, "Usuario creado con éxito"];
+  return [201, "Usuario creado con éxito"];
 
 }
