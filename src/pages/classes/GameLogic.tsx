@@ -5,7 +5,7 @@ import p5 from 'p5';
 
 
 const pauseCooldown=300;
-const tileSize=60;
+const tileSize=55;
 
 export default class GameLogic {
     player:Player|any;
@@ -19,15 +19,19 @@ export default class GameLogic {
     prevyOffset:number=0;
 
     generalAssets:any;
+    bg:any;
 
     maxscrollSpeed:number;
     scrollSpeed:number=1;
     nextLevel:Tile[][]|any=[[]];
+    nextLevelBg:any[]=[];
     scroll:number=0;
+
+    gameStarted:boolean=false;
     pause:boolean=false;
     pauseTimer:number=0;
 
-    score:number=0;
+    score:number=-1;
     coins:number;
     gems:number;
 
@@ -63,8 +67,10 @@ export default class GameLogic {
             this.p);
 
         //Graphical adjustments
-        this.xOffset = this.prevxOffset =  (this.p.windowWidth - this.level.levelWidth) / 2;
-        this.yOffset =  this.prevyOffset = (this.p.windowHeight - this.level.levelHeight) / 2;
+        // this.xOffset = this.prevxOffset =  (this.p.windowWidth - this.level.levelWidth) / 2;
+        // this.yOffset =  this.prevyOffset = (this.p.windowHeight - this.level.levelHeight) / 2;
+        this.xOffset = 0;
+        this.yOffset = 0
 
         this.player = new Player({
             //Game defined
@@ -82,88 +88,122 @@ export default class GameLogic {
             image : this.playerSkin},
             this.p);
 
+        this.bg=this.levelGraphics[0][21];
+
         this.maxscrollSpeed=gameDetails.maxscrollSpeed;
 
     }
 
-    resize(){
-        //Calculate new centering adjustment for the current level based on its size
-        this.xOffset = (this.p.windowWidth - this.level.levelWidth) / 2;
-        this.yOffset = (this.p.windowHeight - this.level.levelHeight) / 2;
-        //Adjust the player accordingly based on the size changes
-        this.player.movePlayer(this.xOffset-this.prevxOffset,this.yOffset-this.prevyOffset);
-        //Save the new value of the offset
-        this.prevxOffset=this.xOffset;
-        this.prevyOffset=this.yOffset;
-    }
+    // resize(){
+    //     //Calculate new centering adjustment for the current level based on its size
+    //     this.xOffset = (this.p.windowWidth - this.level.levelWidth) / 2;
+    //     this.yOffset = (this.p.windowHeight - this.level.levelHeight) / 2;
+    //     //Adjust the player accordingly based on the size changes
+    //     this.player.movePlayer(this.xOffset-this.prevxOffset,this.yOffset-this.prevyOffset);
+    //     //Save the new value of the offset
+    //     this.prevxOffset=this.xOffset;
+    //     this.prevyOffset=this.yOffset;
+    // }
 
     handleGame(debug:boolean){
-        //DRAWING THE ELEMENTS OF THE GAME
-        this.level.drawBackground(this.xOffset,this.yOffset);
-        this.level.draw(this.xOffset+this.scroll,this.yOffset); //Dynamic, moves based on the scroll
-        this.level.drawCorners(this.xOffset,this.yOffset);
-        this.player.draw();
+        if(this.gameStarted){
+            //DRAWING THE ELEMENTS OF THE GAME
+            this.level.draw(this.xOffset+this.scroll,this.yOffset); //Dynamic, moves based on the scroll
+            this.level.drawCorners(this.xOffset,this.yOffset);
+            this.player.draw();
 
-        //Visually show pause cooldown and score
-        this.p.push();
-            this.p.fill("green");
-            this.p.noStroke();
-            this.p.textSize(this.level.tile_size/2);
-            this.p.rect(this.xOffset,
-                        this.yOffset+this.level.levelHeight,
-                        this.p.map(this.pauseTimer,0,300,0,this.level.levelWidth-this.level.tile_size),
-                        this.level.tile_size*0.2);
-            this.p.fill("black");
-            this.p.text(Math.round(this.score),
-                    this.xOffset+(this.level.levelWidth/2),
-                    this.yOffset-this.level.tile_size*0.2
-                    );
-        this.p.pop();
+            //COLLISIONS
+            this.player.rightCollisionFlag=false; //set the collision on the right to false every frame if it isnt colliding with anything
+            this.handleCollisions(this.xOffset+this.scroll,this.yOffset,debug); //Dynamic, moves based on the scroll
+            this.handlePlayfieldCornerCollisions();
 
-        //COLLISIONS
-        this.player.rightCollisionFlag=false; //set the collision on the right to false every frame if it isnt colliding with anything
-        this.handleCollisions(this.xOffset+this.scroll,this.yOffset,debug); //Dynamic, moves based on the scroll
-        this.handlePlayfieldCornerCollisions();
+            //MOVEMENT
+            if(this.player.isAlive){ //If the player is dead none of this happens
 
-        //MOVEMENT
-        if(this.player.isAlive){ //If the player is dead game ends over all other things
-            if(!this.pause){ //If game isn't paused
-                this.player.update();   //Enable player movement
-                this.player.keyMovement();  
-                this.scroll-=this.scrollSpeed; //Enable scrolling
-                this.player.movePlayer(-this.scrollSpeed,0); //Player movement due to the scrolling
+            //Visually show pause cooldown and score
+                this.p.push();
+                this.p.fill("green");
+                this.p.noStroke();
+                this.p.textSize(this.level.tile_size/2);
+                this.p.rect(this.xOffset,
+                            this.yOffset+this.level.levelHeight,
+                            this.p.map(this.pauseTimer,0,300,0,this.level.levelWidth-this.level.tile_size),
+                            this.level.tile_size*0.2);
+                this.p.fill("black");
+                this.p.text(Math.round(this.score),
+                        this.xOffset+(this.level.levelWidth/2),
+                        this.yOffset-this.level.tile_size*0.2
+                        );
+                this.p.pop();
+
+                if(!this.pause){ //If game isn't paused
+                    this.player.update();   //Enable player movement
+                    this.player.keyMovement();  
+                    this.scroll-=this.scrollSpeed; //Enable scrolling
+                    this.player.movePlayer(-this.scrollSpeed,0); //Player movement due to the scrolling
+                }else{
+                    this.level.tintScreen(this.xOffset,this.yOffset,"gray");
+                    this.showGameInfo(this.generalAssets[0]); // Pause screen
+
+                }
             }else{
-                this.level.tintScreen(this.xOffset,this.yOffset,"gray");
-                this.showGameInfo();
-                
+                    this.level.tintScreen(this.xOffset,this.yOffset,"black");
+                    this.showGameInfo(this.generalAssets[1]); // Death screen
             }
+            //SCROLLING
+            if(Math.abs(this.scroll)>this.level.tile_size){ // Scrolling of 1 tile
+
+                if(this.nextLevel[0].length==0){ 
+                    this.selectNextLevel(); //If we don't have a next row to add, it means that all the next level has been loaded, so we load a new one at random
+                    this.score+=1; //Add to score, player survived one screen
+                    if(this.scrollSpeed<this.maxscrollSpeed){
+                        this.scrollSpeed+=0.2;//Increase difficulty
+                    }else{
+                        this.scrollSpeed=this.maxscrollSpeed;
+                    }
+                }
+
+                for (let i = 0; i < this.level.rows; i++) {
+                    this.level.layout[i].shift(); // Remove the leftmost element from each row
+                    this.level.layout[i].push(this.nextLevel[i].shift()); // insert the leftmost element of the new level to the end of the current one
+                }
+
+                this.level.bg.shift(); //Remove the leftmost column bg
+                this.level.bg.push(this.nextLevelBg.shift()); // insert the leftmost column bg of the new Level to the end of the current one
+
+                this.scroll=0;  //reset the scrolling offset (simulate infiniteness)
+
+            }
+
+            //PAUSE
+            if(this.pauseTimer>0 && this.pause==false){ this.pauseTimer-=1; }//Only decrease the timer if we have paused and the game is currently unpaused
+
         }else{
-                this.level.tintScreen(this.xOffset,this.yOffset,"black");
+            //If game hasn't started
+            this.p.push();
+                this.p.stroke("black");
+                this.p.fill("pink");
+                this.p.rect(this.xOffset,this.yOffset,this.level.levelWidth-this.level.tile_size,this.level.levelHeight);
+                this.p.textSize(this.level.tile_size/2);
+                this.p.fill("black");
+                this.p.image(   
+                    this.generalAssets[2],
+                    this.xOffset+(this.level.levelWidth/2)-1.8*this.level.tile_size,
+                    this.yOffset+(this.level.levelHeight/2)-0.2*this.level.tile_size
+                );
+                this.p.text("Presiona cualquier tecla para comenzar",
+                            this.xOffset+this.level.tile_size*5.65,
+                            this.yOffset+(this.level.levelHeight/2)-this.level.tile_size*0.35
+                            );
+            this.p.pop(); 
+
+            
         }
-        //SCROLLING
-        if(Math.abs(this.scroll)>this.level.tile_size){ // Scrolling of 1 tile
-
-            if(this.nextLevel[0].length==0){ 
-                this.selectNextLevel(); //If we don't have a next row to add, it means that all the next level has been loaded, so we load a new one at random
-                this.score+=1; //Add to score, player survived one screen
-                if(this.scrollSpeed<this.maxscrollSpeed){this.scrollSpeed+=1/5;} //Increase difficulty
-            }
-
-            for (let i = 0; i < this.level.rows; i++) {
-                this.level.layout[i].shift(); // Remove the leftmost element from each row
-                this.level.layout[i].push(this.nextLevel[i].shift()); // insert the leftmost element of the new level to the end of the current one
-            }
-
-            this.scroll=0;  //reset the scrolling offset (simulate infiniteness)
-
-        }
-
-        //PAUSE
-        if(this.pauseTimer>0 && this.pause==false){ this.pauseTimer-=1; }//Only decrease the timer if we have paused and the game is currently unpaused
     }
 
+
     selectNextLevel(){
-        let biomeSelection = GameLogic.getRandomInt(2);
+        let biomeSelection = GameLogic.getRandomInt(3);
         let biome;
         switch(biomeSelection){
             case(0):
@@ -172,15 +212,21 @@ export default class GameLogic {
             case(1):
                 biome=this.levelLayouts.desertWorldLayouts;
             break;
+            case(2):
+            biome=this.levelLayouts.hellWorldLayouts;
+        break;
             // Add more biomes accordingly
         }
         let layout=biome[GameLogic.getRandomInt(biome.length)];
         this.nextLevel=this.level.createLayout(layout,this.levelGraphics[biomeSelection]);
+        for (let i=0;i<this.level.cols;i++){
+            this.nextLevelBg.push(this.levelGraphics[biomeSelection][21]);
+        }
     }
 
-    showGameInfo(){
+    showGameInfo(icon:any){
         this.p.image(   
-                        this.generalAssets[0], //pause icon
+                        icon,
                         this.xOffset+(this.level.levelWidth/2)-this.level.tile_size,
                         this.yOffset+(this.level.levelHeight/2)-2*this.level.tile_size,
                         this.level.tile_size,
@@ -204,6 +250,7 @@ export default class GameLogic {
                     );
 
         this.p.push();
+            this.p.fill("white");
             this.p.textSize(this.level.tile_size/2);
             this.p.text(this.coins,
                         this.xOffset+(this.level.levelWidth/2)+this.level.tile_size*0.35,
@@ -426,6 +473,11 @@ export default class GameLogic {
     }
 
     keyInteractions(keyCode:number){
+        if(keyCode){
+            if(this.gameStarted==false){
+                this.gameStarted=true;
+            }
+        }
         switch(keyCode){
             case(this.p.UP_ARROW):
                 this.player.isJumping=true;

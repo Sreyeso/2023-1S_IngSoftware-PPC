@@ -5,6 +5,7 @@ export default class Level {
   cols: number;
   tile_size: number;
   layout: Tile[][];
+  bg: any[] = [];
   p: p5;
   levelWidth: number;
   levelHeight: number;
@@ -18,6 +19,9 @@ export default class Level {
     this.levelHeight = (this.rows) * this.tile_size;
     // create the  initial layout
     this.layout=this.createLayout(parameters.initialLayout,parameters.initialImages);
+    for (let i=0;i<this.cols;i++){
+      this.bg.push(parameters.initialImages[21]);
+    }
   }
 
   selectImage(code:string){
@@ -63,14 +67,6 @@ export default class Level {
     return matrix;
   }
 
-  drawBackground(xOffset: number, yOffset: number){
-    this.p.push();
-      this.p.noStroke();
-      this.p.fill("lightskyblue");
-      this.p.rect(xOffset,yOffset,this.levelWidth-this.tile_size,this.levelHeight);
-    this.p.pop(); 
-  }
-
   drawCorners(xOffset: number, yOffset: number){
     this.p.push();
       this.p.stroke("black");
@@ -79,14 +75,19 @@ export default class Level {
     this.p.pop(); 
   }
 
-  draw(xOffset: number, yOffset: number) {
+  draw(xOffset: number, yOffset: number) {  
+    // // draw the background of the level
+    for (let i = 0; i < this.cols; i++) {
+      let x = xOffset + (i * this.tile_size);
+      this.p.image(this.bg[i],x,yOffset,this.tile_size,this.levelHeight);
+    }
+
     // draw each tile in the layout
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
         let x = xOffset + (j * this.tile_size);
         let y = yOffset + (i * this.tile_size);
-        let tile = this.layout[i][j];
-        tile.draw(x, y, this.tile_size);
+        this.layout[i][j].draw(x, y, this.tile_size);
       }
     }
   }
