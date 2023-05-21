@@ -7,45 +7,47 @@
     inset: 0;
 }
 
-.allInside{ /*Aislamos los componentes de adentro para evitar
+.allInside{ 
+    /*Aislamos los componentes de adentro para evitar
     que la opacidad de la imagen de fondo de la página se aplique
     a otros elementos*/
     isolation: isolate;
 }
 
-.logo{
+.logoDiv{
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 3vh;
+}
+
+.logo{
+    width: 6.5rem;
+    height: 25vh;
 }
 
 .background h2{
     text-align: center;
     font-family: cinzel-bold;
-    font-size: 35px;
-    margin-top: 2rem;
+    font-size: 1.4rem;
+    margin-top: 1.3vh;
 }
 
-.submitForm h3{
-    text-align: center;
-    font-family: cinzel-regular;
-    font-size: 25px;
-    margin-top: 40px;
-    
+.submitForm{
+    margin-top: 4.5vh;
 }
 
 .gridInputs{
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto;
-    row-gap: 30px;
+    row-gap: 2.5vh;
     column-gap: 5vw;
 }
 
 .gridInputs input{
-    width: 350px;
-    height: 35px;
-    font-size: large;
-    padding: 10px;
+    width: 12em;
+    height: 3.1vh;
+    font-size: 1rem;
+    padding: 0.5em;
     border: solid 1px;  
     justify-self: end;
 } 
@@ -55,18 +57,13 @@
 } 
 
 .gridInputs select{
-    width: 372px;
-    height: 58px;
-    font-size: large;
-    padding: 10px;
+    width: 13.15rem;
+    height: 6vh;
+    font-size: 1rem;
+    padding: 0.4em;
     border: solid 1px;  
     justify-self: end;
 }
-
-/* .gridInputs select:invalid{
-    text-decoration: #999999;
-    color:aliceblue
-} */
 
 .gridInputs select:nth-child(even){
     justify-self: start;
@@ -87,30 +84,35 @@
 }
 
 .gridInputs input:hover{
-    border:solid 3px;
+    outline:solid 1.8px;
 }
 
 .gridInputs select:hover{
-    border:solid 3px;
+    border:solid 1.8px;
 }
 
-
+.submitForm h3{
+    text-align: center;
+    font-family: cinzel-regular;
+    font-size: 1.2rem;
+    margin-top: 3.8vh;   
+}
 
 .buttonDiv {
     display:flex;
     justify-content: center;
-    margin-top: 23px;
+    margin-top: 1vh;
 }
  
 .button{
-    margin: 15px;
+    /* margin-top: 0vh; */
     border: transparent;
     background-color: transparent;
 }
 
 .button img{
-    width: 200px;
-    height: 62px;
+    height: 7vh;
+    width: 9rem; 
 }
 
 .button:hover{
@@ -128,7 +130,7 @@
 .loginLink{
     text-align: center;
     font-family: cinzel-regular;
-    font-size: 20px;
+    font-size: 1.05rem;
 }
 
 .loginLink a{
@@ -152,10 +154,10 @@
     display:grid;
     grid-template-columns: auto auto;
     column-gap: 50vw;
-    margin-top: 30px;
+    margin-top: 4vh;
     text-align: center;
     font-family: cinzel-regular;
-    font-size: 18px;
+    font-size: 1rem;
 }
 
 @font-face {

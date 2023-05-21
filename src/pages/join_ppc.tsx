@@ -45,13 +45,17 @@ export default function Join (){
             <main>          
                 <div className = {styles.background}>
                     <div className = {styles.allInside}>
-                        <div className = {styles.logo}>
-                            <Image
+                        <div className = {styles.logoDiv}>
+                            {/* <Image
                             src="/pages_imgs/logo_PPC.png"
                             alt="Logo de PPC Games"
                             width={200}
                             height={300}
-                            />
+                            /> */}
+                            <img 
+                            src="/pages_imgs/logo_PPC.png"
+                            className={styles.logo}>
+                            </img> 
                         </div>
                         <h2>Únete a PPC Games</h2>
                         <SubmitForm/>
@@ -62,7 +66,7 @@ export default function Join (){
                         </div>        
                         <footer>
                             <h3>PPC - 2023</h3>
-                            <h3>Copyright © PPC Team Ltd</h3>
+                            <h3>Copyright © PPC Team</h3>
                         </footer>
                     </div>    
                 </div>
