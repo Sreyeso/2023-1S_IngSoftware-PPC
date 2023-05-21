@@ -116,7 +116,10 @@ function SubmitForm(){
                                     userToSend[field[1]] = e.target.value;                            
                                 }}
                             >
-                                <option value="" className={styles.defaultSelectOption} disabled selected>{field[0]}</option>
+                                <option value="" 
+                                styles = "selected:invalid" 
+                                selected disabled hidden>
+                                    {field[0]}</option>
                                 {optionsToDisplay.map(function(option, index2){
                                     return (<option value={option} key={index2+1}>{option}</option>);
                                 })}
@@ -131,7 +134,7 @@ function SubmitForm(){
                             onChange={(e)=>{
                                 e.preventDefault();
                                 userToSend[field[1]] = e.target.value;                            
-                            }}>                                                                                        
+                            }}>                 
                         </input>
                     );
                 })}

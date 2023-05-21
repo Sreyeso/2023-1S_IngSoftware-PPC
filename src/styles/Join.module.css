@@ -76,11 +76,12 @@
     text-decoration: #999999;
 }
 
-.selection[value=""] {
+/* .selection[value=""] { */
 /* .selection:invalid { */
 /* .allInside ::select{     */
 /* .select.selector{ */
 /* .select * { */
+.gridInputs select[value=""]{
     color:aliceblue;
     text-decoration: #999999;
 }
