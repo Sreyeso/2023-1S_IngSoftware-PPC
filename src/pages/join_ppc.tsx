@@ -1,5 +1,4 @@
 import styles from '../styles/Join.module.css';
-import Image from 'next/image'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -46,12 +45,6 @@ export default function Join (){
                 <div className = {styles.background}>
                     <div className = {styles.allInside}>
                         <div className = {styles.logoDiv}>
-                            {/* <Image
-                            src="/pages_imgs/logo_PPC.png"
-                            alt="Logo de PPC Games"
-                            width={200}
-                            height={300}
-                            /> */}
                             <img 
                             src="/pages_imgs/logo_PPC.png"
                             className={styles.logo}>

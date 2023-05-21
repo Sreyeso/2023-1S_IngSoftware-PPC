@@ -88,7 +88,7 @@
 }
 
 .gridInputs select:hover{
-    border:solid 1.8px;
+    outline:solid 1.8px;
 }
 
 .submitForm h3{
