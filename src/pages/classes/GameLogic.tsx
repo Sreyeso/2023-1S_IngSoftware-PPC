@@ -126,13 +126,13 @@ export default class GameLogic {
                 this.p.noStroke();
                 this.p.textSize(this.level.tile_size/2);
                 this.p.rect(this.xOffset,
-                            this.yOffset+this.level.levelHeight,
+                            this.yOffset+this.level.levelHeight-this.level.tile_size*0.2,
                             this.p.map(this.pauseTimer,0,300,0,this.level.levelWidth-this.level.tile_size),
                             this.level.tile_size*0.2);
-                this.p.fill("black");
+                this.p.fill("white");
                 this.p.text(Math.round(this.score),
-                        this.xOffset+(this.level.levelWidth/2),
-                        this.yOffset-this.level.tile_size*0.2
+                        this.xOffset+(this.level.levelWidth)-this.level.tile_size*1.8,
+                        this.yOffset+this.level.tile_size*0.8
                         );
                 this.p.pop();
 
