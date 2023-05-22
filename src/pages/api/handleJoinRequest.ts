@@ -5,6 +5,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import nodemailer from 'nodemailer'
 // const nodemailer = require('nodemailer')
 import MailGen from 'mailgen'
+import fs from 'fs'
+import path from 'path'
 
 type Data = {
   name: string
@@ -110,22 +112,22 @@ export default function handler(
       let validation = saveUser(userReceived);
       let code = validation[0];
       let message = validation[1];
-      let email = validation [2];
+      let user = validation [2];
 
       console.log(users);
 
       res.status(code).json({name: message});
 
-      if(code === 201 && email !== null){
+      if(code === 201 && user !== null){
         //Enviar mensaje de bienvenida:
-        sendWelcomeMail(email);
+        sendWelcomeMail(user);
       }
       
     }
   
 }
 
-function saveUser(userReceived: ProperUser): [number,string, string|null]{
+function saveUser(userReceived: ProperUser): [number,string, User|null]{
 
   console.log(userReceived);
   //Validamos los datos, y devolvemos un código http junto con un mensaje para el cliente
@@ -211,7 +213,7 @@ function saveUser(userReceived: ProperUser): [number,string, string|null]{
   users.push(user)
   
   //let userInserted = pushUserToBD() //Devuelve algún valor si hubo algún problema validando la BD
-  return [201, "Usuario creado con éxito", email];
+  return [201, "Usuario creado con éxito", user];
 
 }
 
@@ -223,11 +225,19 @@ function hashedPassword(password: string){
 
 }
 
-async function sendWelcomeMail(email: string){
+async function sendWelcomeMail(user: User){
+  
+  const { email, username } = user;
+
   const EMAIL = process.env.PPC_MAIL_EMAIL;
   const PASSWORD = process.env.PPC_MAIL_PASSWORD;
+
+  const imagePath = path.join(__dirname,"..","..","..","..","public","pages_imgs","logo_PPC.png");
+  const imgFile = fs.readFileSync(imagePath);
+  const b64 = imgFile.toString('base64'); //Esto nos permite convertir la imagen en base 64, para poder enviarla en el correo
+  const imageSrc = `data:image/png;b64,${b64}`;
   
-  let config = { //Configuración de cómo se envian los mensajes!
+  let config = { //Configuración de cómo se envian los mensajes
     service: "gmail",
     host: 'smtp.gmail.com',
     port: 465,
@@ -241,5 +251,46 @@ async function sendWelcomeMail(email: string){
     }      
   }
 
-  // let transporter = 
+  let transporter = nodemailer.createTransport(config);
+
+  //Formato del correo a enviar:
+  let mailGenerator = new MailGen({
+    theme: "cerberus",
+    product: {
+      name: username,
+      link: "http://mailgen.js/"
+    }
+  });
+
+  let msgContent = {
+    body:{
+      name: "PPC Games",
+      intro: "¡Muchas gracias por unirte a nuestra comunidad!",
+      image: {
+        src: imageSrc,
+        alt: "PPC logo"
+      },
+      outro: "PPC Team",
+      signature: false,
+      greeting: "Bienvenido a "
+      
+    }
+  };
+
+  let mail = mailGenerator.generate(msgContent);
+
+  let message = {
+    from: EMAIL,
+    to: email,
+    subject: "Bienvenido a PPC",
+    html: mail
+  }
+
+  transporter.sendMail(message)
+  .then(() => {
+    console.log("Correo Enviado");
+  })
+  .catch(error => {
+    console.log(error);
+  })
 }
