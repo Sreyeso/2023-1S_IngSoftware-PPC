@@ -17,37 +17,37 @@
 .logoDiv{
     text-align: center;
     margin-top: 3vh;
+    margin-bottom: 0px;
+    height: 28vh;
 }
 
 .logo{
-    width: 6.5rem;
-    height: 25vh;
+    height: 90%;
 }
 
 .background h2{
     text-align: center;
     font-family: cinzel-bold;
-    font-size: 1.4rem;
+    /* font-size: 1.4rem; */
+    font-size: 3.2vh;
     margin-top: 1.3vh;
 }
 
-.submitForm{
-    margin-top: 4.5vh;
-}
-
 .gridInputs{
+    margin-top: 5vh;
+    height: 25vh;
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto;
-    row-gap: 2.5vh;
+    row-gap: 1.2vh;
     column-gap: 5vw;
 }
 
 .gridInputs input{
-    width: 12em;
+    width: 27.6vh;
     height: 3.1vh;
-    font-size: 1rem;
-    padding: 0.5em;
+    font-size: 2vh;
+    padding: 1.1vh;
     border: solid 1px;  
     justify-self: end;
 } 
@@ -57,10 +57,10 @@
 } 
 
 .gridInputs select{
-    width: 13.15rem;
-    height: 6vh;
-    font-size: 1rem;
-    padding: 0.4em;
+    width: 30vh;
+    height: 5.7vh;
+    font-size: 2vh;
+    padding: 0.9vh;
     border: solid 1px;  
     justify-self: end;
 }
@@ -94,25 +94,23 @@
 .submitForm h3{
     text-align: center;
     font-family: cinzel-regular;
-    font-size: 1.2rem;
-    margin-top: 3.8vh;   
+    font-size: 2.5vh;
 }
 
 .buttonDiv {
+    height: 8vh;
     display:flex;
     justify-content: center;
     margin-top: 1vh;
 }
  
 .button{
-    /* margin-top: 0vh; */
     border: transparent;
     background-color: transparent;
 }
 
 .button img{
-    height: 7vh;
-    width: 9rem; 
+    height: 90%;
 }
 
 .button:hover{
@@ -130,7 +128,7 @@
 .loginLink{
     text-align: center;
     font-family: cinzel-regular;
-    font-size: 1.05rem;
+    font-size: 1.8vh;
 }
 
 .loginLink a{
@@ -150,14 +148,14 @@
     text-decoration:line-through;
 }
 
-.allInside footer{
+.allInside footer{    
     display:grid;
     grid-template-columns: auto auto;
     column-gap: 50vw;
     margin-top: 4vh;
     text-align: center;
     font-family: cinzel-regular;
-    font-size: 1rem;
+    font-size: 2vh;
 }
 
 @font-face {
