@@ -3,8 +3,6 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import nodemailer from 'nodemailer'
-// const nodemailer = require('nodemailer')
-import MailGen from 'mailgen'
 import fs from 'fs'
 import path from 'path'
 
@@ -229,13 +227,13 @@ async function sendWelcomeMail(user: User){
   
   const { email, username } = user;
 
+  //Credenciales del email de PPC:
   const EMAIL = process.env.PPC_MAIL_EMAIL;
   const PASSWORD = process.env.PPC_MAIL_PASSWORD;
 
   const imagePath = path.join(__dirname,"..","..","..","..","public","pages_imgs","logo_PPC.png");
   const imgFile = fs.readFileSync(imagePath);
   const b64 = imgFile.toString('base64'); //Esto nos permite convertir la imagen en base 64, para poder enviarla en el correo
-  const imageSrc = `data:image/png;b64,${b64}`;
   
   let config = { //Configuración de cómo se envian los mensajes
     service: "gmail",
@@ -253,37 +251,32 @@ async function sendWelcomeMail(user: User){
 
   let transporter = nodemailer.createTransport(config);
 
-  //Formato del correo a enviar:
-  let mailGenerator = new MailGen({
-    theme: "cerberus",
-    product: {
-      name: username,
-      link: "http://mailgen.js/"
-    }
-  });
-
-  let msgContent = {
-    body:{
-      name: "PPC Games",
-      intro: "¡Muchas gracias por unirte a nuestra comunidad!",
-      image: {
-        src: imageSrc,
-        alt: "PPC logo"
-      },
-      outro: "PPC Team",
-      signature: false,
-      greeting: "Bienvenido a "
-      
-    }
-  };
-
-  let mail = mailGenerator.generate(msgContent);
+  const mail = `
+    <div style="background-color: #ffff99; border: solid 1px; margin: 0px;">
+      <h1 style="text-align: center" >Hola ${username}</h1>
+      <h2 style="text-align: center">Bienvenido a PPC Games</h2>
+    </div>  
+    <div style="background-color: #ffdd99; overflow: hidden; border: solid 1px">
+      <p style="font-size: 1rem; text-align: center;"><b>Muchas gracias por unirte a nuestra comunidad</b></p>
+      <div style="text-align: center; height: 340px">
+        <img src="cid:logo_PPC.png" style="text-align:center; height: 80%" alt="Logo PPC"></img>
+      </div>
+    </div>
+    <footer>
+      <h3 style="text-align: center">© PPC Team</h3>
+    </footer>
+  `;
 
   let message = {
     from: EMAIL,
     to: email,
     subject: "Bienvenido a PPC",
-    html: mail
+    html: mail,
+    attachments: [{
+      filename: 'logo_PPC.png',
+      path: imagePath,
+      cid: "logo_PPC.png" //same cid value as in the html img src
+  }]
   }
 
   transporter.sendMail(message)
