@@ -1,4 +1,4 @@
-import styles from 'src/styles/Layout.module.css';
+import styles from 'src/styles/Layoutlogin.module.css';
 export default function Layout({ children }) {
     return (
         <div className="flex h-screen bg-blue-400">

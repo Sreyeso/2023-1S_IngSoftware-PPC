@@ -1,7 +1,7 @@
 import Head from 'next/head'
-import Layout from '/layout/layuot'
+import Layout from '/src/pages/login/layout/layuot'
 import Link from 'next/link'
-import styles from '/src/styles/Form.module.css';
+import styles from '/src/styles/Formlogin.module.css';
 import { HiAtSymbol,HiEyeOff,HiEye } from "react-icons/hi";
 import { useState } from 'react';
 
@@ -81,4 +81,5 @@ export default function login() {
         </Layout>
     );
 }
+
 
