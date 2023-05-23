@@ -138,7 +138,7 @@ export default class GameLogic {
 
                 if(!this.pause){ //If game isn't paused
                     this.player.update();   //Enable player movement
-                    this.keyMovement();  
+                    this.keyMovement();     //Enable player movement
                     this.scroll-=this.scrollSpeed; //Enable scrolling
                     this.player.movePlayer(-this.scrollSpeed,0); //Player movement due to the scrolling
                 }else{
@@ -149,6 +149,7 @@ export default class GameLogic {
             }else{
                     this.level.tintScreen(this.xOffset,this.yOffset,"black");
                     this.showGameInfo(this.generalAssets[1]); // Death screen
+                    return true;
             }
             //SCROLLING
             if(Math.abs(this.scroll)>this.level.tile_size){ // Scrolling of 1 tile
@@ -495,7 +496,6 @@ export default class GameLogic {
                 this.gameStarted=true;
             }
         }
-        this.keyMovement();
         switch(keyCode){
             case(this.p.UP_ARROW):
             case(87): // w

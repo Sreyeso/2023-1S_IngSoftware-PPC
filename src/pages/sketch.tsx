@@ -35,6 +35,8 @@ let levelLayouts :any;
 
 //Main game object
 let game:GameLogic;
+let gameFinished:boolean|undefined=false;
+let resultsLogged:boolean=false;
 
 //Debug control
 const debug:boolean=false;
@@ -101,7 +103,12 @@ export default class App extends Component {
 
     draw = (p5:p5) => {
         p5.background('white');
-        game.handleGame(debug);
+        gameFinished=game.handleGame(debug);
+        if(gameFinished==true && resultsLogged==false){
+          console.log(game.coins,game.gems,game.score);
+          resultsLogged=true;
+        }
+
     };
 
     keyPressed = (p5:p5) => {
