@@ -32,8 +32,10 @@ export default class GameLogic {
     pauseTimer:number=0;
 
     score:number=-1;
-    coins:number;
-    gems:number;
+    userCoins:number;
+    userGems:number;
+    collectedCoins:number=0;
+    collectedGems:number=0;
 
     playerSkin: p5.Image;
 
@@ -43,7 +45,7 @@ export default class GameLogic {
         return Math.floor(Math.random() * max);
     }
 
-    constructor(userData:any|{coins:number,gems:number,image:any},
+    constructor(userData:any|{userCoins:number,userGems:number,image:any},
                 gameDetails:any|{playerSizeModifier:number,gravityModifier:number,maxscrollSpeed:number},
                 generalAssets:any,levelGraphics:any[],levelLayouts:any,
                 p:p5) {
@@ -52,8 +54,8 @@ export default class GameLogic {
         this.levelGraphics=levelGraphics;
         this.levelLayouts=levelLayouts;
 
-        this.coins=userData.coins;
-        this.gems=userData.gems;
+        this.userCoins=userData.userCoins;
+        this.userGems=userData.userGems;
         this.playerSkin=userData.image;
         this.p=p;               
         
@@ -237,7 +239,7 @@ export default class GameLogic {
 
         this.p.image(   
                         this.levelGraphics[0][8], //coin
-                        this.xOffset+(this.level.levelWidth/2)-2*this.level.tile_size,
+                        this.xOffset+(this.level.levelWidth/2)-2.5*this.level.tile_size,
                         this.yOffset+(this.level.levelHeight/2)-1*this.level.tile_size,
                         this.level.tile_size,
                         this.level.tile_size
@@ -245,7 +247,7 @@ export default class GameLogic {
 
         this.p.image(   
                         this.levelGraphics[0][9], //gem
-                        this.xOffset+(this.level.levelWidth/2)-2*this.level.tile_size,
+                        this.xOffset+(this.level.levelWidth/2)-2.5*this.level.tile_size,
                         this.yOffset+(this.level.levelHeight/2)-0*this.level.tile_size,
                         this.level.tile_size,
                         this.level.tile_size
@@ -254,12 +256,12 @@ export default class GameLogic {
         this.p.push();
             this.p.fill("white");
             this.p.textSize(this.level.tile_size/2);
-            this.p.text(this.coins,
-                        this.xOffset+(this.level.levelWidth/2)+this.level.tile_size*0.35,
+            this.p.text(this.userCoins+" + "+this.collectedCoins ,
+                        this.xOffset+(this.level.levelWidth/2),
                         this.yOffset+(this.level.levelHeight/2)-this.level.tile_size*0.35
                         );
-            this.p.text(this.gems,
-                        this.xOffset+(this.level.levelWidth/2)+this.level.tile_size*0.35,
+            this.p.text(this.userGems+" + "+this.collectedGems ,
+                        this.xOffset+(this.level.levelWidth/2),
                         this.yOffset+(this.level.levelHeight/2)+this.level.tile_size*0.75
                         );
         this.p.pop();
@@ -449,9 +451,9 @@ export default class GameLogic {
                         // check if the player's bounding box overlaps with the tile's ellipse
                         if (this.player.x < centerX + radiusX && this.player.x+this.player.width > centerX - radiusX && this.player.y < centerY + radiusY && this.player.y+this.player.height > centerY - radiusY) {
                             if(this.level.layout[i][j].code=="coi"){
-                                this.coins++;
+                                this.collectedCoins++;
                             }else{
-                                this.gems++;
+                                this.collectedGems++;
                             }
                             this.level.layout[i][j].code = "000";
                             this.level.layout[i][j].image = this.levelGraphics[0][0];
@@ -504,7 +506,6 @@ export default class GameLogic {
             break;
             case(80): // p
             case(27): // esc
-            case(13): // enter
                 this.pauseGame();
             break;
         }

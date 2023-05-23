@@ -91,10 +91,10 @@ export default class App extends Component {
         //LOAD THE USER DATA INTO THESE VARIABLES OR DIRECTLY INTO THE GAME'S DECLARATION
         let userCoins=this.props.userCoins;
         let userGems=0;
-        let userSkinID=5;
+        let userSkinID=1;
 
         game = new GameLogic(
-          {coins:userCoins,gems:userGems,image:player_Skins[userSkinID]}, //userData
+          {userCoins:userCoins,userGems:userGems,image:player_Skins[userSkinID]}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           generalAssets,levelGraphics,levelLayouts,p5);
 
@@ -105,7 +105,7 @@ export default class App extends Component {
         p5.background('white');
         gameFinished=game.handleGame(debug);
         if(gameFinished==true && resultsLogged==false){
-          console.log(game.coins,game.gems,game.score);
+          console.log(game.collectedCoins,game.collectedCoins,game.score);
           resultsLogged=true;
         }
 
