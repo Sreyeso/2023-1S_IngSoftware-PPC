@@ -1,0 +1,117 @@
+.imgStyle{
+    @apply bg-gradient-to-r from-blue-500 to-indigo-500 rounded-l-sm;
+    position: relative;
+    overflow: hidden;
+}
+
+.logolmg{
+    background: url('/assets/logo_ppc.png') no-repeat;
+    position: absolute;
+    bottom: 0;left: 0;right: 0;top: 0;
+    width: auto;
+    height: auto;
+    background-size:50%;
+    background-position: center;
+    z-index: 3;
+}
+.cloud_one{
+    /*draw img*/
+    background: url('/assets/cloud_1.png') no-repeat;
+    /*positon*/
+    position: absolute;
+    top:25%; left: 10%;
+    width: 200px;
+    height: 200px;
+    background-size: contain;
+    z-index: 0;
+    /* animation*/  
+    animation: cloud_one 5s ease-in 0s infinite;
+}
+.cloud_two{
+    /*draw img*/
+    background: url('/assets/cloud_1.png') no-repeat;
+
+    /*positon*/
+    position: absolute;
+    top:5%; left: 60%;
+
+    width: 200px;
+
+    height: 100px;
+    background-size: contain;
+    z-index: 2;
+    /* animation*/
+    animation: cloud_two 8s ease-in 0s infinite;
+    /* transform: translateX(290%);  */
+}
+
+.grass{
+    /*draw img*/
+    background: url('/assets/grass.png');
+    background-repeat: repeat-x;
+    /*positon*/
+    position: absolute;
+    top:80%;
+
+    width: 2000px;
+
+    height: 100px;
+    background-size: contain;
+    z-index: 2;
+
+}
+
+.dirt{
+    /*draw img*/
+    background: url('/assets/dirt.png');
+    background-repeat: repeat-x;
+    /*positon*/
+    position: absolute;
+    top:90%;
+
+    width: 2000px;
+    height: 100px;
+    background-size: contain;
+    z-index: 2;
+}
+
+.tree{
+    background: url('/assets/tree.png')no-repeat;
+    position: absolute;
+    top:53%;
+
+    width: 200px;
+    height: 200px;
+    background-size: contain;
+    z-index: 2;
+}
+
+.pine{
+    background: url('/assets/pine.png')no-repeat;
+    position: absolute;
+    top:53%;left: 70%;
+
+    width: 200px;
+    height: 200px;
+    background-size: contain;
+    z-index: 2;
+}
+/* css keyframes */
+
+
+@keyframes cloud_one{
+    0%{
+        transform: translateX(300%);
+    }100%{
+        transform: translateX(-250%);
+    }
+}
+
+
+@keyframes cloud_two{
+    0%{
+        transform: translateX(130%);
+    }100%{
+        transform: translateX(-270%);
+    }
+}
