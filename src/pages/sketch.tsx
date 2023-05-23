@@ -88,13 +88,8 @@ export default class App extends Component {
       setup = (p5:p5, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
-        //LOAD THE USER DATA INTO THESE VARIABLES OR DIRECTLY INTO THE GAME'S DECLARATION
-        let userCoins=this.props.userCoins;
-        let userGems=0;
-        let userSkinID=1;
-
         game = new GameLogic(
-          {userCoins:userCoins,userGems:userGems,image:player_Skins[userSkinID]}, //userData
+          {userCoins:this.props.userCoins,userGems:0,image:player_Skins[7]}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           generalAssets,levelGraphics,levelLayouts,p5);
 
@@ -113,6 +108,15 @@ export default class App extends Component {
 
     keyPressed = (p5:p5) => {
       game.keyInteractions(p5.keyCode);
+      if((p5.keyCode == 82 || p5.keyCode == 13) && gameFinished==true && resultsLogged==true){
+        game = new GameLogic(
+          {userCoins:this.props.userCoins,userGems:0,image:player_Skins[7]}, //userData
+          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
+          generalAssets,levelGraphics,levelLayouts,p5);
+
+        gameFinished=false;
+        resultsLogged=false;
+      }
     }
 
     render() {
