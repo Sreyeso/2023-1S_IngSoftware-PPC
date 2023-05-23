@@ -87,20 +87,4 @@ export default class Player {
     this.p.pop();
   }
 
-  keyMovement(){
-      if(this.p.keyIsDown(this.p.LEFT_ARROW)){
-        this.movePlayer(this.vleft,0);
-      }
-      if(this.p.keyIsDown(this.p.RIGHT_ARROW)){
-        this.movePlayer(this.vright,0);
-      }
-      // if(this.p.keyIsDown(this.p.UP_ARROW)){
-      //   this.movePlayer(0,-3);
-      // }
-      // if(this.p.keyIsDown(this.p.DOWN_ARROW)){
-      //   this.movePlayer(0,3);
-      // }
-
-      
-  }
 }

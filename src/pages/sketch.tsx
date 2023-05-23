@@ -6,7 +6,11 @@ import p5 from 'p5';
 
 //Class imports
 import GameLogic from "./classes/GameLogic";
+import DBO from "@/lib/dbo";
+import UserModel from "@/lib/models/user";
+import { GetServerSideProps } from "next";
 
+//Main sketch fuction (AKA Game)
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
     require('p5/lib/addons/p5.sound'); // Sound library imported after react-p5 is loaded
     return mod.default // returning react-p5 default export
@@ -32,9 +36,35 @@ let levelLayouts :any;
 
 //Main game object
 let game:GameLogic;
+let gameFinished:boolean|undefined=false;
+let resultsLogged:boolean=false;
 
 //Debug control
 const debug:boolean=false;
+
+//Server prop function (backend)
+
+export async function getServerSideProps() {
+  try {
+    //Database object
+    const DB:DBO=new DBO();
+    //User data object
+    const UDO=new UserModel(DB.db);
+    let userData=await UDO.getUser("bingus");
+    //let userSkin=await 
+    //retorno Objid, id in array, name ...
+    return {
+      props: { isConnected: true, userCoins:userData.CoinAmount , userGems:userData.GemAmount ,userSkin:userData.CurrentAspect,maxScore:userData.HiScore},
+    }
+  } catch (e) {
+    console.error(e)
+    return {
+      props: { isConnected: false },
+    }
+  }
+}
+
+
 
 export default class App extends Component {
 
@@ -58,13 +88,8 @@ export default class App extends Component {
       setup = (p5:p5, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
-        //LOAD THE USER DATA INTO THESE VARIABLES OR DIRECTLY INTO THE GAME'S DECLARATION
-        let userCoins=0;
-        let userGems=0;
-        let userSkinID=7;
-
         game = new GameLogic(
-          {coins:userCoins,gems:userGems,image:player_Skins[userSkinID]}, //userData
+          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[7]}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           generalAssets,levelGraphics,levelLayouts,p5);
 
@@ -73,11 +98,35 @@ export default class App extends Component {
 
     draw = (p5:p5) => {
         p5.background('white');
-        game.handleGame(debug);
+        gameFinished=game.handleGame(debug);
+        if(gameFinished==true && resultsLogged==false){
+
+        let score =  (game.score > this.props.maxScore) ? (game.score) : (this.props.maxScore);
+
+          const updateUser = () => {
+            fetch("http://localhost:3000/api/GameReq", {
+              method: "PUT",
+              body: JSON.stringify({
+                "coins":game.collectedCoins,
+                "gems":game.collectedGems,
+                "score":score
+              }),
+              headers: {
+                "content-type": "application/json",
+              },
+            }).catch((e) => console.log(e));
+          };
+          updateUser();
+          resultsLogged=true;
+        }
+
     };
 
     keyPressed = (p5:p5) => {
       game.keyInteractions(p5.keyCode);
+      if(p5.keyCode && gameFinished==true && resultsLogged==true){
+        location.reload();
+      }
     }
 
     render() {
