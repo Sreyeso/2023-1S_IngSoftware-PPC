@@ -8,6 +8,7 @@ import p5 from 'p5';
 import GameLogic from "./classes/GameLogic";
 import DBO from "@/lib/dbo";
 import UserModel from "@/lib/models/user";
+import { GetServerSideProps } from "next";
 
 //Main sketch fuction (AKA Game)
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
@@ -100,8 +101,22 @@ export default class App extends Component {
         p5.background('white');
         gameFinished=game.handleGame(debug);
         if(gameFinished==true && resultsLogged==false){
+          const addCoins = () => {
+            fetch("http://localhost:3000/api/GameReq", {
+              method: "PUT",
+              body: JSON.stringify({
+                "coins":game.collectedCoins,
+              }),
+              headers: {
+                "content-type": "application/json",
+              },
+            }).catch((e) => console.log(e));
+          };
+          addCoins();
           console.log(game.collectedCoins,game.collectedCoins,game.score);
           resultsLogged=true;
+          setTimeout(() => {  location.reload(); }, 3000);
+
         }
 
     };
@@ -109,6 +124,7 @@ export default class App extends Component {
     keyPressed = (p5:p5) => {
       game.keyInteractions(p5.keyCode);
       if((p5.keyCode == 82 || p5.keyCode == 13) && gameFinished==true && resultsLogged==true){
+        /* Disculpa el abuso ac[a] lo mejor seria actualizar para refrescar el total de monedas. voy a mimir
         game = new GameLogic(
           {userCoins:this.props.userCoins,userGems:0,image:player_Skins[7]}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
@@ -116,6 +132,8 @@ export default class App extends Component {
 
         gameFinished=false;
         resultsLogged=false;
+        */
+       setTimeout(() => {  location.reload(); }, 1000);
       }
     }
 
