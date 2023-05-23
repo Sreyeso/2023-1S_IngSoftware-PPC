@@ -15,8 +15,9 @@ export async function getServerSideProps() {
     const queryResult= await dbs.collections();
     */
     const MB = new DBO();
-    /*  TEST NEW USER
     const User=new UserModel(MB.db);
+    /*  TEST NEW USER
+    
     let userp:any[] = [
       "bingustest",
       "bingustest",
@@ -28,8 +29,8 @@ export async function getServerSideProps() {
       333666
     ];
     const newUser= await User.addUser(userp)
-    const queryResult=await User.getUser("bingus");
     */
+    const queryResult=await User.getUser("bingus");
     //const queryResult=await MB.db.collection("Clients").findOne({UserName:"bingus"});
 
     // `await clientPromise` will use the default database passed in the MONGODB_URI
