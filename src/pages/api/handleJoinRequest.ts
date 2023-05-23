@@ -3,8 +3,10 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 import nodemailer from 'nodemailer'
+import bcryptjs from 'bcryptjs'
 import fs from 'fs'
 import path from 'path'
+import { defaultConfig } from 'next/dist/server/config-shared'
 
 type Data = {
   name: string
@@ -191,15 +193,15 @@ function saveUser(userReceived: ProperUser): [number,string, User|null]{
     return [409, "Las contraseñas deben coincidir", null];
   }
 
-  //Ahora se deben hacer las validaciones en la BD
-
-  //Crear el usuario para enviar a la BD
+  //Verificar que ni el usuario ni el correo estén en uso
 
   //Mejorar la seguridad de la contraseña:
-  //hashedPassword = hashFunc(password);
-  let hashedPassword = password;
+  const numSalts = 10; //Cantidad de saltos
+  const hashedPassword = bcryptjs.hashSync(password, numSalts);
+
+  //Crear el usuario para enviar a la BD
   
-  //crear usuario para enviar:
+  // crear usuario para enviar:
   let user: User ={
     username: username,
     email: email,
@@ -208,18 +210,14 @@ function saveUser(userReceived: ProperUser): [number,string, User|null]{
     password: hashedPassword,      
   }
 
+  if(bcryptjs.compareSync(password,hashedPassword)){
+    console.log("True");
+  }
+  
   users.push(user)
   
   //let userInserted = pushUserToBD() //Devuelve algún valor si hubo algún problema validando la BD
   return [201, "Usuario creado con éxito", user];
-
-}
-
-async function pushUserToBD(user: ProperUser){
-
-}
-
-function hashedPassword(password: string){
 
 }
 
@@ -231,9 +229,8 @@ async function sendWelcomeMail(user: User){
   const EMAIL = process.env.PPC_MAIL_EMAIL;
   const PASSWORD = process.env.PPC_MAIL_PASSWORD;
 
+  //Dirección del logo de PPC
   const imagePath = path.join(__dirname,"..","..","..","..","public","pages_imgs","logo_PPC.png");
-  const imgFile = fs.readFileSync(imagePath);
-  const b64 = imgFile.toString('base64'); //Esto nos permite convertir la imagen en base 64, para poder enviarla en el correo
   
   let config = { //Configuración de cómo se envian los mensajes
     service: "gmail",
