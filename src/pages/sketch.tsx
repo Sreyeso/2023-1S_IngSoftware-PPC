@@ -5,8 +5,6 @@ import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
 
 //Class imports
-import Level from "./classes/Level";
-import Player from "./classes/Player";
 import GameLogic from "./classes/GameLogic";
 
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
@@ -18,123 +16,86 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 //import Sketch from "react-p5";
 
 // Graphic assets
-const graphicnames: string[] = ["grass.png", "dirt.png", "coin.gif", "gem.gif", "cloud_l.png",
-                                "cloud_r.png", "flowers.gif", "pine_small.png", "pine_big_down.png", 
-                                "pine_big_up.png", "tree_small.png", "tree_big_down.png", "tree_big_up.png", 
-                                "stone.png", "spikes.png","empty.png", "error.png","pro.gif","barrier.png"];
-const graphics: p5.Image[] = []; // Array where all the game-related graphical assets are stored
+const general_assets_names: string[] = ["pause.png","exit.png","start.png"]
+const player_names: string[] = ["default_ppc.png","la_creatura.png","love_letter.png","nyan_poptart.png","pollo.png","hypnotic_blue.gif","purple_toxic.png","sans.png"];
+const defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
 
-//Graphical control variables
-let xOffset:number;
-let yOffset:number;
-let prevxOffset:number;
-let prevyOffset:number;
+let generalAssets:any[]=[];
 
-//Main game objects
-let lvl:Level;
-let player:Player;
+let player_Skins: any[]=[];
+let defaultLevel_Graphics: any[]=[];
+let desertLevel_Graphics: any[]=[];
+let hellLevel_Graphics: any[]=[];
+
+let levelGraphics:any;
+let levelLayouts :any;
+
+//Main game object
+let game:GameLogic;
 
 //Debug control
-const debug:boolean=true;
-/*
-Things that the debug does:
-- Show hitboxes
-- 
-*/
+const debug:boolean=false;
 
 export default class App extends Component {
 
       preload = (p5:p5) => {
-        for (let i = 0; i < graphicnames.length; i++) {
-          //Load all of the sprites into the graphics 
-          graphics[i] = p5.loadImage(`/sprites/${graphicnames[i]}`);
-        }
+        levelLayouts=p5.loadJSON('/levelLayouts.json');
+        // Load graphical assets
+        for (let i = 0; i < general_assets_names.length; i++) {generalAssets.push(p5.loadImage(`/sprites/generalAssets/${general_assets_names[i]}`));}
+        for (let i = 0; i < defaultTile_names.length; i++) {defaultLevel_Graphics.push(p5.loadImage(`/sprites/defaultLevel/${defaultTile_names[i]}`));}
+        for (let i = 0; i < defaultTile_names.length; i++) {desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${defaultTile_names[i]}`));}
+        for (let i = 0; i < defaultTile_names.length; i++) {hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${defaultTile_names[i]}`));}
+        for (let i = 0; i < player_names.length; i++) {player_Skins.push(p5.loadImage(`/sprites/playerSkins/${player_names[i]}`));}
+        levelGraphics=[defaultLevel_Graphics,desertLevel_Graphics,hellLevel_Graphics];
+
       };
 
       windowResized = (p5:p5) =>  {
-        //Calculate new centering adjustment for the current level based on its size
-        xOffset = (p5.windowWidth - lvl.levelWidth) / 2;
-        yOffset = (p5.windowHeight - lvl.levelHeight) / 2;
-
-        //Adjust the player accordingly based on the size changes
-        player.movePlayer(xOffset-prevxOffset,yOffset-prevyOffset);
-
-        //Resize the canvas
-        p5.resizeCanvas(p5.windowWidth,p5.windowHeight);
-
-        //Save the new value of the offset
-        prevxOffset=xOffset;
-        prevyOffset=yOffset;
+        //game.resize();  //Resize the game
+        //p5.resizeCanvas(p5.windowWidth,p5.windowHeight);  //Resize the canvas
       };
 
       setup = (p5:p5, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
-        p5.background("tomato");
 
-        //Initial declaration of a template level
-        lvl = new Level({rows:12,cols:21,
-          rawLayout:[ "111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111",
-                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","000","000","000","000","000","cll","clr","000","000","000","000","000","000","000","000","000","000","000",
-                      "111","000","000","000","000","000","000","000","000","000","sto","000","000","000","tbu","coi","gem","pbu","000","000","000",
-                      "111","000","000","000","000","000","000","000","000","000","000","000","000","000","tbd","000","000","pbd","000","000","000",
-                      "111","000","000","000","000","tbu","000","000","000","000","000","000","000","gra","gra","gra","gra","gra","000","000","000",
-                      "111","000","flo","spi","psm","tbd","000","000","000","000","000","000","gra","dir","dir","dir","dir","dir","gra","000","flo",
-                      "111","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","gra","dir","dir","dir","dir","dir","dir","dir","gra","gra",
-                      "111","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir","dir",
-                      "111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111","111"],
-            tile_size:70,
-          images:graphics},
-          p5
-        );
+        //LOAD THE USER DATA INTO THESE VARIABLES OR DIRECTLY INTO THE GAME'S DECLARATION
+        let userCoins=0;
+        let userGems=0;
+        let userSkinID=7;
 
-        //Initialize offset for this template level
-        xOffset = (p5.windowWidth - lvl.levelWidth-(1 * lvl.tile_size)) / 2;
-        yOffset = (p5.windowHeight - lvl.levelHeight-(1 * lvl.tile_size)) / 2;
-        prevxOffset=xOffset;
-        prevyOffset=yOffset;
-        //Position the player in the template level
-        player = new Player({width : lvl.tile_size*0.5,
-                            height : lvl.tile_size*0.5,
-                            gravity : lvl.tile_size*0.0098,
-                            jumpVelocity : -lvl.tile_size*0.2,
-                            speed : 5,
-                            jumps : 2,
-                            initialX : xOffset + (10) * lvl.tile_size,
-                            initialY : yOffset,
-                            image : graphics[17]},
-                            p5);
+        game = new GameLogic(
+          {coins:userCoins,gems:userGems,image:player_Skins[userSkinID]}, //userData
+          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
+          generalAssets,levelGraphics,levelLayouts,p5);
+
+          p5.resizeCanvas(game.level.levelWidth-game.level.tile_size,game.level.levelHeight);  //Resize the canvas according to the viewable game size
     };
 
     draw = (p5:p5) => {
-        p5.background('tomato');
-        //Draw the elements of the game
-        lvl.draw(xOffset,yOffset,debug);
-        player.draw();
-        GameLogic.handleCollisions(player,lvl,xOffset,yOffset,debug);
-        //Enable pllayer movement
-        if(player.isAlive){
-          player.update();
-          player.keyMovement();
-        }else{
-          p5.push();
-            p5.noStroke();
-            p5.fill(200,125);//Gray out the screen
-            p5.rect(xOffset, yOffset, lvl.levelWidth, lvl.levelHeight); 
-          p5.pop();
-        }
-        
+        p5.background('white');
+        game.handleGame(debug);
     };
 
     keyPressed = (p5:p5) => {
-      if (p5.keyCode == p5.UP_ARROW) {
-        player.isJumping=true;
-      } 
+      game.keyInteractions(p5.keyCode);
     }
 
     render() {
-        return <Sketch preload={this.preload} windowResized={this.windowResized} setup={ this.setup } keyPressed={this.keyPressed} draw = { this.draw } />;
+
+        return (
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Sketch 
+                  preload={this.preload}
+                  windowResized={this.windowResized}
+                  setup={this.setup}
+                  keyPressed={this.keyPressed}
+                  draw={this.draw}
+                />
+              </div>
+            </div>
+        );
     };
+
 }
+
