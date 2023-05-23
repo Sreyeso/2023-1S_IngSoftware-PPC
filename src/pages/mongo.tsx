@@ -15,8 +15,21 @@ export async function getServerSideProps() {
     const queryResult= await dbs.collections();
     */
     const MB = new DBO();
+    /*  TEST NEW USER
     const User=new UserModel(MB.db);
+    let userp:any[] = [
+      "bingustest",
+      "bingustest",
+      "bingustest",
+      "bingustest",
+      "bingustest",
+      1337,
+      1338,
+      333666
+    ];
+    const newUser= await User.addUser(userp)
     const queryResult=await User.getUser("bingus");
+    */
     //const queryResult=await MB.db.collection("Clients").findOne({UserName:"bingus"});
 
     // `await clientPromise` will use the default database passed in the MONGODB_URI
@@ -28,6 +41,7 @@ export async function getServerSideProps() {
     // Then you can execute queries against your database like so:
     // db.find({}) or any of the MongoDB Node Driver commands
     console.log(queryResult.CoinAmount);
+    //console.log(newUser.insertedId);
 
     return {
       props: { isConnected: true, QR: JSON.stringify(queryResult)},
