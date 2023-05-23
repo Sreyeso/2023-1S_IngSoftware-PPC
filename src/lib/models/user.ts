@@ -19,6 +19,12 @@ export default class UserModel {
   constructor(db:Db) {
     this.collection = db.collection<Clients>('Clients');
   }
+
+ /**
+ *  Adds a new user to the database
+ * @param {string}  user - An array with all of the properties of the user (Look for the Clients interface for all fields)
+ * @returns {string} returns the database response
+ */
   async addUser(user:any[]) {
     const newUser = this.collection.insertOne(user);
     return newUser;
