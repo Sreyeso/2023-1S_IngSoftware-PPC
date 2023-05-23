@@ -6,7 +6,10 @@ import p5 from 'p5';
 
 //Class imports
 import GameLogic from "./classes/GameLogic";
+import DBO from "@/lib/dbo";
+import UserModel from "@/lib/models/user";
 
+//Main sketch fuction (AKA Game)
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
     require('p5/lib/addons/p5.sound'); // Sound library imported after react-p5 is loaded
     return mod.default // returning react-p5 default export
@@ -36,6 +39,31 @@ let game:GameLogic;
 //Debug control
 const debug:boolean=false;
 
+//Server prop function (backend)
+
+export async function getServerSideProps() {
+  try {
+    //Database object
+    const DB:DBO=new DBO();
+
+    //User data object
+    const UDO=new UserModel(DB.db);
+    let userData=await UDO.getUser("bingus");
+    //let userSkin=await 
+    //retorno Objid, id in array, name ...
+    return {
+      props: { isConnected: true, userCoins:userData.CoinAmount,userSkin:userData.CurrentAspect},
+    }
+  } catch (e) {
+    console.error(e)
+    return {
+      props: { isConnected: false },
+    }
+  }
+}
+
+
+
 export default class App extends Component {
 
       preload = (p5:p5) => {
@@ -59,9 +87,9 @@ export default class App extends Component {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
         //LOAD THE USER DATA INTO THESE VARIABLES OR DIRECTLY INTO THE GAME'S DECLARATION
-        let userCoins=0;
+        let userCoins=this.props.userCoins;
         let userGems=0;
-        let userSkinID=7;
+        let userSkinID=5;
 
         game = new GameLogic(
           {coins:userCoins,gems:userGems,image:player_Skins[userSkinID]}, //userData

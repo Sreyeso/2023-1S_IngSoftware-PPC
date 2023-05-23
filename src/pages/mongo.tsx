@@ -2,10 +2,36 @@ import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
+import UserModel from '@/lib/models/user'
+import DBO from '../lib/dbo'
+
 
 export async function getServerSideProps() {
   try {
-    await clientPromise
+    /*
+    const clients = await clientPromise;
+    const dbs= clients.db("Main");
+
+    const queryResult= await dbs.collections();
+    */
+    const MB = new DBO();
+    /*  TEST NEW USER
+    const User=new UserModel(MB.db);
+    let userp:any[] = [
+      "bingustest",
+      "bingustest",
+      "bingustest",
+      "bingustest",
+      "bingustest",
+      1337,
+      1338,
+      333666
+    ];
+    const newUser= await User.addUser(userp)
+    const queryResult=await User.getUser("bingus");
+    */
+    //const queryResult=await MB.db.collection("Clients").findOne({UserName:"bingus"});
+
     // `await clientPromise` will use the default database passed in the MONGODB_URI
     // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
     //
@@ -14,9 +40,11 @@ export async function getServerSideProps() {
     //
     // Then you can execute queries against your database like so:
     // db.find({}) or any of the MongoDB Node Driver commands
+    console.log(queryResult.CoinAmount);
+    //console.log(newUser.insertedId);
 
     return {
-      props: { isConnected: true },
+      props: { isConnected: true, QR: JSON.stringify(queryResult)},
     }
   } catch (e) {
     console.error(e)
@@ -27,7 +55,7 @@ export async function getServerSideProps() {
 }
 
 export default function Home({
-  isConnected,
+  isConnected,QR,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className="container">
@@ -42,7 +70,7 @@ export default function Home({
         </h1>
 
         {isConnected ? (
-          <h2 className="subtitle">You are connected to MongoDB</h2>
+          <h2 className="subtitle">{QR}</h2>
         ) : (
           <h2 className="subtitle">
             You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
