@@ -138,7 +138,7 @@ export default class GameLogic {
 
                 if(!this.pause){ //If game isn't paused
                     this.player.update();   //Enable player movement
-                    this.player.keyMovement();  
+                    this.keyMovement();  
                     this.scroll-=this.scrollSpeed; //Enable scrolling
                     this.player.movePlayer(-this.scrollSpeed,0); //Player movement due to the scrolling
                 }else{
@@ -209,6 +209,7 @@ export default class GameLogic {
             case(0):
                 biome=this.levelLayouts.defaultWorldLayouts;
             break;
+            
             case(1):
                 biome=this.levelLayouts.desertWorldLayouts;
             break;
@@ -472,18 +473,38 @@ export default class GameLogic {
         }
     }
 
+    keyMovement(){
+        if(this.p.keyIsDown(this.p.LEFT_ARROW) || this.p.keyIsDown(65)){
+            this.player.movePlayer(this.player.vleft,0);
+        }
+        if(this.p.keyIsDown(this.p.RIGHT_ARROW) || this.p.keyIsDown(68)){
+            this.player.movePlayer(this.player.vright,0);
+        }
+            // if(this.p.keyIsDown(this.p.UP_ARROW)){
+            //   this.movePlayer(0,-3);
+            // }
+            // if(this.p.keyIsDown(this.p.DOWN_ARROW)){
+            //   this.movePlayer(0,3);
+            // }
+
+    }
+
     keyInteractions(keyCode:number){
         if(keyCode){
             if(this.gameStarted==false){
                 this.gameStarted=true;
             }
         }
+        this.keyMovement();
         switch(keyCode){
             case(this.p.UP_ARROW):
+            case(87): // w
+            case(32): //spacebar
                 this.player.isJumping=true;
             break;
             case(80): // p
             case(27): // esc
+            case(13): // enter
                 this.pauseGame();
             break;
         }
