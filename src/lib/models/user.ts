@@ -60,6 +60,7 @@ export default class UserModel {
     const  nuAspect= this.collection.updateOne({UserName:user},{$set: {CurrentAspect:aspect}});
     return nuAspect;
   }
+
   async addCoins(user:string,amount:number){
     const  inCoins= this.collection.updateOne({UserName:user},{$inc: {CoinAmount:amount}});
     return inCoins;

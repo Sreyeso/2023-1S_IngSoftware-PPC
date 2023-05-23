@@ -48,14 +48,13 @@ export async function getServerSideProps() {
   try {
     //Database object
     const DB:DBO=new DBO();
-
     //User data object
     const UDO=new UserModel(DB.db);
     let userData=await UDO.getUser("bingus");
     //let userSkin=await 
     //retorno Objid, id in array, name ...
     return {
-      props: { isConnected: true, userCoins:userData.CoinAmount,userSkin:userData.CurrentAspect},
+      props: { isConnected: true, userCoins:userData.CoinAmount , userGems:userData.GemAmount ,userSkin:userData.CurrentAspect,maxScore:userData.HiScore},
     }
   } catch (e) {
     console.error(e)
@@ -90,7 +89,7 @@ export default class App extends Component {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
         game = new GameLogic(
-          {userCoins:this.props.userCoins,userGems:0,image:player_Skins[7]}, //userData
+          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[7]}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           generalAssets,levelGraphics,levelLayouts,p5);
 
@@ -101,39 +100,32 @@ export default class App extends Component {
         p5.background('white');
         gameFinished=game.handleGame(debug);
         if(gameFinished==true && resultsLogged==false){
-          const addCoins = () => {
+
+        let score =  (game.score > this.props.maxScore) ? (game.score) : (this.props.maxScore);
+
+          const updateUser = () => {
             fetch("http://localhost:3000/api/GameReq", {
               method: "PUT",
               body: JSON.stringify({
                 "coins":game.collectedCoins,
+                "gems":game.collectedGems,
+                "score":score
               }),
               headers: {
                 "content-type": "application/json",
               },
             }).catch((e) => console.log(e));
           };
-          addCoins();
-          console.log(game.collectedCoins,game.collectedCoins,game.score);
+          updateUser();
           resultsLogged=true;
-          setTimeout(() => {  location.reload(); }, 3000);
-
         }
 
     };
 
     keyPressed = (p5:p5) => {
       game.keyInteractions(p5.keyCode);
-      if((p5.keyCode == 82 || p5.keyCode == 13) && gameFinished==true && resultsLogged==true){
-        /* Disculpa el abuso ac[a] lo mejor seria actualizar para refrescar el total de monedas. voy a mimir
-        game = new GameLogic(
-          {userCoins:this.props.userCoins,userGems:0,image:player_Skins[7]}, //userData
-          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
-          generalAssets,levelGraphics,levelLayouts,p5);
-
-        gameFinished=false;
-        resultsLogged=false;
-        */
-       setTimeout(() => {  location.reload(); }, 1000);
+      if(p5.keyCode && gameFinished==true && resultsLogged==true){
+        location.reload();
       }
     }
 

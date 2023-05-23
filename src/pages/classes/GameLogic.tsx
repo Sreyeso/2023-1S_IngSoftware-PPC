@@ -151,6 +151,15 @@ export default class GameLogic {
             }else{
                     this.level.tintScreen(this.xOffset,this.yOffset,"black");
                     this.showGameInfo(this.generalAssets[1]); // Death screen
+
+                    this.p.push();
+                        this.p.fill("white");
+                        this.p.textSize(this.level.tile_size/2);
+                        this.p.text("Presiona cualquier tecla para continuar...",
+                                this.xOffset+this.level.tile_size*5.65,
+                                this.yOffset+(this.level.levelHeight/2)+2*this.level.tile_size
+                                );
+                    this.p.pop(); 
                     return true;
             }
             //SCROLLING
