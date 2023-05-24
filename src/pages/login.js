@@ -8,6 +8,7 @@ import { useState } from 'react';
 import {signIn, signOut } from "next-auth/react"
 import {useFormik} from 'formik';
 import login_validate from '../lib/validate';
+
 //BUENO ME FALTA LA WEBONADA DE, se me olvido
 
 export default function login() {
@@ -19,7 +20,6 @@ export default function login() {
         initialValues: {
             email:'',
             password:''
-            
         },
         validate : login_validate,
         onSubmit
@@ -27,7 +27,14 @@ export default function login() {
 
     async function onSubmit(values){
         console.log(values)
+        const responder = await fetch('/api/login_handler',{
+            method:"POST",body:JSON.stringify(values)
+        })
+        const JSON = await responder.json();
+        JSON.then
     }
+
+
 
 
     //Google Handler function
