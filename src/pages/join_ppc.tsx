@@ -2,14 +2,13 @@ import styles from '../styles/Join.module.css';
 import Head from 'next/head'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { join } from 'path';
 
 let inputFields = [ //Para poner los nombres por defecto de los campos,
     //y el nombre de la correspondiente propiedad en userToSend
     ["Usuario", "username","text"],
     ["Correo", "email","text"],
     ["Género","gender","select"],
-    ["Región","country","select"], 
+    ["Región","region","select"], 
     ["Contraseña","password","password"],
     ["Repetir Contraseña","rep_password","password"]
 ];
@@ -18,7 +17,7 @@ let userToSend: object = {
     username:"",
     email:"",
     gender:"",
-    country:"",
+    region:"",
     password:"",
     rep_password:"",
 }
@@ -148,6 +147,7 @@ function LoginButton({showMessageScreen}:msg_shower){
     //Cuando se presiona el botón, se envía al servidor lo
     //que haya en el objeto userToSend
     async function sendNewUser(){
+        showMessageScreen({name: "Procesando datos..."})
         const response = await fetch(url, {
             method: "PUT",
             body: JSON.stringify(userToSend),

@@ -4,9 +4,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import nodemailer from 'nodemailer'
 import bcryptjs from 'bcryptjs'
-import fs from 'fs'
 import path from 'path'
 import { defaultConfig } from 'next/dist/server/config-shared'
+import UserModel from '@/lib/models/user'
+import DBO from '@/lib/dbo'
 
 type Data = {
   name: string
@@ -16,18 +17,12 @@ interface ProperUser{
   username: string,
   email: string,
   gender: string,
-  country: string,
+  region: string,
   password: string,
   rep_password: string
 }
 
-interface User{ //El tipo de dato Usuario para ingresar en BD
-  username: string,
-  email: string,
-  gender: string,
-  country: string,
-  password: string,  
-}
+type UserToSave = [string, string, string, string, string, number, number, number]
 
 type KeyProperUser = keyof ProperUser
 
@@ -67,7 +62,7 @@ const insults = [
 "abuso",
 "rape",
 "kill",
-"assasin",
+"assassin",
 "asesino",
 "pussy",
 "ass",
@@ -86,13 +81,11 @@ const insults = [
 "logi",
 ]
 
-let users: User[] =[] //Provisional. Arreglo con los usuarios creados
-
 const required_fields = [
-  "username","email","gender","country","password","rep_password"
+  "username","email","gender","region","password","rep_password"
 ];
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
@@ -100,6 +93,7 @@ export default function handler(
       const response = [regions, genders]  
       res.status(200).end(JSON.stringify(response));
     }
+
     else if(req.method==="PUT"){
       let userReceived;
       try{
@@ -109,27 +103,49 @@ export default function handler(
         res.status(400).json({name: "Invalid Request"});
       }
       
-      let validation = saveUser(userReceived);
-      let code = validation[0];
-      let message = validation[1];
-      let user = validation [2];
+      saveUser(userReceived)
+      .then(response=>{
+        let code = response[0];
+        let message = response[1];
+        let user = response [2];
 
-      console.log(users);
+        res.status(code).json({name: message});
 
-      res.status(code).json({name: message});
+        if(code === 201 && user !== null){
+          //Enviar mensaje de bienvenida:
+          sendWelcomeMail(user);
+        }
+      })
+      
+      
+      //validation.
+      // then((response: [number, string, null | UserToSave])=>{
+      //   let code = response[0];
+      //   let message = response[1];
+      //   let user = response[2];
+      // })
 
-      if(code === 201 && user !== null){
-        //Enviar mensaje de bienvenida:
-        sendWelcomeMail(user);
-      }
+      // let code = validation[0];
+      // let message = validation[1];
+      // let user = validation [2];
+
+      
+
+      // res.status(code).json({name: message});
+
+      // if(code === 201 && user !== null){
+      //   //Enviar mensaje de bienvenida:
+      //   sendWelcomeMail(user);
+      // }
       
     }
   
 }
 
-function saveUser(userReceived: ProperUser): [number,string, User|null]{
+async function saveUser(userReceived: ProperUser): Promise<[number, string, null | UserToSave]>{
 
   console.log(userReceived);
+  
   //Validamos los datos, y devolvemos un código http junto con un mensaje para el cliente
 
   //Si alguno de los datos recibidos no es un String, convertirlo en un string
@@ -156,7 +172,7 @@ function saveUser(userReceived: ProperUser): [number,string, User|null]{
   userReceived.username = userReceived.username.trim();
   userReceived.email = userReceived.email.trim();
 
-  let {username, email, gender, country, password, rep_password } = userReceived;
+  let {username, email, gender, region, password, rep_password } = userReceived;
 
   if(username.includes(" ")){
     return [409, "El nombre de usuario no puede contener espacios en blanco", null];
@@ -195,35 +211,61 @@ function saveUser(userReceived: ProperUser): [number,string, User|null]{
 
   //Verificar que ni el usuario ni el correo estén en uso
 
+  let dbo = new DBO().db;
+  let userModel = new UserModel(dbo);
+
+  let dbError: [number,string,UserToSave|null] = [0,"", null];
+
+  // Username: 
+  await userModel.getUser(username)
+  .then(res => {
+    console.log(res);
+    if (res !== null){
+      dbError = [409, "El usuario ya está en uso", null];
+    }
+  })
+  .catch(err => console.log(err));
+
+  // Email:
+  await userModel.verifyMail(email)
+  .then(res => {
+    if (res !== null){
+      dbError = [409, "El email ya está en uso", null];
+    }
+  })
+  .catch(err => console.log(err));
+
+  if(dbError[0] !== 0){ //Es decir, se encontró que el usuario o el correo ya estaban en uso
+    return dbError;
+  }
+
   //Mejorar la seguridad de la contraseña:
   const numSalts = 10; //Cantidad de saltos
   const hashedPassword = bcryptjs.hashSync(password, numSalts);
 
   //Crear el usuario para enviar a la BD
-  
-  // crear usuario para enviar:
-  let user: User ={
-    username: username,
-    email: email,
-    gender: gender,
-    country: country,
-    password: hashedPassword,      
-  }
 
-  if(bcryptjs.compareSync(password,hashedPassword)){
-    console.log("True");
-  }
+  let user: UserToSave = [
+    username,
+    hashedPassword, 
+    email,
+    gender,
+    region,
+    0,0,0
+  ]
+
+  const retUser = userModel.addUser(user)
+  //console.log(retUser);
+  console.log("Usuario añadido a la BD");
   
-  users.push(user)
-  
-  //let userInserted = pushUserToBD() //Devuelve algún valor si hubo algún problema validando la BD
   return [201, "Usuario creado con éxito", user];
 
 }
 
-async function sendWelcomeMail(user: User){
+async function sendWelcomeMail(user: UserToSave){
   
-  const { email, username } = user;
+  const username = user[0];
+  const email = user[2];
 
   //Credenciales del email de PPC:
   const EMAIL = process.env.PPC_MAIL_EMAIL;
@@ -277,10 +319,6 @@ async function sendWelcomeMail(user: User){
   }
 
   transporter.sendMail(message)
-  .then(() => {
-    console.log("Correo Enviado");
-  })
-  .catch(error => {
-    console.log(error);
-  })
+  .then(() => console.log("Correo Enviado"))
+  .catch(error => console.log(error));
 }

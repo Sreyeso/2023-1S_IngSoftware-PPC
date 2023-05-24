@@ -49,8 +49,9 @@ export default class UserModel {
     const  findUser= this.collection.findOne({UserName:user});
     return findUser;
   }
-  async verifyMail(){
-
+  async verifyMail(mail: string){
+    const findMail = this.collection.findOne({Mail: mail});
+    return findMail;
   }
   async setScore(user:string,score:number){
     const  nuScore= this.collection.updateOne({UserName:user},{$set: {HiScore:score}});
