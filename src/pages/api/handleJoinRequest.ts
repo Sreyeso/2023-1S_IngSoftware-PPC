@@ -254,7 +254,7 @@ async function saveUser(userReceived: ProperUser): Promise<[number, string, null
     0,0,0
   ]
 
-  const retUser = userModel.addUser(user)
+  const retUser = userModel.addUser(user);
   //console.log(retUser);
   console.log("Usuario añadido a la BD");
   
