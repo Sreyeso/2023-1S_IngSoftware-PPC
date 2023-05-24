@@ -30,13 +30,9 @@ export default function login() {
         const responder = await fetch('/api/login_handler',{
             method:"POST",body:JSON.stringify(values)
         })
-        const qdas = await responder.json();
-        console.log(qdas)
+        const respuesta = await responder.json();
+        console.log(respuesta)
     }
-
-
-
-
     //Google Handler function
     async function handleGoogleSignin(){
         //https://next-auth.js.org/
