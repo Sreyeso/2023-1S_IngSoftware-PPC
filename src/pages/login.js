@@ -30,8 +30,8 @@ export default function login() {
         const responder = await fetch('/api/login_handler',{
             method:"POST",body:JSON.stringify(values)
         })
-        const JSON = await responder.json();
-        JSON.then
+        const qdas = await responder.json();
+        console.log(qdas)
     }
 
 
