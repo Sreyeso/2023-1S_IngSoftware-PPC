@@ -1,18 +1,37 @@
 import styles from '../styles/RestorePassword.module.css'
-import Image from 'next/image'
 
 export default function RestorePassword() {
+    let email: string;
+
+    async function sendMail(){
+        // const response = await fetch('api/handlePasswordRestoration',{
+        //     method: "PUT",
+        //     body: email
+        // })
+
+    }
+    
     return (
         <div className = {styles.Background}>
             <div className = {styles.AllInside}>
-                <h1>restoring password</h1>
-                <Image
-                    src="/pages_imgs/logo_PPC.png"
-                    alt="Logo de PPC Games"
-                    width={200}
-                    height={300}
-                    priority                    
-                />
+                <div className = {styles.bigTextDiv}>
+                    <h2>¿Has olvidado tu contraseña?</h2>
+                    <h3>Para restaurar tu contraseña, necesitarás el correo electrónico vinculado a tu cuenta</h3>
+                </div>
+                <form className = {styles.submitForm}>
+                    <input 
+                    type="text"
+                    placeholder='Correo'
+                    onChange={e => {
+                        e.preventDefault();
+                        email = e.target.value;
+                    }}
+                    >
+                    </input>
+                    <button onSubmit={sendMail}>
+                        Restaurar contraseña
+                    </button>                    
+                </form>
             </div>
         </div>
     );

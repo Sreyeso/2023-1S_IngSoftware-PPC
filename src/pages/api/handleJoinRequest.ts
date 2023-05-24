@@ -116,27 +116,7 @@ export default async function handler(
           sendWelcomeMail(user);
         }
       })
-      
-      
-      //validation.
-      // then((response: [number, string, null | UserToSave])=>{
-      //   let code = response[0];
-      //   let message = response[1];
-      //   let user = response[2];
-      // })
 
-      // let code = validation[0];
-      // let message = validation[1];
-      // let user = validation [2];
-
-      
-
-      // res.status(code).json({name: message});
-
-      // if(code === 201 && user !== null){
-      //   //Enviar mensaje de bienvenida:
-      //   sendWelcomeMail(user);
-      // }
       
     }
   
