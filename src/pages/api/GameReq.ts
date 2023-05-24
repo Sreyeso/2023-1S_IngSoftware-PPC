@@ -20,13 +20,26 @@ export async function connection(body:any){
   
 }
 
+export async function getUser(username:string){   
+  try {     //Database object     
+    const DB:DBO=new DBO();      //User data object     
+    const UDO=new UserModel(DB.db);     
+    const User = await UDO.getUser(username);  //retorno Objid, id in array, name ...     
+    return User;   
+  } 
+  catch (e) 
+  {   console.error(e)   
+  }    
+}
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method;
   console.log(req.body);
   const body = req.body;  
   switch (requestMethod) {
     case 'POST':
-      res.status(200).json({ message: `You submitted the following data: ss` })
+      getUser(body.username);
+      res.status(200).json({ message: 'You submitted the following data: ${body.username}' })
     case 'PUT':
       connection(body);
       res.status(200).json({ message: `Entry successfully updated` })
@@ -36,3 +49,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       res.status(200).json({ message: 'Api gaming'})
   }
 }
+
+
+  

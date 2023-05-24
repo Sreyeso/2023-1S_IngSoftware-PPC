@@ -3,6 +3,10 @@ import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
+import Stack from '@mui/material/Stack';
+
+
+
 
 //Class imports
 import GameLogic from "./classes/GameLogic";
@@ -64,8 +68,6 @@ export async function getServerSideProps() {
   }
 }
 
-
-
 export default class App extends Component {
 
       preload = (p5:p5) => {
@@ -123,7 +125,7 @@ export default class App extends Component {
     };
 
     keyPressed = (p5:p5) => {
-      game.keyInteractions(p5.keyCode);
+      if(game){game.keyInteractions(p5.keyCode);}
       if(p5.keyCode && gameFinished==true && resultsLogged==true){
         location.reload();
       }
@@ -142,7 +144,14 @@ export default class App extends Component {
                   draw={this.draw}
                 />
               </div>
+            <div className="flex">
+                <button><img src="./sprites/generalAssets/LOG-OUT.png" alt="Iniciar Juego"/></button>
+                <button><img src="./sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
+                <a href="\leaderboard"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
+                <button><img src="./sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
             </div>
+            </div>
+            
         );
     };
 
