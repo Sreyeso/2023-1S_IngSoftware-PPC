@@ -60,7 +60,7 @@ export default class GameLogic {
         this.p=p;               
         
         let startLvlID = GameLogic.getRandomInt(this.levelLayouts.defaultLevelLayouts.length);
-        
+
         this.level = new Level({
             rows: 10, cols: 21, 
             initialLayout: this.levelLayouts.defaultLevelLayouts[startLvlID].layout,

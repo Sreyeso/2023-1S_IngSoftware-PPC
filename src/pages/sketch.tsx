@@ -89,8 +89,8 @@ export default class App extends Component {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
         game = new GameLogic(
-          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[7]}, //userData
-          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
+          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[1]}, //userData
+          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:0}, //gameDetails
           generalAssets,levelGraphics,levelLayouts,p5);
 
           p5.resizeCanvas(game.level.levelWidth-game.level.tile_size,game.level.levelHeight);  //Resize the canvas according to the viewable game size
@@ -123,7 +123,7 @@ export default class App extends Component {
     };
 
     keyPressed = (p5:p5) => {
-      game.keyInteractions(p5.keyCode);
+      if(game){game.keyInteractions(p5.keyCode);}
       if(p5.keyCode && gameFinished==true && resultsLogged==true){
         location.reload();
       }
@@ -136,8 +136,8 @@ export default class App extends Component {
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                 <Sketch 
                   preload={this.preload}
-                  windowResized={this.windowResized}
                   setup={this.setup}
+                  windowResized={this.windowResized}
                   keyPressed={this.keyPressed}
                   draw={this.draw}
                 />
