@@ -32,8 +32,10 @@ export default class GameLogic {
     pauseTimer:number=0;
 
     score:number=-1;
-    coins:number;
-    gems:number;
+    userCoins:number;
+    userGems:number;
+    collectedCoins:number=0;
+    collectedGems:number=0;
 
     playerSkin: p5.Image;
 
@@ -43,7 +45,7 @@ export default class GameLogic {
         return Math.floor(Math.random() * max);
     }
 
-    constructor(userData:any|{coins:number,gems:number,image:any},
+    constructor(userData:any|{userCoins:number,userGems:number,image:any},
                 gameDetails:any|{playerSizeModifier:number,gravityModifier:number,maxscrollSpeed:number},
                 generalAssets:any,levelGraphics:any[],levelLayouts:any,
                 p:p5) {
@@ -52,8 +54,8 @@ export default class GameLogic {
         this.levelGraphics=levelGraphics;
         this.levelLayouts=levelLayouts;
 
-        this.coins=userData.coins;
-        this.gems=userData.gems;
+        this.userCoins=userData.userCoins;
+        this.userGems=userData.userGems;
         this.playerSkin=userData.image;
         this.p=p;               
         
@@ -138,7 +140,7 @@ export default class GameLogic {
 
                 if(!this.pause){ //If game isn't paused
                     this.player.update();   //Enable player movement
-                    this.player.keyMovement();  
+                    this.keyMovement();     //Enable player movement
                     this.scroll-=this.scrollSpeed; //Enable scrolling
                     this.player.movePlayer(-this.scrollSpeed,0); //Player movement due to the scrolling
                 }else{
@@ -149,6 +151,16 @@ export default class GameLogic {
             }else{
                     this.level.tintScreen(this.xOffset,this.yOffset,"black");
                     this.showGameInfo(this.generalAssets[1]); // Death screen
+
+                    this.p.push();
+                        this.p.fill("white");
+                        this.p.textSize(this.level.tile_size/2);
+                        this.p.text("Presiona cualquier tecla para continuar...",
+                                this.xOffset+this.level.tile_size*5.65,
+                                this.yOffset+(this.level.levelHeight/2)+2*this.level.tile_size
+                                );
+                    this.p.pop(); 
+                    return true;
             }
             //SCROLLING
             if(Math.abs(this.scroll)>this.level.tile_size){ // Scrolling of 1 tile
@@ -209,6 +221,7 @@ export default class GameLogic {
             case(0):
                 biome=this.levelLayouts.defaultWorldLayouts;
             break;
+            
             case(1):
                 biome=this.levelLayouts.desertWorldLayouts;
             break;
@@ -235,7 +248,7 @@ export default class GameLogic {
 
         this.p.image(   
                         this.levelGraphics[0][8], //coin
-                        this.xOffset+(this.level.levelWidth/2)-2*this.level.tile_size,
+                        this.xOffset+(this.level.levelWidth/2)-2.5*this.level.tile_size,
                         this.yOffset+(this.level.levelHeight/2)-1*this.level.tile_size,
                         this.level.tile_size,
                         this.level.tile_size
@@ -243,7 +256,7 @@ export default class GameLogic {
 
         this.p.image(   
                         this.levelGraphics[0][9], //gem
-                        this.xOffset+(this.level.levelWidth/2)-2*this.level.tile_size,
+                        this.xOffset+(this.level.levelWidth/2)-2.5*this.level.tile_size,
                         this.yOffset+(this.level.levelHeight/2)-0*this.level.tile_size,
                         this.level.tile_size,
                         this.level.tile_size
@@ -252,12 +265,12 @@ export default class GameLogic {
         this.p.push();
             this.p.fill("white");
             this.p.textSize(this.level.tile_size/2);
-            this.p.text(this.coins,
-                        this.xOffset+(this.level.levelWidth/2)+this.level.tile_size*0.35,
+            this.p.text(this.userCoins+" + "+this.collectedCoins ,
+                        this.xOffset+(this.level.levelWidth/2),
                         this.yOffset+(this.level.levelHeight/2)-this.level.tile_size*0.35
                         );
-            this.p.text(this.gems,
-                        this.xOffset+(this.level.levelWidth/2)+this.level.tile_size*0.35,
+            this.p.text(this.userGems+" + "+this.collectedGems ,
+                        this.xOffset+(this.level.levelWidth/2),
                         this.yOffset+(this.level.levelHeight/2)+this.level.tile_size*0.75
                         );
         this.p.pop();
@@ -447,9 +460,9 @@ export default class GameLogic {
                         // check if the player's bounding box overlaps with the tile's ellipse
                         if (this.player.x < centerX + radiusX && this.player.x+this.player.width > centerX - radiusX && this.player.y < centerY + radiusY && this.player.y+this.player.height > centerY - radiusY) {
                             if(this.level.layout[i][j].code=="coi"){
-                                this.coins++;
+                                this.collectedCoins++;
                             }else{
-                                this.gems++;
+                                this.collectedGems++;
                             }
                             this.level.layout[i][j].code = "000";
                             this.level.layout[i][j].image = this.levelGraphics[0][0];
@@ -472,6 +485,22 @@ export default class GameLogic {
         }
     }
 
+    keyMovement(){
+        if(this.p.keyIsDown(this.p.LEFT_ARROW) || this.p.keyIsDown(65)){
+            this.player.movePlayer(this.player.vleft,0);
+        }
+        if(this.p.keyIsDown(this.p.RIGHT_ARROW) || this.p.keyIsDown(68)){
+            this.player.movePlayer(this.player.vright,0);
+        }
+            // if(this.p.keyIsDown(this.p.UP_ARROW)){
+            //   this.movePlayer(0,-3);
+            // }
+            // if(this.p.keyIsDown(this.p.DOWN_ARROW)){
+            //   this.movePlayer(0,3);
+            // }
+
+    }
+
     keyInteractions(keyCode:number){
         if(keyCode){
             if(this.gameStarted==false){
@@ -480,6 +509,8 @@ export default class GameLogic {
         }
         switch(keyCode){
             case(this.p.UP_ARROW):
+            case(87): // w
+            case(32): //spacebar
                 this.player.isJumping=true;
             break;
             case(80): // p
