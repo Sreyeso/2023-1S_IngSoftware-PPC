@@ -16,7 +16,7 @@ export interface Clients extends Document{
 export default class UserModel {
   collection:Collection;
   constructor(db:Db) {
-    this.collection = db.collection<Clients>('Clients');
+    this.collection = db.collection('Clients');
   }
 
  /**
