@@ -10,6 +10,7 @@ import GameLogic from "./classes/GameLogic";
 import DBO from "@/lib/dbo";
 import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
+import Clients from "@/lib/models/user";
 
 //Main sketch fuction (AKA Game)
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
@@ -54,8 +55,14 @@ export async function getServerSideProps() {
     let userData=await UDO.getUser("bingus");
     //let userSkin=await 
     //retorno Objid, id in array, name ...
+    let userCoins:number =userData.CoinAmount;
+    let userGems:number=userData.GemAmount;
+    let userSkin:number =userData.userSkin;
+    let maxScore:number =userData.HiScore;
+
+
     return {
-      props: { isConnected: true, userCoins:userData.CoinAmount , userGems:userData.GemAmount ,userSkin:userData.CurrentAspect,maxScore:userData.HiScore},
+      props: { isConnected: true, userCoins:userCoins, userGems:userGems ,userSkin:userSkin,maxScore:maxScore},
     }
   } catch (e) {
     console.error(e)
@@ -67,7 +74,7 @@ export async function getServerSideProps() {
 
 
 
-export default class App extends Component {
+export default class App extends Component<Clients> {
 
       preload = (p5:p5) => {
         levelLayouts=p5.loadJSON('/levelLayouts.json');
