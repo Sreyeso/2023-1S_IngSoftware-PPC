@@ -6,8 +6,8 @@ import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
 
 //Class imports
-import GameLogic from "./classes/GameLogic";
-import DBO from "@/lib/dbo";
+import GameLogic from "../lib/classes/GameLogic";
+import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
@@ -57,7 +57,7 @@ export async function getServerSideProps() {
     //retorno Objid, id in array, name ...
     let userCoins:number =userData.CoinAmount;
     let userGems:number=userData.GemAmount;
-    let userSkin:number =userData.userSkin;
+    let userSkin:number =userData.CurrentAspect;
     let maxScore:number =userData.HiScore;
 
 
@@ -98,7 +98,7 @@ export default class App extends Component<Clients> {
 
         game = new GameLogic(
           {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[1]}, //userData
-          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:0}, //gameDetails
+          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           generalAssets,levelGraphics,levelLayouts,p5);
 
           p5.resizeCanvas(game.level.levelWidth-game.level.tile_size,game.level.levelHeight);  //Resize the canvas according to the viewable game size

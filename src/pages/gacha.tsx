@@ -5,8 +5,8 @@ import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
 
 //Class imports
-import GameLogic from "./classes/GameLogic";
-import DBO from "@/lib/dbo";
+import GameLogic from "../lib/classes/GameLogic";
+import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 

@@ -1,4 +1,4 @@
-import DBO from '@/lib/dbo';
+import DBO from '@/lib/utils/dbo';
 import UserModel from '@/lib/models/user';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
