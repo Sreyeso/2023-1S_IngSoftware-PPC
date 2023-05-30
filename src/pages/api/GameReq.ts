@@ -40,6 +40,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       });
       break;
     default:
-      res.status(200).json({ message: 'Api gaming' });
+      res.status(401).json({ message: 'Api gaming' });
   }
 }
