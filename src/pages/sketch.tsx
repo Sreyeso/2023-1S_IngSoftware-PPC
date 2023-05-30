@@ -112,7 +112,7 @@ export default class App extends Component<Clients> {
         let score =  (game.score > this.props.maxScore) ? (game.score) : (this.props.maxScore);
 
           const updateUser = () => {
-            fetch("http://localhost:3000/api/GameReq", {
+            fetch("/api/GameReq", {
               method: "PUT",
               body: JSON.stringify({
                 "coins":game.collectedCoins,
