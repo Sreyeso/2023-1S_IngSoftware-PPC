@@ -13,8 +13,12 @@ export interface Clients extends Document{
   gachaobjects: string[];
 }
 
-export default class UserModel {
-  collection:Collection;
+export default class UserModel{
+  collection:any;
+  userCoins:number=0;
+  userGems:number=0;
+  userSkin:number=0;
+  maxScore:number=0;
   constructor(db:Db) {
     this.collection = db.collection('Clients');
   }

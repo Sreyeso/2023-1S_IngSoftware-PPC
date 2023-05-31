@@ -1,9 +1,9 @@
 import Head from 'next/head'
-import clientPromise from '../lib/mongodb'
+import clientPromise from '../lib/utils/mongodb'
 import { InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 import UserModel from '@/lib/models/user'
-import DBO from '../lib/dbo'
+import DBO from '../lib/utils/dbo'
 
 
 export async function getServerSideProps() {

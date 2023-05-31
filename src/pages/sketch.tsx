@@ -6,10 +6,11 @@ import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
 
 //Class imports
-import GameLogic from "./classes/GameLogic";
-import DBO from "@/lib/dbo";
+import GameLogic from "../lib/classes/GameLogic";
+import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
+import Clients from "@/lib/models/user";
 
 //Main sketch fuction (AKA Game)
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
@@ -59,15 +60,16 @@ export async function getServerSideProps() {
     else{
       console.log("ERROR FETHCING USER DATA")
     }
-    
     //let userSkin=await 
     //retorno Objid, id in array, name ...
     let userCoins:number =userData.CoinAmount;
-    let userGems:number =userData.GemAmount;
+    let userGems:number=userData.GemAmount;
     let userSkin:number =userData.CurrentAspect;
     let maxScore:number =userData.HiScore;
+
+
     return {
-      props: { isConnected: true, userCoins,userGems,userSkin,maxScore},
+      props: { isConnected: true, userCoins:userCoins, userGems:userGems ,userSkin:userSkin,maxScore:maxScore},
     }
   } catch (e) {
     console.error(e)
@@ -79,7 +81,7 @@ export async function getServerSideProps() {
 
 
 
-export default class App extends Component {
+export default class App extends Component<Clients> {
 
       preload = (p5:p5) => {
         levelLayouts=p5.loadJSON('/levelLayouts.json');
@@ -103,7 +105,7 @@ export default class App extends Component {
 
         game = new GameLogic(
           {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[1]}, //userData
-          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:0}, //gameDetails
+          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           generalAssets,levelGraphics,levelLayouts,p5);
 
           p5.resizeCanvas(game.level.levelWidth-game.level.tile_size,game.level.levelHeight);  //Resize the canvas according to the viewable game size
@@ -117,7 +119,7 @@ export default class App extends Component {
         let score =  (game.score > this.props.maxScore) ? (game.score) : (this.props.maxScore);
 
           const updateUser = () => {
-            fetch("http://localhost:3000/api/GameReq", {
+            fetch("/api/GameReq", {
               method: "PUT",
               body: JSON.stringify({
                 "coins":game.collectedCoins,
