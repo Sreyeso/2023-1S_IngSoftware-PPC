@@ -16,7 +16,9 @@ export async function connection(body:any){
     //retorno Objid, id in array, name ...
     //machete gaming
     if(true){
-      DB.end();
+      //DB.end();
+      console.log("xdding")
+
     }
     else{
       console.log("ERROR FETCHING USER DATA")
