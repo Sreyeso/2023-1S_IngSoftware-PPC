@@ -21,10 +21,10 @@ export async function connection(body:any){
     else{
       console.log("ERROR FETCHING USER DATA")
     }
-    return DB;
+    //return DB;
   } catch (e) {
     console.error(e)
-    return null;
+    //return null;
   }
   
 }
