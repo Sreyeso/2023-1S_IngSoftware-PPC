@@ -56,7 +56,7 @@ export async function getServerSideProps() {
     let userData=await UDO.getUser("bingus");
     //added connection close, but it lacks proper handling of errors and conditions
     if(userData){
-      DB.end();
+      //DB.end();
     }
     else{
       console.log("ERROR FETHCING USER DATA")
