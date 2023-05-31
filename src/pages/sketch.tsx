@@ -67,7 +67,7 @@ export async function getServerSideProps() {
     else{
       console.log("ERROR FETHCING USER DATA")
     }
-    
+
     return {
       props: { isConnected: true, userCoins:userCoins, userGems:userGems ,userSkin:userSkin,maxScore:maxScore},
     }

@@ -9,17 +9,14 @@ export async function connection(body:any){
 
     //User data object
     const UDO=new UserModel(DB.db);
-    //await UDO.addCoins("bingus",parseInt(body.coins));
-    //await UDO.addGems("bingus",parseInt(body.gems));
-    //await UDO.setScore("bingus",parseInt(body.score));
-    UDO.addCoins("bingus",parseInt(body.coins));
-    UDO.addGems("bingus",parseInt(body.gems));
-    UDO.setScore("bingus",parseInt(body.score));
+    await UDO.addCoins("bingus",parseInt(body.coins));
+    await UDO.addGems("bingus",parseInt(body.gems));
+    await UDO.setScore("bingus",parseInt(body.score));
     //let userSkin=await 
     //retorno Objid, id in array, name ...
     //machete gaming true
     if(true){
-      DB.end();
+      //DB.end();
       //console.log("xdding")
 
     }
