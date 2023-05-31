@@ -14,7 +14,7 @@ export async function connection(body:any){
     await UDO.setScore("bingus",parseInt(body.score));
     //let userSkin=await 
     //retorno Objid, id in array, name ...
-    //machete gaming
+    //machete gaming true
     if(true){
       DB.end();
       //console.log("xdding")
@@ -23,9 +23,10 @@ export async function connection(body:any){
     else{
       console.log("ERROR FETCHING USER DATA")
     }
-    //return DB;
+    return Promise.resolve(); // Resolve the promise when the operations are completed
   } catch (e) {
-    console.error(e)
+    console.error(e);
+    return Promise.reject(e); // Reject the promise if an error occurs
     //return null;
   }
   
