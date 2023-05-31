@@ -59,10 +59,15 @@ export async function getServerSideProps() {
     else{
       console.log("ERROR FETHCING USER DATA")
     }
+    
     //let userSkin=await 
     //retorno Objid, id in array, name ...
+    let userCoins:number =userData.CoinAmount;
+    let userGems:number =userData.GemAmount;
+    let userSkin:number =userData.CurrentAspect;
+    let maxScore:number =userData.HiScore;
     return {
-      props: { isConnected: true, userCoins:userData.CoinAmount , userGems:userData.GemAmount ,userSkin:userData.CurrentAspect,maxScore:userData.HiScore},
+      props: { isConnected: true, userCoins,userGems,userSkin,maxScore},
     }
   } catch (e) {
     console.error(e)
