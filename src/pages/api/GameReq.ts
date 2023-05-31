@@ -14,18 +14,19 @@ export async function connection(body:any){
     await UDO.setScore("bingus",parseInt(body.score));
     //let userSkin=await 
     //retorno Objid, id in array, name ...
-    //machete gaming
+    //machete gaming true
     if(true){
-      //DB.end();
-      console.log("xdding")
+      DB.end();
+      //console.log("xdding")
 
     }
     else{
       console.log("ERROR FETCHING USER DATA")
     }
-    //return DB;
+    return Promise.resolve(); // Resolve the promise when the operations are completed
   } catch (e) {
-    console.error(e)
+    console.error(e);
+    return Promise.reject(e); // Reject the promise if an error occurs
     //return null;
   }
   
@@ -38,6 +39,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (requestMethod) {
     case 'POST':
       res.status(200).json({ message: `You submitted the following data: ss` })
+      break;
     case 'PUT':
       //const _DB=connection(body);
       connection(body);
@@ -53,7 +55,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       */
 
     // handle other HTTP methods
+      break;
     default:
-      res.status(200).json({ message: 'Api gaming'})
+      res.status(401).json({ message: 'Api gaming'})
+      break;
   }
 }
