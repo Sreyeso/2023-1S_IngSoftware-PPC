@@ -16,8 +16,8 @@ export async function connection(body:any){
     //retorno Objid, id in array, name ...
     //machete gaming
     if(true){
-      //DB.end();
-      console.log("xdding")
+      DB.end();
+      //console.log("xdding")
 
     }
     else{
