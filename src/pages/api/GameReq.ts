@@ -16,7 +16,7 @@ export async function connection(body:any){
     //retorno Objid, id in array, name ...
     //machete gaming true
     if(true){
-      DB.end();
+      //DB.end();
       //console.log("xdding")
 
     }
@@ -39,6 +39,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (requestMethod) {
     case 'POST':
       res.status(200).json({ message: `You submitted the following data: ss` })
+      break;
     case 'PUT':
       //const _DB=connection(body);
       connection(body);
@@ -54,7 +55,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       */
 
     // handle other HTTP methods
+      break;
     default:
-      res.status(200).json({ message: 'Api gaming'})
+      res.status(401).json({ message: 'Api gaming'})
+      break;
   }
 }
