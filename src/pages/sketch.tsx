@@ -53,6 +53,13 @@ export async function getServerSideProps() {
     //User data object
     const UDO=new UserModel(DB.db);
     let userData=await UDO.getUser("bingus");
+    //added connection close, but it lacks proper handling of errors and conditions
+    if(userData){
+      DB.end();
+    }
+    else{
+      console.log("ERROR FETHCING USER DATA")
+    }
     //let userSkin=await 
     //retorno Objid, id in array, name ...
     let userCoins:number =userData.CoinAmount;
