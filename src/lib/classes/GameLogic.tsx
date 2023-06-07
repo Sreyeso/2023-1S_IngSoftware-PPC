@@ -286,12 +286,15 @@ export default class GameLogic {
         if(playerLeft<this.xOffset){ //Left side
             if(this.player.rightCollisionFlag){ this.player.isAlive=false; } //Squished by tile and (left) playfield border death trigger
             this.player.x=this.xOffset;
-        }else if(playerRight>this.xOffset+this.level.levelWidth-this.level.tile_size){
+        }
+        if(playerRight>this.xOffset+this.level.levelWidth-this.level.tile_size){
             this.player.x=(this.xOffset+this.level.levelWidth-this.level.tile_size)-this.player.width;
-        }else if(playerTop<this.yOffset){
+        }
+        if(playerTop<this.yOffset){
             this.player.y=this.yOffset;
             this.player.vy=0;
-        }else if(playerBottom>this.yOffset+this.level.levelHeight){
+        }
+        if(playerBottom>this.yOffset+this.level.levelHeight){
             this.player.isAlive=false; //death by falling out of the playfield
         }
     }
@@ -370,9 +373,9 @@ export default class GameLogic {
                         dircol = this.detectSquareCollisions(tileLeft,tileRight,tileTop,tileBottom,debug);
                         switch(dircol[0]){
                             case("top"):
-                                this.player.y -= dircol[1];   //Get the player out of the tile
+                                 this.player.y -= dircol[1];   //Get the player out of the tile
+                                 this.player.movePlayer(0,-2+this.player.gravity); //Adjust for other collisions
                                 this.player.vy = 0; //Reset vertical velocity
-                                this.player.movePlayer(0,-2+this.player.gravity); //Adjust for other collisions
                                 this.player.jumps = this.player.defaultJumps; //Reset jump count
                             break;
                             case("bottom"):

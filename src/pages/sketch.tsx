@@ -22,29 +22,6 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 });
 //import Sketch from "react-p5";
 
-// Graphic assets
-const general_assets_names: string[] = ["pause.png","exit.png","start.png"]
-const player_names: string[] = ["default_ppc.png","la_creatura.png","love_letter.png","nyan_poptart.png","pollo.png","hypnotic_blue.gif","purple_toxic.png","sans.png"];
-const defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
-
-let generalAssets:any[]=[];
-
-let player_Skins: any[]=[];
-let defaultLevel_Graphics: any[]=[];
-let desertLevel_Graphics: any[]=[];
-let hellLevel_Graphics: any[]=[];
-
-let levelGraphics:any;
-let levelLayouts :any;
-
-//Main game object
-let game:GameLogic;
-let gameFinished:boolean|undefined=false;
-let resultsLogged:boolean=false;
-
-//Debug control
-const debug:boolean=false;
-
 //Server prop function (backend)
 
 export async function getServerSideProps() {
@@ -79,19 +56,41 @@ export async function getServerSideProps() {
   }
 }
 
-
-
 export default class App extends Component<Clients> {
 
+      
+      // Graphic assets
+      general_assets_names: string[] = ["pause.png","exit.png","start.png"]
+      player_names: string[] = ["default_ppc.png","la_creatura.png","love_letter.png","nyan_poptart.png","pollo.png","hypnotic_blue.gif","purple_toxic.png","sans.png"];
+      defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
+
+      generalAssets:any[]=[];
+
+      player_Skins: any[]=[];
+      defaultLevel_Graphics: any[]=[];
+      desertLevel_Graphics: any[]=[];
+      hellLevel_Graphics: any[]=[];
+  
+      levelGraphics:any;
+      levelLayouts :any;
+
+      //Main game object
+      game:GameLogic|any=undefined;
+      gameFinished:boolean|undefined=false;
+      resultsLogged:boolean=false;
+
+      //Debug control
+      debug:boolean=false;
+
       preload = (p5:p5) => {
-        levelLayouts=p5.loadJSON('/levelLayouts.json');
+        this.levelLayouts=p5.loadJSON('/levelLayouts.json');
         // Load graphical assets
-        for (let i = 0; i < general_assets_names.length; i++) {generalAssets.push(p5.loadImage(`/sprites/generalAssets/${general_assets_names[i]}`));}
-        for (let i = 0; i < defaultTile_names.length; i++) {defaultLevel_Graphics.push(p5.loadImage(`/sprites/defaultLevel/${defaultTile_names[i]}`));}
-        for (let i = 0; i < defaultTile_names.length; i++) {desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${defaultTile_names[i]}`));}
-        for (let i = 0; i < defaultTile_names.length; i++) {hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${defaultTile_names[i]}`));}
-        for (let i = 0; i < player_names.length; i++) {player_Skins.push(p5.loadImage(`/sprites/playerSkins/${player_names[i]}`));}
-        levelGraphics=[defaultLevel_Graphics,desertLevel_Graphics,hellLevel_Graphics];
+        for (let i = 0; i < this.general_assets_names.length; i++) {this.generalAssets.push(p5.loadImage(`/sprites/generalAssets/${this.general_assets_names[i]}`));}
+        for (let i = 0; i < this.defaultTile_names.length; i++) {this.defaultLevel_Graphics.push(p5.loadImage(`/sprites/defaultLevel/${this.defaultTile_names[i]}`));}
+        for (let i = 0; i < this.defaultTile_names.length; i++) {this.desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${this.defaultTile_names[i]}`));}
+        for (let i = 0; i < this.defaultTile_names.length; i++) {this.hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${this.defaultTile_names[i]}`));}
+        for (let i = 0; i < this.player_names.length; i++) {this.player_Skins.push(p5.loadImage(`/sprites/playerSkins/${this.player_names[i]}`));}
+        this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
 
       };
 
@@ -103,27 +102,27 @@ export default class App extends Component<Clients> {
       setup = (p5:p5, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
-        game = new GameLogic(
-          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[1]}, //userData
+        this.game = new GameLogic(
+          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:this.player_Skins[this.player_names.indexOf(this.props.userSkin)]}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
-          generalAssets,levelGraphics,levelLayouts,p5);
+          this.generalAssets,this.levelGraphics,this.levelLayouts,p5);
 
-          p5.resizeCanvas(game.level.levelWidth-game.level.tile_size,game.level.levelHeight);  //Resize the canvas according to the viewable game size
+        p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
     };
 
     draw = (p5:p5) => {
         p5.background('white');
-        gameFinished=game.handleGame(debug);
-        if(gameFinished==true && resultsLogged==false){
+        this.gameFinished=this.game.handleGame(this.debug);
+        if(this.gameFinished==true && this.resultsLogged==false){
 
-        let score =  (game.score > this.props.maxScore) ? (game.score) : (this.props.maxScore);
+        let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
 
           const updateUser = () => {
             fetch("/api/GameReq", {
               method: "PUT",
               body: JSON.stringify({
-                "coins":game.collectedCoins,
-                "gems":game.collectedGems,
+                "coins":this.game.collectedCoins,
+                "gems":this.game.collectedGems,
                 "score":score
               }),
               headers: {
@@ -132,14 +131,14 @@ export default class App extends Component<Clients> {
             }).catch((e) => console.log(e));
           };
           updateUser();
-          resultsLogged=true;
+          this.resultsLogged=true;
         }
 
     };
 
     keyPressed = (p5:p5) => {
-      if(game){game.keyInteractions(p5.keyCode);}
-      if(p5.keyCode && gameFinished==true && resultsLogged==true){
+      if(this.game){this.game.keyInteractions(p5.keyCode);}
+      if(p5.keyCode && this.gameFinished==true && this.resultsLogged==true){
         location.reload();
       }
     }

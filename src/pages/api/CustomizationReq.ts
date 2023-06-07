@@ -9,13 +9,11 @@ export async function connection(body:any){
 
     //User data object
     const UDO=new UserModel(DB.db);
-    await UDO.addCoins("bingus",parseInt(body.coins));
-    await UDO.addGems("bingus",parseInt(body.gems));
-    await UDO.setScore("bingus",parseInt(body.score));
-    //let userSkin=await 
-    //retorno Objid, id in array, name ...
-    //machete gaming true
+    await UDO.setAspect("bingus",body.skin);
+
+
     DB.end();
+
     return Promise.resolve(); // Resolve the promise when the operations are completed
   } catch (e) {
     console.error(e);

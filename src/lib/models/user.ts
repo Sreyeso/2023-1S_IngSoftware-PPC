@@ -17,7 +17,8 @@ export default class UserModel{
   collection:any;
   userCoins:number=0;
   userGems:number=0;
-  userSkin:number=0;
+  userSkin:string="default_ppc.png";
+  gachaObjects:string[]=["default_ppc.png"];
   maxScore:number=0;
   constructor(db:Db) {
     this.collection = db.collection('Clients');
@@ -38,8 +39,8 @@ export default class UserModel{
       GemAmount: user[5],
       CoinAmount: user[6],
       HiScore: user[7],
-      CurrentAspect: "default",
-      GachaObjects:["default"],
+      CurrentAspect: "default_ppc.png",
+      GachaObjects:["default_ppc.png"],
     });
     //newUser es un objeto, tiene props como newUser.insertedId, usar para verificación
     return newUser;
