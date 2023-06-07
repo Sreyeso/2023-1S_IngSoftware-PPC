@@ -1,7 +1,4 @@
-import Board from "@/components/board";
 import React, { Component } from "react";
-import * as ReactDOM from "react-dom";
-import dynamic from 'next/dynamic';
 import DBO from "@/lib/dbo";
 import UserModel from "@/lib/models/user";
 
@@ -38,4 +35,38 @@ export default class Leaderboard extends Component{
     <button><img src="./sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
     </div>);
     }
+}
+
+function Board(){
+    return(
+        <div className="board">
+            <h1 className="leaderboard">Rankings</h1>
+            <Profiles datos={this.props.userName}></Profiles>
+        </div>
+    );
+}
+
+export function Profiles({datos}){
+    return(
+        <div id="profile">
+            {Item(datos)}
+        </div>
+    )
+}
+
+function Item(datos){
+    return (
+        <div className="flex">
+            <div className="item">
+                <img src="./sprites/pro.gif" alt="test"></img>
+                <div className="info">
+                    <h3 className="name text-dark">{datos}</h3>
+                    <span>Región: </span>
+                </div>
+            </div>
+            <div className="item">
+                <span>Score</span>
+            </div>
+        </div>
+    )
 }
