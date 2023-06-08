@@ -28,23 +28,19 @@ export default class Leaderboard extends Component{
     render() {
     return(
     <div>
-    <Board></Board>
-    <button><img src="./sprites/generalAssets/LOG-OUT.png" alt="Logout"/></button>
-    <button><img src="./sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
+    <div className="board">
+            <h1 className="leaderboard">Rankings</h1>
+            <Profiles datos={this.props}></Profiles>
+    </div>
+    <button><img src="/sprites/generalAssets/LOG-OUT.png" alt="Logout"/></button>
+    <button><img src="/sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
     <a href="\leaderboard"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
-    <button><img src="./sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
+    <button><img src="/sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
     </div>);
     }
 }
 
-function Board(){
-    return(
-        <div className="board">
-            <h1 className="leaderboard">Rankings</h1>
-            <Profiles datos={this.props.userName}></Profiles>
-        </div>
-    );
-}
+
 
 export function Profiles({datos}){
     return(
@@ -55,18 +51,20 @@ export function Profiles({datos}){
 }
 
 function Item(datos){
+    let imagen = `/sprites/playerSkins/${datos.userSkin}`
     return (
         <div className="flex">
             <div className="item">
-                <img src="./sprites/pro.gif" alt="test"></img>
+                <img id="imagen" src={imagen}  alt="test"></img>
                 <div className="info">
-                    <h3 className="name text-dark">{datos}</h3>
-                    <span>Región: </span>
+                    <h3 className="name text-dark">{datos.userName}</h3>
+                    <span>Región: {datos.region}</span>
                 </div>
             </div>
             <div className="item">
-                <span>Score</span>
+                <span>Score: {datos.maxScore}</span>
             </div>
         </div>
     )
+    
 }
