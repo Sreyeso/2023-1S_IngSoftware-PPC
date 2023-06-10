@@ -32,10 +32,12 @@ export default class Leaderboard extends Component{
             <h1 className="leaderboard">Rankings</h1>
             <Profiles datos={this.props}></Profiles>
     </div>
+    <div>
     <button><img src="/sprites/generalAssets/LOG-OUT.png" alt="Logout"/></button>
     <button><img src="/sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
     <a href="\leaderboard"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
     <button><img src="/sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
+    </div>
     </div>);
     }
 }
@@ -46,6 +48,15 @@ export function Profiles({datos}){
     return(
         <div id="profile">
             {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
+            {Item(datos)}
         </div>
     )
 }
@@ -55,7 +66,7 @@ function Item(datos){
     return (
         <div className="flex">
             <div className="item">
-                <img id="imagen" src={imagen}  alt="test"></img>
+                <img src={imagen} alt="userSkin"></img>
                 <div className="info">
                     <h3 className="name text-dark">{datos.userName}</h3>
                     <span>Región: {datos.region}</span>
