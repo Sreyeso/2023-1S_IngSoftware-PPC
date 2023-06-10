@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import styles from '../styles/Login2.module.css'
+import styles from '@/styles/Login2.module.css'
 import Head from 'next/head'
-import { Credentials, KeyCredentials } from '../lib/variousTypes'
+import { Credentials, KeyCredentials } from '@/lib/variousTypes'
 
 let creds: Credentials = {userOrEmail: "", password: ""};
 

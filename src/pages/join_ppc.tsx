@@ -1,9 +1,9 @@
-import styles from '../styles/Join.module.css';
+import styles from '@/styles/Join.module.css';
 import Head from 'next/head'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Router, useRouter } from 'next/router'
-import { Data, UserFromFrontend, KeyUserFromFrontend } from '../lib/variousTypes'
+import { Data, UserFromFrontend, KeyUserFromFrontend } from '@/lib/variousTypes'
 
 let inputFields = [ //Para poner los nombres por defecto de los campos,
     //y el nombre de la correspondiente propiedad en userToSend

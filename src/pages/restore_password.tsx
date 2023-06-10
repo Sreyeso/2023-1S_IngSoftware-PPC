@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '../styles/RestorePassword.module.css'
+import styles from '@/styles/RestorePassword.module.css'
 import { useState } from 'react'
 
 export default function RestorePassword() {
