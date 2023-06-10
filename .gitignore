@@ -23,11 +23,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
 # local env files
 .env*.local
-env.local
 
 # vercel
 .vercel
@@ -35,6 +33,5 @@ env.local
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-README.md
-node_modules
 
+public/pages_imgs/Ejemplo de video con ClipCharm.mp4

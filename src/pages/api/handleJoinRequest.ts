@@ -6,25 +6,11 @@ import nodemailer from 'nodemailer'
 import bcryptjs from 'bcryptjs'
 import path from 'path'
 import { defaultConfig } from 'next/dist/server/config-shared'
-import UserModel from '@/lib/models/user'
-import DBO from '@/lib/dbo'
-
-type Data = {
-  name: string
-}
-
-interface ProperUser{
-  username: string,
-  email: string,
-  gender: string,
-  region: string,
-  password: string,
-  rep_password: string
-}
+import UserModel from '../../lib/models/user'
+import DBO from '../../lib/dbo'
+import { Data, UserFromFrontend, KeyUserFromFrontend} from '../../lib/variousTypes'
 
 type UserToSave = [string, string, string, string, string, number, number, number]
-
-type KeyProperUser = keyof ProperUser
 
 const regions = [
   "Sudamérica",
@@ -95,6 +81,7 @@ export default async function handler(
     }
 
     else if(req.method==="PUT"){
+      console.log("OOPS")
       let userReceived;
       try{
         userReceived = JSON.parse(req.body);
@@ -122,7 +109,7 @@ export default async function handler(
   
 }
 
-async function saveUser(userReceived: ProperUser): Promise<[number, string, null | UserToSave]>{
+async function saveUser(userReceived: UserFromFrontend): Promise<[number, string, null | UserToSave]>{
 
   console.log(userReceived);
   
@@ -130,8 +117,8 @@ async function saveUser(userReceived: ProperUser): Promise<[number, string, null
 
   //Si alguno de los datos recibidos no es un String, convertirlo en un string
   for (let field in userReceived){
-    let actualField = userReceived[field as KeyProperUser];
-    userReceived[field as KeyProperUser] = actualField.toString();
+    let actualField = userReceived[field as KeyUserFromFrontend];
+    userReceived[field as KeyUserFromFrontend] = actualField.toString();
   }
 
   //Verificar si el objeto enviado sí tiene las llaves requeridas:
@@ -143,7 +130,7 @@ async function saveUser(userReceived: ProperUser): Promise<[number, string, null
 
   //Verificar si hay algún campo en blanco:
   for (let field in userReceived){
-    if(userReceived[field as KeyProperUser] === ""){
+    if(userReceived[field as KeyUserFromFrontend] === ""){
       return [409, "Se debe llenar todo el formulario",null];
     };
   }
@@ -252,7 +239,7 @@ async function sendWelcomeMail(user: UserToSave){
   const PASSWORD = process.env.PPC_MAIL_PASSWORD;
 
   //Dirección del logo de PPC
-  const imagePath = path.join(__dirname,"..","..","..","..","public","pages_imgs","logo_PPC.png");
+  const imagePath = path.join(__dirname,"..","..","..","..","public","backgrounds","logo_PPC.png");
   
   let config = { //Configuración de cómo se envian los mensajes
     service: "gmail",

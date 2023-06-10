@@ -1,0 +1,19 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+*>*{
+  font-family: 'poppins',sans-serif;
+}  */
+
+@font-face {
+  font-family: cinzel-regular;
+  src: url('../../public/fonts/cinzel/Cinzel-Regular.otf');
+}
+
+@font-face {
+  font-family: cinzel-bold;
+  src: url('../../public/fonts/cinzel/Cinzel-Bold.otf');
+}

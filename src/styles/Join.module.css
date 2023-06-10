@@ -1,17 +1,16 @@
-.background::before{
-    content:'';
-    background-image: url("../../public/pages_imgs/Fondo_juego.jpg");
-    opacity: 0.25;
-    position: absolute;
-    background-size: cover;
-    inset: 0;
+.videoDiv video{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: 0.35;
 }
 
 .allInside{ 
-    /*Aislamos los componentes de adentro para evitar
-    que la opacidad de la imagen de fondo de la página se aplique
-    a otros elementos*/
-    isolation: isolate;
+    position: fixed;
+    bottom: 0;
+    width:100%;
 }
 
 .logoDiv{
@@ -25,10 +24,9 @@
     height: 90%;
 }
 
-.background h2{
+.allInside h2{
     text-align: center;
     font-family: cinzel-bold;
-    /* font-size: 1.4rem; */
     font-size: 3.2vh;
     margin-top: 1.3vh;
 }
@@ -156,15 +154,5 @@
     text-align: center;
     font-family: cinzel-regular;
     font-size: 2vh;
+    
 }
-
-@font-face {
-    font-family: cinzel-regular;
-    src: url('../../public/fonts/cinzel/Cinzel-Regular.otf');
-}
-
-@font-face {
-    font-family: cinzel-bold;
-    src: url('../../public/fonts/cinzel/Cinzel-Bold.otf');
-}
-
