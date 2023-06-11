@@ -1,7 +1,6 @@
 // Framework Imports
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
-import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
 
 //Class imports
@@ -85,13 +84,13 @@ export default class App extends Component<Clients> {
   done: boolean = false;
   dripMsg: string = "";
 
-  preload = (p5: p5) => {
+  preload = (p5: any) => {
     this.skin_names = this.props.gachaObjects;
     for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/playerSkins/${this.skin_names[i]}`)); }
     for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/playerSkins/${this.hat_names[i]}`)); }
   };
 
-  windowResized = (p5: p5) => {
+  windowResized = (p5: any) => {
     //Window Size
     const marginPercentage = 0.15;
     const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
@@ -114,7 +113,7 @@ export default class App extends Component<Clients> {
 
   };
 
-  setup = (p5: p5, canvasParentRef: Element) => {
+  setup = (p5: any, canvasParentRef: Element) => {
 
     //Initial setup
     p5.createCanvas(0, 0).parent(canvasParentRef);
@@ -168,14 +167,14 @@ export default class App extends Component<Clients> {
     }
   };
 
-  mouseInsideSquare(p5: p5, x: number, y: number, size: number) {
+  mouseInsideSquare(p5: any, x: number, y: number, size: number) {
     return (p5.mouseX > x - size / 2 &&
       p5.mouseX < x + size / 2 &&
       p5.mouseY > y - size / 2 &&
       p5.mouseY < y + size / 2);
   }
 
-  draw = (p5: p5) => {
+  draw = (p5: any) => {
     p5.background(this.bgShadeOfGray, 125);
 
     // Display the hat selection squares
@@ -361,7 +360,7 @@ export default class App extends Component<Clients> {
 
   };
 
-  keyPressed = (p5: p5) => {
+  keyPressed = (p5: any) => {
 
     if (!this.done) {
       if(!this.confirm){

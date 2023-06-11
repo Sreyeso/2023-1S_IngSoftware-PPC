@@ -1,9 +1,7 @@
 //Link vercel desarrollo : https://2023-1-s-ing-software-99kiat0q2-sreyeso.vercel.app/
 // Framework Imports
-//Vercel gamong
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
-import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
 
 //Class imports
@@ -13,12 +11,16 @@ import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
 
-//Main sketch fuction (AKA Game)
-const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
-    require('p5/lib/addons/p5.sound'); // Sound library imported after react-p5 is loaded
-    return mod.default // returning react-p5 default export
-}),{
-    ssr: false    //Disable server side rendering
+// Will only import `react-p5` on client-side
+const Sketch = dynamic(() => import("react-p5").then((mod) => {
+
+  // importing sound lib only after react-p5 is loaded
+  require('p5/lib/addons/p5.sound');
+
+  // returning react-p5 default export
+  return mod.default
+}), {
+  ssr: false
 });
 
 //Server prop function (backend)
@@ -80,7 +82,7 @@ export default class App extends Component<Clients> {
       //Debug control
       debug:boolean=false;
 
-      preload = (p5:p5) => {
+      preload = (p5:any) => {
         this.levelLayouts=p5.loadJSON('/levelLayouts.json');
         // Load graphical assets
         for (let i = 0; i < this.general_assets_names.length; i++) {this.generalAssets.push(p5.loadImage(`/sprites/generalAssets/${this.general_assets_names[i]}`));}
@@ -93,12 +95,12 @@ export default class App extends Component<Clients> {
         this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
       };
 
-      windowResized = (p5:p5) =>  {
+      windowResized = (p5:any) =>  {
         //game.resize();  //Resize the game
         //p5.resizeCanvas(p5.windowWidth,p5.windowHeight);  //Resize the canvas
       };
 
-      setup = (p5:p5, canvasParentRef:Element) => {
+      setup = (p5:any, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
         this.game = new GameLogic(
@@ -108,7 +110,7 @@ export default class App extends Component<Clients> {
         p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
     };
 
-    draw = (p5:p5) => {
+    draw = (p5:any) => {
         p5.background('white');
         this.gameFinished=this.game.handleGame(this.debug);
         if(this.gameFinished==true && this.resultsLogged==false){
@@ -134,7 +136,7 @@ export default class App extends Component<Clients> {
 
     };
 
-    keyPressed = (p5:p5) => {
+    keyPressed = (p5:any) => {
       if(this.game){this.game.keyInteractions(p5.keyCode);}
       if(p5.keyCode && this.gameFinished==true && this.resultsLogged==true){
         location.reload();

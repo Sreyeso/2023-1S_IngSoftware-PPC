@@ -1,7 +1,6 @@
 // Framework Imports
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
-import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
 
 //Class imports
@@ -61,7 +60,7 @@ export default class App extends Component<Clients> {
   previewedSkin: any;
   previewedHat: any;
 
-  preload = (p5: p5) => {
+  preload = (p5: any) => {
     // Load graphical assets
     this.gachaMachine = p5.loadImage('/sprites/generalAssets/gachaMachine.png');
     this.gachaGIF = p5.loadImage('/sprites/generalAssets/gachaGIF.gif');
@@ -70,7 +69,7 @@ export default class App extends Component<Clients> {
     for (let i = 0; i < this.hat_names.length; i++) { this.hatImages.push(p5.loadImage(`/sprites/playerSkins/${this.hat_names[i]}`)); }
   };
 
-  windowResized = (p5: p5) => {
+  windowResized = (p5: any) => {
     //Window Size
     const marginPercentage = 0.15;
     const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
@@ -95,7 +94,7 @@ export default class App extends Component<Clients> {
     this.prevSquareHatY = this.imgY;
   };
 
-  setup = (p5: p5, canvasParentRef: Element) => {
+  setup = (p5: any, canvasParentRef: Element) => {
 
     //Initial setup
     p5.createCanvas(0, 0).parent(canvasParentRef);
@@ -134,7 +133,7 @@ export default class App extends Component<Clients> {
       p5.mouseY < y + size / 2);
   }
 
-  draw = (p5: p5) => {
+  draw = (p5: any) => {
     p5.background(this.bgShadeOfGray, 125);
 
     // Iterate over the leftArray and display its values
@@ -284,10 +283,10 @@ export default class App extends Component<Clients> {
 
   };
 
-  keyPressed = (p5: p5) => {
+  keyPressed = (p5: any) => {
   };
 
-  mouseClicked = (p5: p5) => {
+  mouseClicked = (p5: any) => {
     // Check if the mouse clicked inside square A
     if (this.mouseInsideSquare(p5, this.selSquareAX, this.selSquareAY, this.squareSize)) {
       this.hasInteracted = true;
