@@ -66,18 +66,21 @@ export default function Join (){
 }
 
 function SubmitForm(){
-    const [error, showError] = useState("Llena el formulario");
+    const [error, displayMessage] = useState("Llena el formulario"); //El mensaje al usuario
     const [genders, setGenders] = useState([]);
     const [countries, setCountries] = useState([]);
 
-    //Mostrar el mensaje que viene del backend
-    function showMessageScreen (js: Data, statusReceived: number) {
-        console.log(js);
-        showError(js.name);
+    //La función que se ejecuta cuando se presiona del botón JOIN
+    async function sendNewUser(){
+        displayMessage("Procesando datos");
 
-        if(statusReceived === 201){
-            console.log("Hola man");
-        }
+        const response = await fetch('/api/handleJoinRequest', {
+            method: "PUT",
+            body: JSON.stringify(userToSend),
+        });
+
+        const json = await response.json();
+        displayMessage(json.name);
     }
 
     //Obtener las regiones y los géneros desde el backend
@@ -139,33 +142,14 @@ function SubmitForm(){
             </div>
             <h3>{`¡${error}!`}</h3>
             <div className = {styles.buttonDiv}>
-                <LoginButton showMessageScreen = {showMessageScreen}/>
+                <button
+                type="button"
+                onClick={sendNewUser}
+                className={styles.button}
+                >
+                    <img src = '/buttons/JOIN.png'></img>
+                </button>
             </div>            
         </form>
     )
-}
-
-function LoginButton({showMessageScreen}:msg_shower){
-    //Cuando se presiona el botón, se envía al servidor lo
-    //que haya en el objeto userToSend
-
-    async function sendNewUser(){
-        showMessageScreen({name: "Procesando datos..."}, 0)
-        const response = await fetch('/api/handleJoinRequest', {
-            method: "PUT",
-            body: JSON.stringify(userToSend),
-        });
-        const json = await response.json();
-        showMessageScreen(json, response.status);
-        console.log(userToSend)
-    }
-    return (
-        <button 
-            type="button"
-            onClick={sendNewUser} 
-            className={styles.button}
-        >
-            <img src = '/buttons/JOIN.png'></img>    
-        </button>
-    );
 }
