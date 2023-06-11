@@ -12,6 +12,7 @@ export default class GameLogic {
     level:Level|any;
     levelGraphics:any[];
     levelLayouts:any;
+    gameSounds:any[];
     
     xOffset:number=0;
     yOffset:number=0;
@@ -47,12 +48,13 @@ export default class GameLogic {
 
     constructor(userData:any|{userCoins:number,userGems:number,image:any},
                 gameDetails:any|{playerSizeModifier:number,gravityModifier:number,maxscrollSpeed:number},
-                generalAssets:any,levelGraphics:any[],levelLayouts:any,
+                generalAssets:any,levelGraphics:any[],levelLayouts:any,gameSounds:any[],
                 p:p5) {
 
         this.generalAssets=generalAssets;
         this.levelGraphics=levelGraphics;
         this.levelLayouts=levelLayouts;
+        this.gameSounds=gameSounds;
 
         this.userCoins=userData.userCoins;
         this.userGems=userData.userGems;
@@ -495,18 +497,13 @@ export default class GameLogic {
         if(this.p.keyIsDown(this.p.RIGHT_ARROW) || this.p.keyIsDown(68)){
             this.player.movePlayer(this.player.vright,0);
         }
-            // if(this.p.keyIsDown(this.p.UP_ARROW)){
-            //   this.movePlayer(0,-3);
-            // }
-            // if(this.p.keyIsDown(this.p.DOWN_ARROW)){
-            //   this.movePlayer(0,3);
-            // }
-
     }
 
     keyInteractions(keyCode:number){
         if(keyCode){
             if(this.gameStarted==false){
+                this.gameSounds[0].setVolume(0.1);
+                this.gameSounds[0].play();
                 this.gameStarted=true;
             }
         }
@@ -515,6 +512,8 @@ export default class GameLogic {
             case(87): // w
             case(32): //spacebar
                 this.player.isJumping=true;
+                this.gameSounds[1].setVolume(0.1);
+                this.gameSounds[1].play();
             break;
             case(80): // p
             case(27): // esc

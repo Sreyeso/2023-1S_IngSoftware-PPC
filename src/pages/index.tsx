@@ -61,7 +61,7 @@ export default function Home() {
 
         <div className={styles.grid}>
           <a
-            href="\sketch"
+            href="\game"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"

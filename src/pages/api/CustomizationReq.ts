@@ -11,7 +11,6 @@ export async function connection(body:any){
     const UDO=new UserModel(DB.db);
     await UDO.setAspect("bingus",body.skin);
 
-
     DB.end();
 
     return Promise.resolve(); // Resolve the promise when the operations are completed
