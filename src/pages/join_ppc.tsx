@@ -2,6 +2,7 @@ import styles from '@/styles/Join.module.css';
 import Head from 'next/head'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { UserFromFrontend, KeyUserFromFrontend } from '@/lib/variousTypes'
 
 let inputFields = [ //Para poner los nombres por defecto de los campos,
@@ -48,7 +49,7 @@ export default function Join (){
                     <SubmitForm/>
                     <div className={styles.loginLink}>
                         <h3>
-                            <Link href="/login2">¿Ya tienes una cuenta? Inicia sesión acá</Link>
+                            <Link href="/login">¿Ya tienes una cuenta? Inicia sesión acá</Link>
                         </h3>
                     </div>        
                     <footer className={styles.footer}>
@@ -63,11 +64,13 @@ export default function Join (){
 }
 
 function SubmitForm(){
-    const [error, displayMessage] = useState("Llena el formulario"); //El mensaje al usuario
+    const [message, displayMessage] = useState("Llena el formulario"); //El mensaje al usuario
     const [genders, setGenders] = useState([]);
     const [countries, setCountries] = useState([]);
 
     const API_NAME = '/api/handleJoinRequest';
+
+    const router = useRouter();
 
     //La función que se ejecuta cuando se presiona del botón JOIN
     async function sendNewUser(){
@@ -80,6 +83,12 @@ function SubmitForm(){
 
         const json = await response.json();
         displayMessage(json.name);
+
+        if(response.status === 201){
+            setTimeout(() => {
+                router.push('/login')
+            }, 1200);
+        }
     }
 
     //Obtener las regiones y los géneros desde el backend
@@ -130,7 +139,7 @@ function SubmitForm(){
                     }
                 })}
             </div>
-            <h3>{`¡${error}!`}</h3>
+            <h3>{`¡${message}!`}</h3>
             <div className = {styles.buttonDiv}>
                 <button
                 type="button"
@@ -144,7 +153,7 @@ function SubmitForm(){
     )
 }
 
-//El siguiente componente corresponde a los dos dropdown menus de la sección
+//El siguiente componente corresponde a los dos dropdown menus
 function DropdownMenu (props: {selectInfo: string[], index: number, options: string[]}){
     const { selectInfo, index, options } = props;
 

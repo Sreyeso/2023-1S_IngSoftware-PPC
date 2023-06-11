@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '@/styles/Login2.module.css'
+import styles from '@/styles/Login.module.css'
 import Head from 'next/head'
 import { Credentials, KeyCredentials } from '@/lib/variousTypes'
 
@@ -61,14 +61,12 @@ export default function login2(){
                                 </img>
                             </button>
                         </div>
-                        {/* <div className = {styles.linksDiv}> */}
-                            <h3 className={styles.link}>
-                                <Link href="/join_ppc">¿Aún no tienes una cuenta? Crea una</Link>
-                            </h3>
-                            <h3 className = {styles.link}>
-                                <Link href="/restore_password">¿Has olvidado tu contraseña?</Link>
-                            </h3>
-                        {/* </div> */}
+                        <h3 className={styles.link}>
+                            <Link href="/join_ppc">¿Aún no tienes una cuenta? Crea una</Link>
+                        </h3>
+                        <h3 className = {styles.link}>
+                            <Link href="/restore_password">¿Has olvidado tu contraseña?</Link>
+                        </h3>
                     </form>
                 </div>    
             </main>

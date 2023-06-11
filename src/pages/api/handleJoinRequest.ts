@@ -7,8 +7,8 @@ import bcryptjs from 'bcryptjs'
 import path from 'path'
 import { defaultConfig } from 'next/dist/server/config-shared'
 import UserModel from '../../lib/models/user'
-import DBO from '../../lib/dbo'
-import { Data, UserFromFrontend, KeyUserFromFrontend} from '../../lib/variousTypes'
+import DBO from '@/lib/dbo'
+import { Data, UserFromFrontend, KeyUserFromFrontend} from '@/lib/variousTypes'
 
 type UserToSave = [string, string, string, string, string, number, number, number]
 
@@ -81,7 +81,6 @@ export default async function handler(
     }
 
     else if(req.method==="PUT"){
-      console.log("OOPS")
       let userReceived;
       try{
         userReceived = JSON.parse(req.body);
@@ -98,20 +97,19 @@ export default async function handler(
 
         res.status(code).json({name: message});
 
-        if(code === 201 && user !== null){
-          //Enviar mensaje de bienvenida:
+        if(code === 201 && user !== null)
           sendWelcomeMail(user);
-        }
       })
-
-      
     }
   
 }
 
 async function saveUser(userReceived: UserFromFrontend): Promise<[number, string, null | UserToSave]>{
 
-  console.log(userReceived);
+  let dbo = new DBO().db;
+  let userModel = new UserModel(dbo);
+
+  // console.log(userReceived);
   
   //Validamos los datos, y devolvemos un código http junto con un mensaje para el cliente
 
@@ -177,33 +175,15 @@ async function saveUser(userReceived: UserFromFrontend): Promise<[number, string
   }
 
   //Verificar que ni el usuario ni el correo estén en uso
-
-  let dbo = new DBO().db;
-  let userModel = new UserModel(dbo);
-
-  let dbError: [number,string,UserToSave|null] = [0,"", null];
-
-  // Username: 
-  await userModel.getUser(username)
-  .then(res => {
-    console.log(res);
-    if (res !== null){
-      dbError = [409, "El usuario ya está en uso", null];
-    }
-  })
-  .catch(err => console.log(err));
-
-  // Email:
-  await userModel.verifyMail(email)
-  .then(res => {
-    if (res !== null){
-      dbError = [409, "El email ya está en uso", null];
-    }
-  })
-  .catch(err => console.log(err));
-
-  if(dbError[0] !== 0){ //Es decir, se encontró que el usuario o el correo ya estaban en uso
-    return dbError;
+  try{
+    let userFromBD = await userModel.getUser(username);
+    let userFromBDEmail = await userModel.verifyMail(email);
+    if (userFromBD !== null)
+      return [409, "El usuario ya está en uso", null];
+    else if (userFromBDEmail !== null)
+      return [409, "El email ya está en uso", null];
+  }catch(error){
+    console.log(error);
   }
 
   //Mejorar la seguridad de la contraseña:
@@ -221,11 +201,14 @@ async function saveUser(userReceived: UserFromFrontend): Promise<[number, string
     0,0,0
   ]
 
-  const retUser = userModel.addUser(user);
-  //console.log(retUser);
-  console.log("Usuario añadido a la BD");
-  
-  return [201, "Usuario creado con éxito", user];
+  //Añadir el usuario a la BD
+  try{
+    const retUser = await userModel.addUser(user);
+    return [201, "Usuario creado con éxito", user];
+  }catch(error){
+    console.log(error);
+    return [500, "Error del servidor. Intenta de nuevo más tarde", null];
+  }
 
 }
 
@@ -262,7 +245,7 @@ async function sendWelcomeMail(user: UserToSave){
       <h1 style="text-align: center" >Hola ${username}</h1>
       <h2 style="text-align: center">Bienvenido a PPC Games</h2>
     </div>  
-    <div style="background-color: #ffdd99; overflow: hidden; border: solid 1px">
+    <div style="background-color: #ffdd99; overflow: hidden; border: solid 1px; box-sizing: border-box; padding=10%;">
       <p style="font-size: 1rem; text-align: center;"><b>Muchas gracias por unirte a nuestra comunidad</b></p>
       <div style="text-align: center; height: 340px">
         <img src="cid:logo_PPC.png" style="text-align:center; height: 80%" alt="Logo PPC"></img>

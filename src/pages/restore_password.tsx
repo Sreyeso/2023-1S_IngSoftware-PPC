@@ -48,7 +48,7 @@ export default function RestorePassword() {
                         </button>  
                     </form>
                     <h3 className = {styles.link}>
-                        <Link href="/login2">Volver al login</Link>
+                        <Link href="/login">Volver al login</Link>
                     </h3>
                 </div>
             </div>
