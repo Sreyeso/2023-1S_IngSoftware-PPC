@@ -24,7 +24,7 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
             res.status(400).json({name: "Invalid Request"});
         }
         const resp = await authentication(dataReceived, userModel);
-        if(resp === 409)
+        if(resp === 401)
             res.status(resp).json({name: "Credenciales incorrectas"})
         else
             res.status(resp).json({name: "Login existoso"});
@@ -54,7 +54,7 @@ async function authentication(dataReceived: credentials, userModel: UserModel): 
 
     //No existe el usuario:
     if (user === null){ 
-        return 409;
+        return 401;
     }
 
     //Verificar las contraseñas:
@@ -62,7 +62,7 @@ async function authentication(dataReceived: credentials, userModel: UserModel): 
     const isPassword = bcryptjs.compareSync(dataReceived.password,hashedPassword);
 
     if (!isPassword)
-        return 409;
+        return 401;
     
     return 200;
 }
