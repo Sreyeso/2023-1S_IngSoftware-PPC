@@ -69,20 +69,18 @@ function SubmitForm(){
     const [error, showError] = useState("Llena el formulario");
     const [genders, setGenders] = useState([]);
     const [countries, setCountries] = useState([]);
-    // const [status, setStatus] = useState (0);
 
+    //Mostrar el mensaje que viene del backend
     function showMessageScreen (js: Data, statusReceived: number) {
         console.log(js);
-        showError(js.name)
-        // useState(statusReceived);
+        showError(js.name);
+
         if(statusReceived === 201){
-            console.log("Hola man")
-            // const router = useRouter();
-            // Router.push("/login2");
-            
+            console.log("Hola man");
         }
     }
 
+    //Obtener las regiones y los géneros desde el backend
     async function getOptions(){
         const response = await fetch('/api/handleJoinRequest', {
             method: "GET",
@@ -95,10 +93,6 @@ function SubmitForm(){
     useEffect(() => {
         getOptions();
     }, []);
-
-    useEffect(() => {
-
-    })
 
     return (
         <form className={styles.submitForm}>
