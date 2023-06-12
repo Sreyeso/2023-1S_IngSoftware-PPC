@@ -2,6 +2,8 @@ import Link from 'next/link';
 import styles from '@/styles/Login.module.css'
 import Head from 'next/head'
 import { useState } from 'react'
+import cookie from "js-cookie"
+import { useRouter } from 'next/router'
 import { Data, Credentials, KeyCredentials } from '@/lib/variousTypes'
 
 let creds: Credentials = {userOrEmail: "", password: ""};
@@ -11,13 +13,22 @@ export default function Login(){
     const emptyArray: string[] = []
     const [message, displayMessage] = useState(emptyArray);
 
+    const router = useRouter();
+
     const sendCreds = async () => {
+        displayMessage(emptyArray); 
+        
         const res = await fetch('/api/handleLogin',{
             method: "POST",
             body: JSON.stringify(creds)
         })
         let resText: Data = await res.json();
         displayMessage([resText.name]);
+    
+        if(res.status === 200){
+            // cookie.set("token", "RouLinio", {expires: 1/24})
+            router.push('/sketch'); //Redirección al juego
+        }
     }
 
     return(

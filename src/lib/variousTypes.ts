@@ -1,4 +1,4 @@
-//Una serie de tipos que se usan varias veces en el proyecto
+//Tipos que se usan varias veces en el proyecto
 
 //En general
 
@@ -29,5 +29,10 @@ export interface Credentials{
 }
 
 export type KeyCredentials = keyof Credentials;
+
+export type SessionId = {
+    sessionId: string,
+    username: string,
+}
 
 
