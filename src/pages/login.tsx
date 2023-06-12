@@ -1,21 +1,23 @@
 import Link from 'next/link';
 import styles from '@/styles/Login.module.css'
 import Head from 'next/head'
-import { Credentials, KeyCredentials } from '@/lib/variousTypes'
+import { useState } from 'react'
+import { Data, Credentials, KeyCredentials } from '@/lib/variousTypes'
 
 let creds: Credentials = {userOrEmail: "", password: ""};
 
-export default function login2(){
+export default function Login(){
     
-    const loginButt = '/buttons/LOG-IN.png';
+    const emptyArray: string[] = []
+    const [message, displayMessage] = useState(emptyArray);
 
     const sendCreds = async () => {
         const res = await fetch('/api/handleLogin',{
             method: "POST",
             body: JSON.stringify(creds)
         })
-        let resText = await res.json();
-        console.log(resText)
+        let resText: Data = await res.json();
+        displayMessage([resText.name]);
     }
 
     return(
@@ -51,22 +53,27 @@ export default function login2(){
                             placeholder="Contraseña"
                             exportFields="password"
                         />
+                        {message.map((message, index) => {
+                            return <h2 className={styles.messageFromBack} key={index}>{message}</h2>
+                        })}
                         <div className={styles.buttonDiv}>
                             <button
                             onClick={e =>{
                                 e.preventDefault();
                                 sendCreds();
                             }}>
-                                <img src = {loginButt}>
+                                <img src = {'/buttons/LOG-IN.png'}>
                                 </img>
                             </button>
                         </div>
-                        <h3 className={styles.link}>
-                            <Link href="/join_ppc">¿Aún no tienes una cuenta? Crea una</Link>
-                        </h3>
-                        <h3 className = {styles.link}>
-                            <Link href="/restore_password">¿Has olvidado tu contraseña?</Link>
-                        </h3>
+                        <div className={styles.linksTest}>
+                            <h3 className={styles.link}>
+                                <Link href="/join_ppc">¿Aún no tienes una cuenta? Crea una</Link>
+                            </h3>
+                            <h3 className = {styles.link}>
+                                <Link href="/restore_password">¿Has olvidado tu contraseña?</Link>
+                            </h3>
+                        </div>
                     </form>
                 </div>    
             </main>

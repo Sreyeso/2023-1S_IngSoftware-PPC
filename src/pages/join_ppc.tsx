@@ -69,7 +69,6 @@ function SubmitForm(){
     const [countries, setCountries] = useState([]);
 
     const API_NAME = '/api/handleJoinRequest';
-
     const router = useRouter();
 
     //La función que se ejecuta cuando se presiona del botón JOIN

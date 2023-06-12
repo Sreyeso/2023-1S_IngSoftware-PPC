@@ -118,6 +118,13 @@
     transition: all 0.3s;
 }
 
+.messageFromBack{
+    font-family: cinzel-regular;
+    margin-top: 0.8%;
+    margin-bottom: 0.8%;
+
+}
+
 .buttonDiv{
     /* border: 1px solid; */
     height: 14%;
@@ -153,7 +160,6 @@
 }
 
 .link{
-    margin-top: 4vh;
     font-size: 2.5vh;
     font-family: cinzel-regular;
 }

@@ -5,11 +5,12 @@ import { useState } from 'react'
 export default function RestorePassword() {
     let email: string;
 
-    const [ans, setAnsScreen] = useState ([]);
+    const emptyArray: string[] = []
+    const [answer, displayMessage] = useState (emptyArray);
     
     async function sendMail(){
-        console.log(typeof(ans));
-        setAnsScreen(["Procesando solicitud"]);
+        
+        displayMessage(["Procesando solicitud"]);
         const response = await fetch('api/handlePasswordRestoration',{
             method: "PUT",
             body: email
@@ -17,7 +18,7 @@ export default function RestorePassword() {
         try{
             const res = await response.json();
             const msgTxt: string = await res.name;
-            setAnsScreen([msgTxt]);
+            displayMessage([msgTxt]);
         } catch(e){
             console.log(e)
         }   
@@ -38,7 +39,7 @@ export default function RestorePassword() {
                             email = e.target.value;
                         }}
                         />
-                        {ans.map((answ,i) => <h2 key={i} className={styles.response}>{answ}</h2>)}
+                        {answer.map((answ,i) => <h2 key={i} className={styles.response}>{answ}</h2>)}
                         <button onClick ={e => {
                             e.preventDefault();
                             sendMail();
