@@ -60,7 +60,6 @@ export async function getServerSideProps() {
 export default class App extends Component<Clients> {
 
       general_assets_names: string[] = ["pause.png","exit.png","start.png"];
-      //player_names: string[] = ["default_ppc.png","la_creatura.png","love_letter.png","nyan_poptart.png","pollo.png","hypnotic_blue.gif","purple_toxic.png","sans.png"];
       defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
       
       generalAssets:any[]=[];
@@ -82,7 +81,7 @@ export default class App extends Component<Clients> {
       //Debug control
       debug:boolean=false;
 
-      preload = (p5:any) => {
+      preload = (p5:p5|any) => {
         this.levelLayouts=p5.loadJSON('/levelLayouts.json');
         // Load graphical assets
         for (let i = 0; i < this.general_assets_names.length; i++) {this.generalAssets.push(p5.loadImage(`/sprites/generalAssets/${this.general_assets_names[i]}`));}
@@ -90,7 +89,7 @@ export default class App extends Component<Clients> {
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${this.defaultTile_names[i]}`));}
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${this.defaultTile_names[i]}`));}
         //for (let i = 0; i < this.player_names.length; i++) {this.player_Skins.push(p5.loadImage(`/sprites/playerSkins/${this.player_names[i]}`));}
-        this.player_Skin=p5.loadImage(`/sprites/playerSkins/${this.props.userSkin}`);
+        this.player_Skin=p5.loadImage(`/sprites/allSkins/${this.props.userSkin}`);
         for (let i = 0; i < this.sound_names.length; i++) {this.gameSounds.push(p5.loadSound(`/sounds/${this.sound_names[i]}`));}
         this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
       };

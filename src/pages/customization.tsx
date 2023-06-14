@@ -57,10 +57,37 @@ export default class App extends Component<Clients> {
   currentSkinIndex: number = 0; // Current index in the skin array
   currentHatIndex: number = 0; // Current index in the hat array
 
-  skin_names: string[] = []; // File names of the users unlocked skin aspects
-  hat_names: string[] = ["default_ppc.png", "la_creatura.png", "love_letter.png", "nyan_poptart.png", "pollo.png", "hypnotic_blue.gif", "purple_toxic.png", "sans.png"]; // File names of the users unlocked hat aspects
+  skin_names: string[] = ["default_ppc.png", "love_letter.png", "nyan_poptart.png", "pollo.png", "hypnotic_blue.gif", "purple_toxic.png", "sans.png"]; // File names of the users unlocked skin aspects
+  hat_names: string[] = ["default_ppc.png", "love_letter.png", "nyan_poptart.png", "pollo.png", "hypnotic_blue.gif", "purple_toxic.png", "sans.png"]; // File names of the users unlocked hat aspects
   playerSkins: any[] = []; // Actual images of the users unlocked skin aspects
   playerHats: any[] = []; // Actual images of the users unlocked aspects
+
+  commonSkin_names: string[] = ["default_ppc.png"
+                              , "love_letter.png"
+                              , "mistery.png"
+                              , "red_mushroom.png"
+                              , "orchid.png"
+                              , "pollo.png"
+                              , "tetris.png"
+                              , "third_love.png"];
+  rareSkin_names: string[] = ["hamburguer.png"
+                            , "monster_ball.png"
+                            , "pizza.png"
+                            , "purple_toxic.png"
+                            , "rex.png"
+                            , "sushi.png"
+                            , "watermelon.png"];
+  epicSkin_names: string[] = ["creeper.png"
+                            , "invaders.gif"
+                            , "japan_night.png"
+                            , "nyan_poptart.png"
+                            , "retrowave.png"
+                            , "sans.png"
+                            , "waka_ghost.gif"];
+  legendarySkin_names: string[] = ["hello_world.gif"
+                            , "hypnotic_blue.gif"
+                            , "rainbow.gif"
+                            , "waka_waka.gif"];
 
   lastKeyPressTimeHat: number = 0;
   lastKeyPressTimeSkin: number = 0;
@@ -85,9 +112,9 @@ export default class App extends Component<Clients> {
   dripMsg: string = "";
 
   preload = (p5: any) => {
-    this.skin_names = this.props.gachaObjects;
-    for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/playerSkins/${this.skin_names[i]}`)); }
-    for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/playerSkins/${this.hat_names[i]}`)); }
+    //this.skin_names = this.props.gachaObjects;
+    for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/allSkins/${this.skin_names[i]}`)); }
+    for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allSkins/${this.hat_names[i]}`)); }
   };
 
   windowResized = (p5: any) => {
@@ -120,7 +147,8 @@ export default class App extends Component<Clients> {
     this.windowResized(p5);
 
     // Set the starting index
-    this.currentSkinIndex = this.skin_names.indexOf(this.props.userSkin);
+    // this.currentSkinIndex = this.skin_names.indexOf(this.props.userSkin);
+    this.currentSkinIndex = 0;
     this.currentHatIndex = 0;
 
     this.currentHat = this.playerHats[this.currentHatIndex];
@@ -137,6 +165,8 @@ export default class App extends Component<Clients> {
         return "purple";
       case ("legendary"):
         return "gold";
+      default:
+        return "red";
     }
   };
 
@@ -186,6 +216,20 @@ export default class App extends Component<Clients> {
 
       // Get the image at the current index
       const hat = this.playerHats[wrappedIndex];
+      const hatName = this.hat_names[wrappedIndex];
+      let rarity: string;
+
+      if (this.commonSkin_names.includes(hatName)) {
+        rarity = "common";
+      } else if (this.rareSkin_names.includes(hatName)) {
+        rarity = "rare";
+      } else if (this.epicSkin_names.includes(hatName)) {
+        rarity = "epic";
+      } else if (this.legendarySkin_names.includes(hatName)) {
+        rarity = "legendary";
+      } else {
+        rarity = "none"; // The skin name doesn't exist in any of the arrays
+      }
 
       // Calculate the size of the current square
       const size = i === 0 ? this.middleSquareSize : this.outerSquareSize;
@@ -200,7 +244,7 @@ export default class App extends Component<Clients> {
       const opacityOut = p5.map(elapsedTime, 0, this.fadeInTime, 255, 125);
       const outerOpacity = i != 0 ? opacityOut : 0; // Set full opacity for the middle square
       const strokeWeight = i === 0 ? this.strokeWidth : 1; // Set thicker stroke for the middle square
-      const strokeColor = (i === 0 && this.selector == "hat") ? p5.color(255, 0, 0) : p5.color(0, 0); // Set red stroke color for the middle square
+      const strokeColor = (i === 0 && this.selector == "hat") ? this.rarityColor(rarity) : p5.color(0, 0); // Set red stroke color for the middle square
 
       // Set stroke properties
       p5.push();
@@ -269,6 +313,20 @@ export default class App extends Component<Clients> {
 
       // Get the image at the current index
       const skin = this.playerSkins[wrappedIndex];
+      const skinName = this.skin_names[wrappedIndex];
+      let rarity: string;
+
+      if (this.commonSkin_names.includes(skinName)) {
+        rarity = "common";
+      } else if (this.rareSkin_names.includes(skinName)) {
+        rarity = "rare";
+      } else if (this.epicSkin_names.includes(skinName)) {
+        rarity = "epic";
+      } else if (this.legendarySkin_names.includes(skinName)) {
+        rarity = "legendary";
+      } else {
+        rarity = "none"; // The skin name doesn't exist in any of the arrays
+      }
 
       // Calculate the size of the current square
       const size = i === 0 ? this.middleSquareSize : this.outerSquareSize;
@@ -283,7 +341,7 @@ export default class App extends Component<Clients> {
       const opacityOut = p5.map(elapsedTime, 0, this.fadeInTime, 255, 125);
       const outerOpacity = i != 0 ? opacityOut : 0; // Set full opacity for the middle square
       const strokeWeight = i === 0 ? this.strokeWidth : 1; // Set thicker stroke for the middle square
-      const strokeColor = (i === 0 && this.selector == "skin") ? p5.color(255, 0, 0) : p5.color(0, 0); // Set red stroke color for the middle square
+      const strokeColor = (i === 0 && this.selector == "skin") ? this.rarityColor(rarity) : p5.color(0, 0); // Set red stroke color for the middle square
 
       // Set stroke properties
       p5.push();
@@ -363,40 +421,40 @@ export default class App extends Component<Clients> {
   keyPressed = (p5: any) => {
 
     if (!this.done) {
-      if(!this.confirm){
-      if (p5.keyCode === p5.UP_ARROW) {
+      if (!this.confirm) {
+        if (p5.keyCode === p5.UP_ARROW) {
 
-        this.selector = "hat"
-      }
-
-      if (p5.keyCode === p5.DOWN_ARROW) {
-        this.selector = "skin"
-      }
-
-      if (p5.keyCode === p5.LEFT_ARROW) {
-        if (this.selector == "hat") {
-          this.currentHatIndex = (this.currentHatIndex - 1 + this.playerHats.length) % this.playerHats.length;
-          this.lastKeyPressTimeHat = p5.millis();
-        } else if (this.selector == "skin") {
-          this.currentSkinIndex = (this.currentSkinIndex - 1 + this.playerSkins.length) % this.playerSkins.length;
-          this.lastKeyPressTimeSkin = p5.millis();
+          this.selector = "hat"
         }
-      }
 
-      if (p5.keyCode === p5.RIGHT_ARROW) {
-        if (this.selector == "hat") {
-          this.currentHatIndex = (this.currentHatIndex + 1 + this.playerHats.length) % this.playerHats.length;
-          this.lastKeyPressTimeHat = p5.millis();
-        } else if (this.selector == "skin") {
-          this.currentSkinIndex = (this.currentSkinIndex + 1 + this.playerSkins.length) % this.playerSkins.length;
-          this.lastKeyPressTimeSkin = p5.millis();
+        if (p5.keyCode === p5.DOWN_ARROW) {
+          this.selector = "skin"
         }
-      }
 
-    }
+        if (p5.keyCode === p5.LEFT_ARROW) {
+          if (this.selector == "hat") {
+            this.currentHatIndex = (this.currentHatIndex - 1 + this.playerHats.length) % this.playerHats.length;
+            this.lastKeyPressTimeHat = p5.millis();
+          } else if (this.selector == "skin") {
+            this.currentSkinIndex = (this.currentSkinIndex - 1 + this.playerSkins.length) % this.playerSkins.length;
+            this.lastKeyPressTimeSkin = p5.millis();
+          }
+        }
+
+        if (p5.keyCode === p5.RIGHT_ARROW) {
+          if (this.selector == "hat") {
+            this.currentHatIndex = (this.currentHatIndex + 1 + this.playerHats.length) % this.playerHats.length;
+            this.lastKeyPressTimeHat = p5.millis();
+          } else if (this.selector == "skin") {
+            this.currentSkinIndex = (this.currentSkinIndex + 1 + this.playerSkins.length) % this.playerSkins.length;
+            this.lastKeyPressTimeSkin = p5.millis();
+          }
+        }
+
+      }
 
       if (p5.keyCode == 27) { // esc key
-        if(this.confirm){
+        if (this.confirm) {
           this.dripMsg = "";
           this.confirm = false;
           // Set the starting index
