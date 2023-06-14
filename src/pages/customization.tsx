@@ -29,13 +29,8 @@ export async function getServerSideProps() {
 
     let userSkin: number = userData.CurrentAspect;
     let unlockedAspects: string[] = userData.GachaObjects;
-    //added connection close, but it lacks proper handling of errors and conditions
-    if (userData) {
-      //DB.end();
-    }
-    else {
-      console.log("ERROR FETHCING USER DATA");
-    }
+
+    DB.end();
 
     return {
       props: { isConnected: true, userSkin: userSkin, gachaObjects: unlockedAspects },
@@ -57,8 +52,8 @@ export default class App extends Component<Clients> {
   currentSkinIndex: number = 0; // Current index in the skin array
   currentHatIndex: number = 0; // Current index in the hat array
 
-  skin_names: string[] = ["default_ppc.png", "love_letter.png", "nyan_poptart.png", "pollo.png", "hypnotic_blue.gif", "purple_toxic.png", "sans.png"]; // File names of the users unlocked skin aspects
-  hat_names: string[] = ["default_ppc.png", "love_letter.png", "nyan_poptart.png", "pollo.png", "hypnotic_blue.gif", "purple_toxic.png", "sans.png"]; // File names of the users unlocked hat aspects
+  skin_names: string[] = ["default_ppc.png"]; // File names of the users unlocked skin aspects
+  hat_names: string[] = ["default_ppc.png]; // File names of the users unlocked hat aspects
   playerSkins: any[] = []; // Actual images of the users unlocked skin aspects
   playerHats: any[] = []; // Actual images of the users unlocked aspects
 
@@ -113,6 +108,7 @@ export default class App extends Component<Clients> {
 
   preload = (p5: any) => {
     this.skin_names = this.props.gachaObjects[0];
+    this.hat_names = this.props.gachaObjects[1];
     for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/allSkins/${this.skin_names[i]}`)); }
     for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allSkins/${this.hat_names[i]}`)); }
   };
@@ -180,7 +176,7 @@ export default class App extends Component<Clients> {
       case (3):
         return "Re facha!";
       case (4):
-        return "Quedó meh.";
+        return "Quedó meh\n(sin ofender xd)";
       case (5):
         return "Bien!";
       case (6):
