@@ -9,7 +9,7 @@ export async function connection(body:any){
 
     //User data object
     const UDO=new UserModel(DB.db);
-    await UDO.setAspect("bingus",body.skin);
+    await UDO.setAspect("bingus",body.skin,body.hat);
 
     DB.end();
 

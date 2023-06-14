@@ -17,8 +17,8 @@ export default class UserModel{
   collection:any;
   userCoins:number=0;
   userGems:number=0;
-  userSkin:string="default_ppc.png";
-  gachaObjects:string[]=["default_ppc.png"];
+  userSkin:string[]=["default_ppc.png","default_ppc.png"];
+  gachaObjects:string[][]=[["default_ppc.png"],["default_ppc.png"]];
   maxScore:number=0;
   constructor(db:Db) {
     this.collection = db.collection('Clients');
@@ -61,8 +61,8 @@ export default class UserModel{
     const  nuScore= this.collection.updateOne({UserName:user},{$set: {HiScore:score}});
     return nuScore;
   }
-  async setAspect(user:string,aspect:string){
-    const  nuAspect= this.collection.updateOne({UserName:user},{$set: {CurrentAspect:aspect}});
+  async setAspect(user:string,skin:string,hat:string){
+    const  nuAspect= this.collection.updateOne({UserName:user},{$set: {CurrentAspect:[skin,hat]}});
     return nuAspect;
   }
 
