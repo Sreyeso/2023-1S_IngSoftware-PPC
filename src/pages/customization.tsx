@@ -53,7 +53,7 @@ export default class App extends Component<Clients> {
   currentHatIndex: number = 0; // Current index in the hat array
 
   skin_names: string[] = ["default_ppc.png"]; // File names of the users unlocked skin aspects
-  hat_names: string[] = ["default_ppc.png]; // File names of the users unlocked hat aspects
+  hat_names: string[] = ["default_ppc.png"]; // File names of the users unlocked hat aspects
   playerSkins: any[] = []; // Actual images of the users unlocked skin aspects
   playerHats: any[] = []; // Actual images of the users unlocked aspects
 
