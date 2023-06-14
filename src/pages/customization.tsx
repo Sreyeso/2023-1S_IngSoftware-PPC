@@ -112,7 +112,7 @@ export default class App extends Component<Clients> {
   dripMsg: string = "";
 
   preload = (p5: any) => {
-    //this.skin_names = this.props.gachaObjects;
+    //this.skin_names = this.props.gachaObjects[0];
     for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/allSkins/${this.skin_names[i]}`)); }
     for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allSkins/${this.hat_names[i]}`)); }
   };
@@ -147,9 +147,8 @@ export default class App extends Component<Clients> {
     this.windowResized(p5);
 
     // Set the starting index
-    // this.currentSkinIndex = this.skin_names.indexOf(this.props.userSkin);
-    this.currentSkinIndex = 0;
-    this.currentHatIndex = 0;
+    this.currentSkinIndex = this.skin_names.indexOf(this.props.userSkin[0]);
+    this.currentHatIndex = this.hat_names.indexOf(this.props.userSkin[1]);
 
     this.currentHat = this.playerHats[this.currentHatIndex];
     this.currentSkin = this.playerSkins[this.currentSkinIndex];

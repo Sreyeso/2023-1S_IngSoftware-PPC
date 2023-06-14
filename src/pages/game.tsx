@@ -89,7 +89,7 @@ export default class App extends Component<Clients> {
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${this.defaultTile_names[i]}`));}
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${this.defaultTile_names[i]}`));}
         //for (let i = 0; i < this.player_names.length; i++) {this.player_Skins.push(p5.loadImage(`/sprites/playerSkins/${this.player_names[i]}`));}
-        this.player_Skin=p5.loadImage(`/sprites/allSkins/${this.props.userSkin}`);
+        this.player_Skin=p5.loadImage(`/sprites/allSkins/${this.props.userSkin[0]}`);
         for (let i = 0; i < this.sound_names.length; i++) {this.gameSounds.push(p5.loadSound(`/sounds/${this.sound_names[i]}`));}
         this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
       };
