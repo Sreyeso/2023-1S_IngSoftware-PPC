@@ -48,6 +48,6 @@
    padding: .5em;
 }
 
-.text-dark{
-    color: var(--color-dark);
+.text{
+    color: #F3F3F2;
 }

@@ -22,6 +22,7 @@ export async function getServerSideProps() {
     }
   }
 
+
 //tuto tomado de: https://www.youtube.com/watch?v=p_046Qe19p0
 
 export default class Leaderboard extends Component{
@@ -30,7 +31,7 @@ export default class Leaderboard extends Component{
     <div>
     <div className="board">
             <h1 className="leaderboard">Rankings</h1>
-            <Profiles datos={this.props}></Profiles>
+            <Profiles datos={[this.props,this.props,this.props,this.props,this.props,this.props,this.props,this.props,this.props,this.props]}></Profiles>
     </div>
     <div>
     <button><img src="/sprites/generalAssets/LOG-OUT.png" alt="Logout"/></button>
@@ -47,28 +48,29 @@ export default class Leaderboard extends Component{
 export function Profiles({datos}){
     return(
         <div id="profile">
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
-            {Item(datos)}
+            {Item(datos[0],"01")}
+            {Item(datos[1],"02")}
+            {Item(datos[2],"03")}
+            {Item(datos[3],"04")}
+            {Item(datos[4],"05")}
+            {Item(datos[5],"06")}
+            {Item(datos[6],"07")}
+            {Item(datos[7],"08")}
+            {Item(datos[8],"09")}
+            {Item(datos[8],"10")}
         </div>
     )
 }
 
-function Item(datos){
+function Item(datos,number){
     let imagen = `/sprites/playerSkins/${datos.userSkin}`
     return (
         <div className="flex">
             <div className="item">
+                <h1>{number}</h1>
                 <img src={imagen} alt="userSkin"></img>
                 <div className="info">
-                    <h3 className="name text-dark">{datos.userName}</h3>
+                    <h3 className="name text">{datos.userName}</h3>
                     <span>Región: {datos.region}</span>
                 </div>
             </div>
