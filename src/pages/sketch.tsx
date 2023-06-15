@@ -22,7 +22,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 //import Sketch from "react-p5";
 
 // Graphic assets
-const general_assets_names: string[] = ["pause.png","exit.png","start.png"]
+const general_assets_names: string[] = ["pause.png","exit.png","start.png"];
 const player_names: string[] = ["default_ppc.png","la_creatura.png","love_letter.png","nyan_poptart.png","pollo.png","hypnotic_blue.gif","purple_toxic.png","sans.png"];
 const defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
 
