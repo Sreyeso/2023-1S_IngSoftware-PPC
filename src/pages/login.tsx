@@ -26,7 +26,6 @@ export default function Login(){
         displayMessage([resText.name]);
     
         if(res.status === 200){
-            // cookie.set("token", "RouLinio", {expires: 1/24})
             router.push('/sketch'); //Redirección al juego
         }
     }
