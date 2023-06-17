@@ -1,0 +1,73 @@
+.background::before{
+    content:'';
+    background-image: url("../../public/pages_imgs/Fondo_juego.jpg");
+    opacity: 0.4;
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+    inset: 0;
+}
+
+.allInside{ 
+    isolation: isolate;
+}
+
+.logoDiv{
+    text-align: center;
+    margin-top: 3vh;
+    margin-bottom: 0px;
+    height: 28vh;
+}
+
+.logo{
+    height: 90%;
+}
+
+.background h2{
+    text-align: center;
+    font-family: cinzel-bold;
+    font-size: 3.2vh;
+    margin-top: 1.3vh;
+}
+
+.defaultSelectOption{
+    text-decoration: #999999;
+}
+
+.buttonDiv {
+    height: 14vh;
+    display:flex;
+    justify-content: center;
+    margin-top: 45vh;
+}
+ 
+.button{
+    border: transparent;
+    background-color: transparent;
+}
+
+.button img{
+    height: 90%;
+}
+
+.button:hover{
+    /* box-shadow: 0 0 20px -10px rgba(0,0,0,150);  */
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.button:active{
+    filter: brightness(0.98);
+    transform: scale(1.08);
+    cursor: pointer;
+}
+
+@font-face {
+    font-family: cinzel-regular;
+    src: url('../../public/fonts/cinzel/Cinzel-Regular.otf');
+}
+
+@font-face {
+    font-family: cinzel-bold;
+    src: url('../../public/fonts/cinzel/Cinzel-Bold.otf');
+}
