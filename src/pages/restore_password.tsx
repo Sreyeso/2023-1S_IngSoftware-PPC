@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from '@/styles/RestorePassword.module.css'
 import { useState } from 'react'
+import { GetStaticProps } from 'next';
 
 export default function RestorePassword() {
     let email: string;
@@ -55,4 +56,13 @@ export default function RestorePassword() {
             </div>
         </div>
     );
+}
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+    
+    return {
+        props: {
+
+        }
+    }
 }

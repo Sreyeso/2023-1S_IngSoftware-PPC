@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { useState } from 'react'
 import cookie from "js-cookie"
 import { useRouter } from 'next/router'
-import { Data, Credentials, KeyCredentials } from '@/lib/variousTypes'
+import { Data, Credentials, KeyCredentials } from '@/authentication/variousTypes'
 
 let creds: Credentials = {userOrEmail: "", password: ""};
 

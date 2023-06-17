@@ -4,8 +4,8 @@ import { error } from 'console';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path'
 import nodemailer from 'nodemailer'
-import UserModel from '../../lib/models/user'
-import DBO from '../../lib/dbo'
+import UserModel from '@/lib/models/user'
+import DBO from '@/lib/dbo'
 
 type Data = {
     name: string

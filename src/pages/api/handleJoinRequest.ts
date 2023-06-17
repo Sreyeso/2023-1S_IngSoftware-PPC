@@ -8,7 +8,7 @@ import path from 'path'
 import UserModel from '@/lib/models/user'
 import DBO from '@/lib/dbo'
 import authData from '@/authentication/joinParams'
-import { Data, UserFromFrontend, KeyUserFromFrontend} from '@/lib/variousTypes'
+import { Data, UserFromFrontend, KeyUserFromFrontend} from '@/authentication/variousTypes'
 import insults from '@/authentication/insults'
 
 type UserToSave = [string, string, string, string, string, number, number, number]

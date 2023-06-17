@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next';
 import { useState } from 'react'
 import authInfo from '@/authentication/joinParams'
 import { useRouter } from 'next/router'
-import { UserFromFrontend, KeyUserFromFrontend } from '@/lib/variousTypes'
+import { UserFromFrontend, KeyUserFromFrontend } from '@/authentication/variousTypes'
 
 let inputFields = [ //Para poner los nombres por defecto de los campos,
     //y el nombre de la correspondiente propiedad en userToSend
