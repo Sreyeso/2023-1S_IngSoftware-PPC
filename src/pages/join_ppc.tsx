@@ -1,6 +1,7 @@
 import styles from '@/styles/Join.module.css';
 import Head from 'next/head'
 import Link from 'next/link'
+import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { UserFromFrontend, KeyUserFromFrontend } from '@/lib/variousTypes'
@@ -189,4 +190,18 @@ function DropdownMenu (props: {selectInfo: string[], index: number, options: str
             </select>
         </>
     )
+}
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+    const dropdownOptions = await fetch('/api/handleJoinRequest',{
+        method: "GET"
+    })
+
+    console.log(dropdownOptions)
+
+    return {
+        props: {
+
+        }
+    }
 }

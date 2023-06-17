@@ -46,6 +46,7 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
 
     if(req.method === "GET"){ //Para devolver si el usuario está o no logueado!
         // Miramos si el usuario está autenticado:
+        
         if ("cookie" in req.headers === false)
             res.status(401).json({name: "No autenticado"})
         

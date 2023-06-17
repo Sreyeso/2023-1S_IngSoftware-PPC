@@ -108,8 +108,6 @@ async function saveUser(userReceived: UserFromFrontend): Promise<[number, string
   let dbo = new DBO().db;
   let userModel = new UserModel(dbo);
 
-  // console.log(userReceived);
-  
   //Validamos los datos, y devolvemos un código http junto con un mensaje para el cliente
 
   //Si alguno de los datos recibidos no es un String, convertirlo en un string
