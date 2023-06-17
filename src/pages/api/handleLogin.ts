@@ -62,7 +62,7 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
             const session = sessionsJson[sessionId]
 
             if (!session)
-                console.log('Hola')
+                res.status(401).json({name: "No autenticado"})
             else
                 res.status(201).json({name: session})    
         }
