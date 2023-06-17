@@ -7,64 +7,11 @@ import bcryptjs from 'bcryptjs'
 import path from 'path'
 import UserModel from '@/lib/models/user'
 import DBO from '@/lib/dbo'
+import authData from '@/authentication/joinParams'
 import { Data, UserFromFrontend, KeyUserFromFrontend} from '@/lib/variousTypes'
+import insults from '@/authentication/insults'
 
 type UserToSave = [string, string, string, string, string, number, number, number]
-
-const regions = [
-  "Sudamérica",
-  "Norteamérica Este", 
-  "Norteamérica Oeste", 
-  "Asia", 
-  "Europa", 
-  "África", 
-  "Oceanía"
-]
-const genders = ["Femenino", "Masculino", "Otro"]
-const insults = [
-"malparido",
-"hijueputa",
-"puta",
-"perra",
-"zorra",
-"cagar",
-"folla",
-"coge",
-"tirar",
-"culea",
-"mata",
-"fuck",
-"bitch",
-"idiota",
-"gil",
-"imbecil",
-"marica",
-"maricon",
-"ano",
-"pene",
-"sexo",
-"viola",
-"abuso",
-"rape",
-"kill",
-"assassin",
-"asesino",
-"pussy",
-"ass",
-"pija",
-"verga",
-"paja",
-"teta",
-"titt",
-"hijodeputa",
-"mama",
-"chupa",
-"culo",
-"cabron",
-"stupid",
-"concha",
-"logi",
-]
 
 const required_fields = [
   "username","email","gender","region","password","rep_password"
@@ -75,8 +22,7 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
     if(req.method==="GET"){
-      const response = [regions, genders]  
-      res.status(200).end(JSON.stringify(response));
+      res.status(200).end({name: "Roses are red"});
     }
 
     else if(req.method==="PUT"){
@@ -129,7 +75,19 @@ async function saveUser(userReceived: UserFromFrontend): Promise<[number, string
       return [409, "Se debe llenar todo el formulario",null];
     };
   }
+
+  //Verificar que la región enviada sea válida:
+  if (!(authData.regions.includes(userReceived.region))){
+    console.log("OOPS1")
+    return [409, "Invalid Request", null]
+  }
   
+  //Verificar que el género enviado sea válido:
+  if (!(authData.genders.includes(userReceived.gender))){
+    console.log("OOPS2") 
+    return [409, "Invalid Request", null]
+  }
+
   //Quitar los espacios en blanco en ambos extremos de usuario y mail:
   userReceived.username = userReceived.username.trim();
   userReceived.email = userReceived.email.trim();

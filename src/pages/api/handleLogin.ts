@@ -9,7 +9,7 @@ import path from 'path'
 
 type Data={ name:string }
 
-const sessionsPathFile = path.join(__dirname,"..","..","..","..","src","sessions","sessions.json")
+const sessionsPathFile = path.join(__dirname,"..","..","..","..","src","authentication","sessions.json")
 
 export default async function handleLogin(req: NextApiRequest, res: NextApiResponse<Data>) {
     let dbo = new DBO().db;
@@ -37,7 +37,7 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
             const updatedSessions = JSON.stringify(sessionsJson, null, 2)
             fs.writeFileSync(sessionsPathFile, updatedSessions, 'utf-8')
 
-            res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; HttpOnly`) //Esto le indicará al navegador que cree
+            res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; HttpOnly; secure; SameSite=Strict`) //Esto le indicará al navegador que cree
             //una cookie con la sesión
 
             res.status(status).json({name: "Login existoso"});
@@ -90,9 +90,9 @@ async function authentication(dataReceived: Credentials, userModel: UserModel): 
     
 
     //No existe el usuario:
-    if (user === null){ 
+    if (user === null)
         return {status: 401, username: null}
-    }
+    
 
     //Verificar las contraseñas:
     const hashedPassword = user.Password;

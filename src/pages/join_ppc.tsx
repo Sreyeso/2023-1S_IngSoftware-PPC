@@ -2,7 +2,8 @@ import styles from '@/styles/Join.module.css';
 import Head from 'next/head'
 import Link from 'next/link'
 import { GetStaticProps } from 'next';
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import authInfo from '@/authentication/joinParams'
 import { useRouter } from 'next/router'
 import { UserFromFrontend, KeyUserFromFrontend } from '@/lib/variousTypes'
 
@@ -25,7 +26,12 @@ let userToSend: UserFromFrontend = {
     rep_password:"",
 }
 
-export default function Join (){
+interface DataProps {
+    regions: string[]
+    genders: string[]
+}
+
+export default function Join (props: DataProps){
     return (
         <div>
             <Head>
@@ -47,7 +53,7 @@ export default function Join (){
                         </img> 
                     </div>
                     <h2>Únete a PPC Games</h2>
-                    <SubmitForm/>
+                    <SubmitForm {...props}/>
                     <div className={styles.loginLink}>
                         <h3>
                             <Link href="/login">¿Ya tienes una cuenta? Inicia sesión acá</Link>
@@ -64,11 +70,11 @@ export default function Join (){
     );
 }
 
-function SubmitForm(){
+function SubmitForm(props: DataProps){
     const [message, displayMessage] = useState("Llena el formulario"); //El mensaje al usuario
-    const [genders, setGenders] = useState([]);
-    const [countries, setCountries] = useState([]);
 
+    const { genders, regions } = props;
+    
     const API_NAME = '/api/handleJoinRequest';
     const router = useRouter();
 
@@ -91,20 +97,6 @@ function SubmitForm(){
         }
     }
 
-    //Obtener las regiones y los géneros desde el backend
-    async function getOptions(){
-        const response = await fetch(API_NAME, {
-            method: "GET",
-        });
-        let responses = await response.json();
-        setCountries(responses[0]);
-        setGenders(responses[1]);
-    }
-
-    useEffect(() => {
-        getOptions();
-    }, []);
-
     return (
         <form className={styles.submitForm}>
             <div className={styles.gridInputs}>
@@ -120,7 +112,7 @@ function SubmitForm(){
                         if(JSON_FIELD==="gender")
                             optionsToDisplay = optionsToDisplay.concat(genders);     
                         else
-                            optionsToDisplay = optionsToDisplay.concat(countries);                                                
+                            optionsToDisplay = optionsToDisplay.concat(regions);                                                
                         return <DropdownMenu selectInfo={field} key={index} index={index} options={optionsToDisplay}/>
                     }
                     else
@@ -193,15 +185,11 @@ function DropdownMenu (props: {selectInfo: string[], index: number, options: str
 }
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-    const dropdownOptions = await fetch('/api/handleJoinRequest',{
-        method: "GET"
-    })
-
-    console.log(dropdownOptions)
 
     return {
         props: {
-
+            regions: authInfo.regions,
+            genders: authInfo.genders
         }
     }
 }
