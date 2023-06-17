@@ -13,7 +13,7 @@ const profileButton = '/buttons/PROFILE.png';
 const rankingButton = '/buttons/RANKINGS.png';
 const gachaButton = '/buttons/GACHA.png';
 
-export default function Join (){
+export default function Main (){
     return (
         <div>
             <Head>
