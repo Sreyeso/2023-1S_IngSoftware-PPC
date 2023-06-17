@@ -123,7 +123,7 @@ function GachaButton(){
 
     async function openGacha(){
         showMessageScreen({name: "Entrando al GACHA..."})
-        open('http://localhost:3000/sketch')
+        open('http://localhost:3000/gacha')
     }
     
     return (
