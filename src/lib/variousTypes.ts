@@ -30,6 +30,4 @@ export interface Credentials{
 
 export type KeyCredentials = keyof Credentials;
 
-export type  Sessions = Record<string, string>
-
 
