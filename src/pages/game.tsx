@@ -161,6 +161,7 @@ export default class App extends Component<Clients> {
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
                        <GachaButton/>
                       <ProfileButton/>
+                      <RankingButton/>
                 </div>          
               
             </div>
@@ -236,3 +237,25 @@ function GachaButton(){
         </Link>
     );
 }
+function RankingButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openRanking(){
+        showMessageScreen({name: "Entrando a el Ranking..."})
+        open('/sketch')
+    }
+    
+    return (
+        <Link 
+            href="/rankings" 
+            className="btn btn-primary button"
+        >
+            <img src = '/assets/RANKINGS.png'></img>    
+        </Link>
+    );
+}
+
