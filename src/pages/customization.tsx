@@ -529,6 +529,7 @@ export default class App extends Component<Clients> {
             preload={this.preload}
             setup={this.setup}
             draw={this.draw}
+            windowResized={this.windowResized}
             keyPressed={this.keyPressed}
             
           />

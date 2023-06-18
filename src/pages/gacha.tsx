@@ -183,8 +183,6 @@ export default class App extends Component<Clients> {
 
   preload = (p5: p5) => {
     // Load graphical assets
-    this.userCoins = this.props.userCoins;
-    this.userGems = this.props.userGems;
     this.gachaMachine = p5.loadImage('/sprites/generalAssets/gachaMachine.png');
     this.gachaGIF = p5.loadImage('/sprites/generalAssets/gachaGIF.gif');
     this.unknown = p5.loadImage('/sprites/generalAssets/unknown.png');
@@ -276,6 +274,9 @@ export default class App extends Component<Clients> {
     this.selector = "skin";
     this.gachaMode = "normal";
     this.keySelector = "unlock";
+
+    this.userCoins = this.props.userCoins;
+    this.userGems = this.props.userGems;
 
   };
 
@@ -698,8 +699,11 @@ export default class App extends Component<Clients> {
             preload={this.preload}
             setup={this.setup}
             draw={this.draw}
+            windowResized={this.windowResized}
             keyPressed={this.keyPressed}
             mouseClicked={this.mouseClicked}
+            
+
           />
         </div>
       </div>
