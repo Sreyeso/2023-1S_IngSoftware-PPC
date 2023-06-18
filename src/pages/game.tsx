@@ -207,10 +207,10 @@ function ProfileButton(){
     }
     
     return (
-        <link 
+        <a 
             href="/signup" className="btn btn-primary"
         >
             <img src = '/assets/PROFILE.png'></img>    
-        </link>
+        </a>
     );
 }
