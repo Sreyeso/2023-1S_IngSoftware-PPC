@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import UserModel from '@/lib/models/user'
-import DBO from '@/lib/dbo'
+import DBO from "@/lib/utils/dbo";
 import bcryptjs from 'bcryptjs' 
 import { Credentials } from '@/authentication/variousTypes'
 import { v4 as uuidv4 } from 'uuid'

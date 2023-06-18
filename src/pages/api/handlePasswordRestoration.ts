@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path'
 import nodemailer from 'nodemailer'
 import UserModel from '@/lib/models/user'
-import DBO from '@/lib/dbo'
+import DBO from "@/lib/utils/dbo";
 
 type Data = {
     name: string

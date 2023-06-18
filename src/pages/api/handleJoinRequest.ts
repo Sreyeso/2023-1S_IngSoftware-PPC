@@ -6,7 +6,7 @@ import nodemailer from 'nodemailer'
 import bcryptjs from 'bcryptjs'
 import path from 'path'
 import UserModel from '@/lib/models/user'
-import DBO from '@/lib/dbo'
+import DBO from "@/lib/utils/dbo";
 import authData from '@/authentication/joinParams'
 import { Data, UserFromFrontend, KeyUserFromFrontend} from '@/authentication/variousTypes'
 import insults from '@/authentication/insults'
