@@ -85,7 +85,6 @@ export default class App extends Component<Clients> {
 
       game:GameLogic|any=undefined;
       gameFinished:boolean|undefined=false;
-      resultsLogged:boolean=false;
 
       //Debug control
       debug:boolean=false;
@@ -121,33 +120,28 @@ export default class App extends Component<Clients> {
     draw = (p5:any) => {
         p5.background('white');
         this.gameFinished=this.game.handleGame(this.debug);
-        if(this.gameFinished==true && this.resultsLogged==false){
-
-        let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
-
-          const updateUser = () => {
-            fetch("/api/GameReq", {
-              method: "PUT",
-              body: JSON.stringify({
-                "coins":this.game.collectedCoins,
-                "gems":this.game.collectedGems,
-                "score":score
-              }),
-              headers: {
-                "content-type": "application/json",
-              },
-            }).catch((e) => console.log(e));
-          };
-          updateUser();
-          this.resultsLogged=true;
-        }
 
     };
 
     keyPressed = (p5:any) => {
       if(this.game){this.game.keyInteractions(p5.keyCode);}
-      if(p5.keyCode && this.gameFinished==true && this.resultsLogged==true){
-        location.reload();
+      if(p5.keyCode && this.gameFinished==true){
+        let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
+        const updateUser = () => {
+          fetch("/api/GameReq", {
+            method: "PUT",
+            body: JSON.stringify({
+              "coins":this.game.collectedCoins,
+              "gems":this.game.collectedGems,
+              "score":score
+            }),
+            headers: {
+              "content-type": "application/json",
+            },
+          }).catch((e) => console.log(e));
+        };
+        updateUser();
+        setTimeout(() => { location.reload(); }, 500);
       }
     }
 
