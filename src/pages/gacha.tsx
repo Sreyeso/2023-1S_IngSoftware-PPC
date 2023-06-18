@@ -661,7 +661,7 @@ export default class App extends Component<Clients> {
       }
     } else {
       if (p5.keyCode === p5.ENTER) {
-        if (this.gachaInstance.scrollAmount < 0) {
+        if (this.gachaInstance.scrollAmount <= 0) {
           this.enter = true;
 
           //CODE FOR SKIN ADQUISITION
