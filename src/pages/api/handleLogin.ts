@@ -6,11 +6,13 @@ import { Credentials } from '@/authentication/variousTypes'
 import { v4 as uuidv4 } from 'uuid'
 import fs from 'fs'
 import path from 'path'
+import xd from '@/authentication/joinParams'
 
 type Data={ name:string }
 
 // const sessionsPathFile = path.join("@","authentication","sessions.json")
-const sessionsPathFile = '/src/pages/api/sessions.json'
+//const sessionsPathFile = '/src/pages/api/sessions.json'
+const sessionsPathFile = '/sessions.json'
 
 export default async function handleLogin(req: NextApiRequest, res: NextApiResponse<Data>) {
     let dbo = new DBO().db;
@@ -28,6 +30,10 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
         if(status === 401 || username === null)
             res.status(status).json({name: "Credenciales incorrectas"})
         else{
+            
+            const { dirname } = xd;
+            console.log(xd)
+            
             const sessionId: string = uuidv4(); //Obtener un id aleatorio para la sesión
 
             const sessions = fs.readFileSync(sessionsPathFile, 'utf-8');
