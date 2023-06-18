@@ -157,9 +157,7 @@ export default class App extends Component<Clients> {
                   keyPressed={this.keyPressed}
                   
                 />
-              </div>
-              <div>
-                <StartButton/>
+                <p><StartButton/></p>
               </div>
             </div>
         );
@@ -188,7 +186,7 @@ function StartButton(){
             onClick={startGame} 
             
         >
-            <img src = '/assets/start game.png'></img>    
+            <img src = '/assets/START GAME.png'></img>    
         </button>
     );
 }
