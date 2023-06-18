@@ -2,6 +2,9 @@
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
+import Link from 'next/link';
+import Image from 'next/image';
+
 
 //Class imports
 import DBO from "@/lib/utils/dbo";
@@ -713,7 +716,7 @@ export default class App extends Component<Clients> {
   render() {
     return (
       <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
           <Sketch
             preload={this.preload}
             setup={this.setup}
@@ -725,9 +728,102 @@ export default class App extends Component<Clients> {
 
           />
         </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
+                       <StartButton/>
+                      <ProfileButton/>
+                      <RankingButton/>
+        </div>          
       </div>
     );
   };
 
 }
 
+type jsAnswer = {
+    name: string;
+}
+function StartButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }   
+
+    async function startGame(){
+        showMessageScreen({name: "Iniciando Juego..."})
+        open('/game');
+    }
+
+    return (
+        <Link
+            href="/game" 
+            className="btn btn-primary button"
+            
+        >
+            <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
+        </Link>
+    );
+}
+function ProfileButton(){
+    //Cuando se presiona el botón, se redirecciona al perfil del jugador
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openProfile(){
+        showMessageScreen({name: "Entrando al perfil del jugador..."})
+        open('/customization')
+    }
+    
+    return (
+        <Link 
+            href="/customization" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/PROFILE.png'alt="lol,lmao"></Image> 
+        </Link>
+    );
+}
+function GachaButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openGacha(){
+        showMessageScreen({name: "Entrando al GACHA..."})
+        open('/gacha')
+    }
+    
+    return (
+        <Link 
+            href="/gacha" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/GACHA.png'alt="lol,lmao"></Image> 
+        </Link>
+    );
+}
+function RankingButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openRanking(){
+        showMessageScreen({name: "Entrando a el Ranking..."})
+        open('/sketch')
+    }
+    
+    return (
+        <Link 
+            href="/rankings" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"></Image>   
+        </Link>
+    );
+}

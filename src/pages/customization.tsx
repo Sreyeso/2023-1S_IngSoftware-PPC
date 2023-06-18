@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
 import Link from 'next/link';
+import Image from 'next/image';
 
 //Class imports
 import DBO from "@/lib/utils/dbo";
@@ -537,7 +538,7 @@ export default class App extends Component<Clients> {
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
                        <StartButton/>
-                      <ProfileButton/>
+                      <GachaButton/>
                       <RankingButton/>
         </div>          
       </div>
@@ -568,7 +569,7 @@ function StartButton(){
             className="btn btn-primary button"
             
         >
-            <img src = '/assets/START GAME.png'></img>    
+            <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
         </Link>
     );
 }
@@ -589,7 +590,7 @@ function ProfileButton(){
             href="/customization" 
             className="btn btn-primary button"
         >
-            <img src = '/assets/PROFILE.png'></img>    
+            <Image src = '/assets/PROFILE.png'alt="lol,lmao"></Image> 
         </Link>
     );
 }
@@ -610,7 +611,7 @@ function GachaButton(){
             href="/gacha" 
             className="btn btn-primary button"
         >
-            <img src = '/assets/GACHA.png'></img>    
+            <Image src = '/assets/GACHA.png'alt="lol,lmao"></Image> 
         </Link>
     );
 }
@@ -631,8 +632,7 @@ function RankingButton(){
             href="/rankings" 
             className="btn btn-primary button"
         >
-            <img src = '/assets/RANKINGS.png'></img>    
+            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"></Image>   
         </Link>
     );
 }
-
