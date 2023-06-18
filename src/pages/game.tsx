@@ -158,9 +158,37 @@ export default class App extends Component<Clients> {
                   
                 />
               </div>
+              <div>
+                <StartButton/>
+              </div>
             </div>
         );
     };
 
 }
 
+type jsAnswer = {
+    name: string;
+}
+function StartButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }   
+
+    async function startGame(){
+        showMessageScreen({name: "Iniciando Juego..."})
+        open('/src/pages/game')
+    }
+
+    return (
+        <button 
+            type="button"
+            onClick={startGame} 
+            
+        >
+            <img src = '/buttons/start.png'></img>    
+        </button>
+    );
+}
