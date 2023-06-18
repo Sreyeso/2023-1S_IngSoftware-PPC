@@ -156,12 +156,10 @@ export default class App extends Component<Clients> {
                   windowResized={this.windowResized}
                   keyPressed={this.keyPressed}
                   
-                />
-                
-                <StartButton/>
-                <ProfileButton/>
-                
+                />                
               </div>
+              <StartButton/>
+              <ProfileButton/>
             </div>
         );
     };
