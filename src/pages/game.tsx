@@ -157,7 +157,10 @@ export default class App extends Component<Clients> {
                   keyPressed={this.keyPressed}
                   
                 />
-                <p><StartButton/></p>
+                <br>
+                <StartButton/>
+                <ProfileButton/>
+                </br>
               </div>
             </div>
         );
@@ -187,6 +190,27 @@ function StartButton(){
             
         >
             <img src = '/assets/START GAME.png'></img>    
+        </button>
+    );
+}
+function ProfileButton(){
+    //Cuando se presiona el botón, se redirecciona al perfil del jugador
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openProfile(){
+        showMessageScreen({name: "Entrando al perfil del jugador..."})
+        open('/customization')
+    }
+    
+    return (
+        <button 
+            type="button"
+            onClick={openProfile} 
+        >
+            <img src = '/assets/PROFILE.png'></img>    
         </button>
     );
 }
