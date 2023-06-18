@@ -534,9 +534,108 @@ export default class App extends Component<Clients> {
             
           />
         </div>
+        <div>
+          <StartButton/>
+        </div>
       </div>
     );
   };
 
 }
+
+
+type jsAnswer = {
+    name: string;
+}
+function StartButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }   
+
+    async function startGame(){
+        showMessageScreen({name: "Iniciando Juego..."})
+        open('/src/pages/game')
+    }
+
+    return (
+        <button 
+            type="button"
+            onClick={startGame} 
+            
+        >
+            <img src = '/buttons/start.png'></img>    
+        </button>
+    );
+}
+/*
+function ProfileButton(){
+    //Cuando se presiona el botón, se redirecciona al perfil del jugador
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openProfile(){
+        showMessageScreen({name: "Entrando al perfil del jugador..."})
+        open('http://localhost:3000/sketch')
+    }
+    
+    return (
+        <button 
+            type="button"
+            onClick={openProfile} 
+            className={styles.button}
+        >
+            <img src = {profileButton}></img>    
+        </button>
+    );
+}
+
+function RankingButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openRanking(){
+        showMessageScreen({name: "Entrando a el Ranking..."})
+        open('http://localhost:3000/sketch')
+    }
+    
+    return (
+        <button 
+            type="button"
+            onClick={openRanking} 
+            className={styles.button}
+        >
+            <img src = {rankingButton}></img>    
+        </button>
+    );
+}
+
+function GachaButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openGacha(){
+        showMessageScreen({name: "Entrando al GACHA..."})
+        open('http://localhost:3000/gacha')
+    }
+    
+    return (
+        <button 
+            type="button"
+            onClick={openGacha} 
+            className={styles.button}
+        >
+            <img src = {gachaButton}></img>    
+        </button>
+    );
+}*/
 
