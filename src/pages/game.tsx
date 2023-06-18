@@ -157,10 +157,10 @@ export default class App extends Component<Clients> {
                   keyPressed={this.keyPressed}
                   
                 />
-                <br>
+                
                 <StartButton/>
                 <ProfileButton/>
-                </br>
+                
               </div>
             </div>
         );
