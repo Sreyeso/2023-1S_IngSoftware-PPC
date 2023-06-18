@@ -156,10 +156,14 @@ export default class App extends Component<Clients> {
                   windowResized={this.windowResized}
                   keyPressed={this.keyPressed}
                   
-                />                
+                />
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '10vh' }}>
+                       <StartButton/>
+                      <ProfileButton/>
+                </div>                
               </div>
-              <StartButton/>
-              <ProfileButton/>
+              
+              
             </div>
         );
     };
