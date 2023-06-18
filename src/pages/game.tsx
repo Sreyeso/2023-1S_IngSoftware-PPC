@@ -148,7 +148,7 @@ export default class App extends Component<Clients> {
 
         return (
             <div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '94vh' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
                 <Sketch 
                   preload={this.preload}
                   setup={this.setup}
