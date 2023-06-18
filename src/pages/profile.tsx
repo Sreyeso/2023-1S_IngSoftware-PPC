@@ -1,15 +1,24 @@
 import Head from "next/head";
 import { useEffect } from 'react'
+import cookie from 'js-cookie'
 import styles from '@/styles/Profile.module.css'
+import Cookies from "js-cookie";
 
 export default function Profile(/*{token}*/){
     
+    let cookie = Cookies
+
+    
     async function logedIn(){
-        const res = await fetch('/api/handleLogin',{
-            method: "GET"
-        })
-        let resText = await res.json()
-        console.log(resText)
+        // const res = await fetch('/api/handleLogin',{
+        //     method: "GET"
+        // })
+        // let resText = await res.json()
+        // console.log(resText)
+
+        let session = cookie.get('session')
+        console.log(session)
+        
     }
 
     useEffect(() => {

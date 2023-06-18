@@ -37,7 +37,7 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
             const updatedSessions = JSON.stringify(sessionsJson, null, 2)
             fs.writeFileSync(sessionsPathFile, updatedSessions, 'utf-8')
 
-            res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; path=/; HttpOnly; secure; SameSite=Strict`) //Esto le indicará al navegador que cree
+            res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; path=/; secure; SameSite=Strict`) //Esto le indicará al navegador que cree
             //una cookie con la sesión
 
             res.status(status).json({name: "Login existoso"});
