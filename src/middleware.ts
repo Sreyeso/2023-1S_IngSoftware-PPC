@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import sessions from'@/authentication/sessions.json'
+// import sessions from'@/authentication/sessions.json'
+import sessions from '@/pages/api/sessions.json'
 
 /*
     El propósito de este middleware es verificar si el usuario está logueado
