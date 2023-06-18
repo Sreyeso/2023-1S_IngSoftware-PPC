@@ -308,7 +308,10 @@ export default class App extends Component<Clients> {
     if (!this.confirmation) {
 
       // Display the gachaMachine image
-      p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
+      if(this.gachaMachine){
+        p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
+      }
+      
 
       // Iterate over the leftArray and display its values
       for (let i = 0; i < this.leftArray.length; i++) {
@@ -351,7 +354,10 @@ export default class App extends Component<Clients> {
         p5.pop();
 
         // Display the image inside the square
-        p5.image(skin, x, y, this.squareSize, this.squareSize);
+        if(skin){
+          p5.image(skin, x, y, this.squareSize, this.squareSize);
+        }
+        
       }
 
       // Iterate over the rightArray and display its values
@@ -395,7 +401,10 @@ export default class App extends Component<Clients> {
         p5.pop();
 
         // Display the image inside the square
-        p5.image(hat, x, y, this.squareSize, this.squareSize);
+        if(hat){
+          p5.image(hat, x, y, this.squareSize, this.squareSize);
+        }
+        
       }
 
       this.scrollLeft += 1;
@@ -515,10 +524,16 @@ export default class App extends Component<Clients> {
 
       if (this.gachaInstance.scrollAmount > 0) {
         // Display the GIF
-        p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
+        if(this.gachaGIF){
+          p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
+        }
+        
       } else {
         // Display the gachaMachine image
-        p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
+        if(this.gachaMachine){
+          p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
+        }
+        
 
         p5.push();
         p5.fill("black");
