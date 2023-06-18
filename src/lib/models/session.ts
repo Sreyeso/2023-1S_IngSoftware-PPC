@@ -39,8 +39,12 @@ export default class SessionModel{
     const  findUser= this.collection.findOne({UserName:sessionid});
     return findUser;
   }
-  async getSessionHash(user:string){
-    const  findHash= this.collection.findOne({Sessionid:user});
+  // async getSessionHash(user:string){
+  //   const  findHash= this.collection.findOne({Sessionid:user});
+  //   return findHash;
+  // }
+  async getSessionHash(sessionId:string){
+    const  findHash= this.collection.findOne({Sessionid:sessionId});
     return findHash;
   }
 }

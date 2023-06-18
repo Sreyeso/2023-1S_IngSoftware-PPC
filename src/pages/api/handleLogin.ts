@@ -1,23 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import UserModel from '@/lib/models/user'
+import SessionModel from '@/lib/models/session'
 import DBO from "@/lib/utils/dbo";
 import bcryptjs from 'bcryptjs' 
 import { Credentials } from '@/authentication/variousTypes'
 import { v4 as uuidv4 } from 'uuid'
 import fs from 'fs'
 import path from 'path'
-import xd from '@/authentication/joinParams'
 
-type Data={ name:string }
+type Data={ name: string }
 
-// const sessionsPathFile = path.join("@","authentication","sessions.json")
-//const sessionsPathFile = '/src/pages/api/sessions.json'
-// const sessionsPathFile = '/sessions.json'
-const sessionsPathFile = '/var/task/.next/server/pages/api/sessions.json'
+//const sessionsPathFile = path.join("@","authentication","sessions.json")
 
 export default async function handleLogin(req: NextApiRequest, res: NextApiResponse<Data>) {
     let dbo = new DBO().db;
     let userModel = new UserModel(dbo);
+    let sessions = new SessionModel(dbo);
     
     if(req.method === "POST"){    
         let dataReceived: Credentials = {userOrEmail:"", password:""};
@@ -31,19 +29,18 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
         if(status === 401 || username === null)
             res.status(status).json({name: "Credenciales incorrectas"})
         else{
-            
-            const { dirname } = xd;
-            console.log(xd)
-            
+
             const sessionId: string = uuidv4(); //Obtener un id aleatorio para la sesión
 
-            const sessions = fs.readFileSync(sessionsPathFile, 'utf-8');
-            const sessionsJson = JSON.parse(sessions)
+            //const sessions = fs.readFileSync(sessionsPathFile, 'utf-8');
+            //const sessionsJson = JSON.parse(sessions)
 
-            sessionsJson[sessionId] = username
+            //sessionsJson[sessionId] = username
 
-            const updatedSessions = JSON.stringify(sessionsJson, null, 2)
-            fs.writeFileSync(sessionsPathFile, updatedSessions, 'utf-8')
+            //const updatedSessions = JSON.stringify(sessionsJson, null, 2)
+            //fs.writeFileSync(sessionsPathFile, updatedSessions, 'utf-8')
+
+            sessions.addSession([username, sessionId])
 
             res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; path=/; secure; SameSite=Strict`) //Esto le indicará al navegador que cree
             //una cookie con la sesión
@@ -65,19 +62,18 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
         else{
         //OJO. BUSCAR ALGUNA LIBRERÍA QUE HAGA ESTO POR Mí    
             
-            const sessions = fs.readFileSync(sessionsPathFile, 'utf-8');
-            const sessionsJson = JSON.parse(sessions)
+            //const sessions = fs.readFileSync(sessionsPathFile, 'utf-8');
+            //const sessionsJson = JSON.parse(sessions)
 
-            const session = sessionsJson[sessionId]
+            //const session = sessionsJson[sessionId]
+            let session = await sessions.getSessionHash(sessionId)
 
             if (!session)
                 res.status(401).json({name: "No autenticado"})
             else
-                res.status(201).json({name: session})    
+                res.status(201).json({name: session.sessionId})    
         }
     }
-        
-        
     
 }
 
