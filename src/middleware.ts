@@ -11,7 +11,6 @@ import sessions from'@/authentication/sessions.json'
 */
 
 export function middleware(req: NextRequest){
-    console.log("request: ", req.nextUrl.pathname);
 
     const cookie = req.cookies.get('session')?.value
 
@@ -20,11 +19,9 @@ export function middleware(req: NextRequest){
     const protectedRoutes = ['/game','/profile']
     
     if (verifyPathname(protectedRoutes, req) && (!cookie || !sessionsJson[cookie])){
-        //if(!cookie || !sessionsJson[cookie]){ //Esto significa que el usuario no está autenticado
-            const response = NextResponse.redirect(new URL('/login', req.url));
-            response.cookies.delete('session');
-            return response;
-        //}
+        const response = NextResponse.redirect(new URL('/login', req.url));
+        response.cookies.delete('session');
+        return response;
     }
     else if(verifyPathname(['/join_ppc','/login','/restore_password'],req) && cookie && sessionsJson[cookie]){
         //El usuario está logueado, por lo que es necesario sacarlo de estas páginas
