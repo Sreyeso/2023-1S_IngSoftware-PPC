@@ -159,7 +159,7 @@ export default class App extends Component<Clients> {
                 />
                 <br>
                 <StartButton/>
-                <ProfileButton/>
+                
                 </br>
               </div>
             </div>
