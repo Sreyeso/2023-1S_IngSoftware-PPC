@@ -13,6 +13,15 @@ export default class SessionModel{
   constructor(db:Db) {
     this.collection = db.collection('SessionManager');
   }
+
+
+/**
+ *  Adds a new user to the database
+ * @param {Array}  session - An array with all of the properties of the session (Look for the SessionManager interface for all fields)
+ * @returns {string} returns the database response
+ */
+
+
  async addSession(session: any[]) {
   const newSession = this.collection.insertOne({
     UserName: session[0],
