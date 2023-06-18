@@ -179,7 +179,7 @@ function StartButton(){
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        open('/src/pages/game')
+        open('/game')
     }
 
     return (
@@ -188,7 +188,7 @@ function StartButton(){
             onClick={startGame} 
             
         >
-            <img src = '/buttons/start.png'></img>    
+            <img src = '/assets/start game.png'></img>    
         </button>
     );
 }
