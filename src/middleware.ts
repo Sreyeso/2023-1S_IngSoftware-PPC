@@ -44,5 +44,5 @@ function verifyPathname (listOfUrls: string[] = [], req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/game','/profile','/restore_password','/join_ppc','/login']
+    matcher: ['/profile','/restore_password','/join_ppc','/login']
 }
