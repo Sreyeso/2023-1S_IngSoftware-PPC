@@ -134,11 +134,11 @@ export default class App extends Component<Clients> {
   allSkinImages: p5.Image[] = [];
   allHatImages: p5.Image[] = [];
 
-  leftArray: any[] = []; //Images of the skins in the left scrolling bar
-  rightArray: any[] = []; //Images of the hats in the right scrolling bar
-  unknown: any; //Question mark sprite
-  gachaMachine: any; //Gacha machine sprite
-  gachaGIF: any; //Gacha machine GIF
+  leftArray: p5.Image[]|any[] = []; //Images of the skins in the left scrolling bar
+  rightArray: p5.Image[]|any[] = []; //Images of the hats in the right scrolling bar
+  unknown: p5.Image|any; //Question mark sprite
+  gachaMachine: p5.Image|any; //Gacha machine sprite
+  gachaGIF: p5.Image|any; //Gacha machine GIF
 
   //Logic control
   scrollLeft: number = 0; //Scroll offset of the bars
@@ -162,8 +162,8 @@ export default class App extends Component<Clients> {
   prevSquareHatY: number = 0;
   confirmTextY: number = 0;
 
-  previewedSkin: any;
-  previewedHat: any;
+  previewedSkin: p5.Image|any;
+  previewedHat: p5.Image|any;
   selector: string = "";
   gachaMode: string = "";
   keySelector: string = "";
@@ -466,9 +466,13 @@ export default class App extends Component<Clients> {
         p5.rect(this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
       }
 
-      p5.image(this.previewedSkin, this.prevSquareSkinX, this.prevSquareSkinY, this.previewSquareSize, this.previewSquareSize);
-      p5.image(this.previewedHat, this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
-
+      if(this.previewedSkin){
+        p5.image(this.previewedSkin, this.prevSquareSkinX, this.prevSquareSkinY, this.previewSquareSize, this.previewSquareSize);
+      }
+      if(this.previewedHat){
+        p5.image(this.previewedHat, this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
+      }
+      
       p5.pop();
 
       p5.push();
