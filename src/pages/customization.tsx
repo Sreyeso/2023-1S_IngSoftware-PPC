@@ -149,13 +149,13 @@ export default class App extends Component<Clients> {
 
   setup = (p5: any, canvasParentRef: Element) => {
 
-    //Initial setup
-    p5.createCanvas(0, 0).parent(canvasParentRef);
     //Window Size
     const marginPercentage = 0.15;
     const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
     const canvasHeight = p5.windowHeight * (1 - 2 * marginPercentage);
-    p5.resizeCanvas(canvasWidth, canvasHeight);
+
+    //Initial setup
+    p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 
     // Calculate the positions of the three squares
     this.middleSquareSize = 0.13 * canvasWidth;
@@ -526,10 +526,10 @@ export default class App extends Component<Clients> {
       <div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <Sketch
-            windowResized={this.windowResized}
             preload={this.preload}
-            keyPressed={this.keyPressed}
             setup={this.setup}
+            windowResized={this.windowResized}
+            keyPressed={this.keyPressed}
             draw={this.draw}
           />
         </div>

@@ -233,14 +233,14 @@ export default class App extends Component<Clients> {
   setup = (p5: any, canvasParentRef: Element) => {
 
     //Initial setup
-    p5.createCanvas(0, 0).parent(canvasParentRef);
-    p5.imageMode(p5.CENTER);
-    p5.rectMode(p5.CENTER);
-    p5.textAlign(p5.CENTER, p5.CENTER);
     const marginPercentage = 0.15;
     const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
     const canvasHeight = p5.windowHeight * (1 - 2 * marginPercentage);
-    p5.resizeCanvas(canvasWidth, canvasHeight);
+    p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
+    p5.imageMode(p5.CENTER);
+    p5.rectMode(p5.CENTER);
+    p5.textAlign(p5.CENTER, p5.CENTER);
+
 
     //Position and sizing of things
     this.squareSize = 0.05 * canvasWidth;
@@ -695,12 +695,14 @@ export default class App extends Component<Clients> {
       <div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <Sketch
-            windowResized={this.windowResized}
             preload={this.preload}
-            keyPressed={this.keyPressed}
             setup={this.setup}
-            draw={this.draw}
+            windowResized={this.windowResized}
+
+            keyPressed={this.keyPressed}
             mouseClicked={this.mouseClicked}
+            draw={this.draw}
+
           />
         </div>
       </div>
