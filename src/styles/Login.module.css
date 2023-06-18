@@ -1,0 +1,196 @@
+.videoDiv video{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: 0.35;
+}
+
+.allInside{
+    position: absolute;
+    /* border: 1px solid; */
+    top:50%;
+    left:50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    padding: 8vh;
+    text-align: center;
+    width: 50vw;
+    height: 68vh;
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    grid-template-rows: 1fr;
+    padding: 0%;
+}
+
+.logoPPC{
+    background: transparent;
+    /* border: 1px solid; */
+    height: inherit;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoPPC img{
+    height: auto;
+    width: 60%;  
+}
+
+.loginForm{
+    box-sizing: border-box;
+    background-color: transparent;
+    /* border: 1px solid; */
+    height: inherit;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.textDiv{
+    /* border: 1px solid; */
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.bigText{
+    font-family: cinzel-bold;
+    font-size: 3.5vh;
+    margin-bottom: 0.5vh;
+}
+
+.smallText{
+    margin-top: 0.5vh;
+    /* border-top: 1px; */
+    font-family: cinzel-regular;
+    font-size: 2.8vh;
+    margin-bottom: 6%;
+}
+
+.inputDiv{
+    /* border: 1px solid; */
+    height: 13%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow:hidden ;
+}
+
+.inputDiv input{
+    height: 70%;
+    width: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    font-size:130%;
+    padding-left: 3%;
+    outline: none;
+}
+
+.inputDiv span{
+    position: absolute;
+    left: 3%;
+    font-size: 2.3vh;
+    color: gray;
+}
+
+.inputDiv input:focus ~ span,
+.inputDiv input:hover ~ span,
+.inputDiv span:hover,
+.inputDiv input:not(:placeholder-shown) ~ span{
+    transform: translateX(-11%) translateY(-80%);
+    font-size: 1.5vh;
+    padding: 0 10px;
+    transition: all 0.3s;
+}
+
+.inputDiv input:focus,
+.inputDiv input:hover,
+.inputDiv span:hover ~ input,
+.inputDiv input:not(:placeholder-shown){
+    padding-top: 3.8%;
+    transition: all 0.3s;
+}
+
+.messageFromBack{
+    font-family: cinzel-regular;
+    margin-top: 0.8%;
+    margin-bottom: 0.8%;
+
+}
+
+.buttonDiv{
+    /* border: 1px solid; */
+    height: 14%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-self: center;
+}
+
+.buttonDiv button{
+    border: transparent;
+    background-color: transparent;
+    position: relative;
+    height: 87%;
+    bottom: 0;
+}
+
+.buttonDiv button img{
+    /* position: absolute; */
+    /* bottom: 0; */
+    height: 78%;
+}
+
+.buttonDiv button:hover{
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.buttonDiv button:active{
+    filter: brightness(0.98);
+    transform: scale(1.08);
+    cursor: pointer;
+}
+
+.link{
+    font-size: 2.5vh;
+    font-family: cinzel-regular;
+}
+
+.link a{
+    text-decoration: none;
+    color:mediumblue;
+}
+
+.link a:hover{
+    text-decoration:underline;
+}
+
+.link a:active{
+    color:rgb(68, 68, 242);
+}
+
+.link:nth-child(odd){
+    margin-bottom:1.52%;
+}
+
+.link:nth-child(even){
+    margin-top: 1.5%;
+}
+
+@media (max-width: 1024px){
+    .logoPPC{
+        display: none;
+    }
+
+    .loginForm{
+        width: inherit;
+    }
+}
