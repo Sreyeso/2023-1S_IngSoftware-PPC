@@ -2,7 +2,6 @@ import Link from 'next/link';
 import styles from '@/styles/Login.module.css'
 import Head from 'next/head'
 import { useState } from 'react'
-import cookie from "js-cookie"
 import { useRouter } from 'next/router'
 import { Data, Credentials, KeyCredentials } from '@/authentication/variousTypes'
 
