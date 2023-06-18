@@ -159,7 +159,7 @@ export default class App extends Component<Clients> {
                 />      
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
-                       <StartButton/>
+                       <GachaButton/>
                       <ProfileButton/>
                 </div>          
               
@@ -212,6 +212,27 @@ function ProfileButton(){
             className="btn btn-primary button"
         >
             <img src = '/assets/PROFILE.png'></img>    
+        </Link>
+    );
+}
+function GachaButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openGacha(){
+        showMessageScreen({name: "Entrando al GACHA..."})
+        open('/gacha')
+    }
+    
+    return (
+        <Link 
+            href="/gacha" 
+            className="btn btn-primary button"
+        >
+            <img src = '/assets/GACHA.png'></img>    
         </Link>
     );
 }
