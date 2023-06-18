@@ -17,7 +17,7 @@ export function middleware(req: NextRequest){
 
     const sessionsJson = sessions as Record<string,string>
 
-    const protectedRoutes = ['/sketch','/profile']
+    const protectedRoutes = ['/game','/profile']
     
     if (verifyPathname(protectedRoutes, req) && (!cookie || !sessionsJson[cookie])){
         //if(!cookie || !sessionsJson[cookie]){ //Esto significa que el usuario no está autenticado
@@ -28,7 +28,7 @@ export function middleware(req: NextRequest){
     }
     else if(verifyPathname(['/join_ppc','/login','/restore_password'],req) && cookie && sessionsJson[cookie]){
         //El usuario está logueado, por lo que es necesario sacarlo de estas páginas
-        const response = NextResponse.redirect(new URL('/sketch', req.url));
+        const response = NextResponse.redirect(new URL('/game', req.url));
         return response;
     }
 
@@ -45,5 +45,5 @@ function verifyPathname (listOfUrls: string[] = [], req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/sketch','/profile','/restore_password','/join_ppc','/login']
+    matcher: ['/game','/profile','/restore_password','/join_ppc','/login']
 }

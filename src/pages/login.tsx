@@ -25,7 +25,7 @@ export default function Login(){
         displayMessage([resText.name]);
     
         if(res.status === 200){
-            router.push('/sketch'); //Redirección al juego
+            router.push('/game'); //Redirección al juego
         }
     }
 
