@@ -148,7 +148,7 @@ export default class App extends Component<Clients> {
 
         return (
             <div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '94vh' }}>
                 <Sketch 
                   preload={this.preload}
                   setup={this.setup}
@@ -156,13 +156,12 @@ export default class App extends Component<Clients> {
                   windowResized={this.windowResized}
                   keyPressed={this.keyPressed}
                   
-                />
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '10vh' }}>
+                />      
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
                        <StartButton/>
                       <ProfileButton/>
-                </div>                
-              </div>
-              
+                </div>          
               
             </div>
         );
