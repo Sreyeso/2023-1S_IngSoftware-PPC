@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
-
+import Link from 'next/link';
 //Class imports
 import GameLogic from "../lib/classes/GameLogic";
 import DBO from "@/lib/utils/dbo";
@@ -207,11 +207,11 @@ function ProfileButton(){
     }
     
     return (
-        <link 
+        <Link 
             href="/customization" 
             className="btn btn-primary button"
         >
             <img src = '/assets/PROFILE.png'></img>    
-        </link>
+        </Link>
     );
 }
