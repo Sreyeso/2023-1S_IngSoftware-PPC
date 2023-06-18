@@ -204,20 +204,20 @@ export default class App extends Component<Clients> {
       p5.resizeCanvas(canvasWidth, canvasHeight);
 
       //Position and sizing of things
-      this.squareSize = 0.05 * p5.width;
+      this.squareSize = 0.05 * canvasWidth;
       this.spacing = 0.3 * this.squareSize;
       this.startY = this.squareSize / 2 + this.spacing;
       this.imageSize = this.squareSize * 4;
       this.previewSquareSize = this.imageSize * 0.8;
-      this.imgX = p5.width / 2;
-      this.imgY = this.prevSquareSkinY = this.prevSquareHatY = p5.height * 0.35;
+      this.imgX = canvasWidth / 2;
+      this.imgY = this.prevSquareSkinY = this.prevSquareHatY = canvasHeight * 0.35;
       this.selSquareAX = this.imgX - this.squareSize;
       this.selSquareAY = this.imgY + this.imageSize * 0.7;
       this.selSquareBX = this.imgX + this.squareSize;
       this.selSquareBY = this.imgY + this.imageSize * 0.7;
-      this.prevSquareSkinX = p5.width * 0.25;
-      this.prevSquareHatX = p5.width * 0.75;
-      this.confirmTextY = p5.height * 0.8;
+      this.prevSquareSkinX = canvasWidth * 0.25;
+      this.prevSquareHatX = canvasWidth * 0.75;
+      this.confirmTextY = canvasHeight * 0.8;
 
       p5.textSize(this.squareSize * 0.5);
     }

@@ -132,18 +132,18 @@ export default class App extends Component<Clients> {
     p5.resizeCanvas(canvasWidth, canvasHeight);
 
     // Calculate the positions of the three squares
-    this.middleSquareSize = 0.13 * p5.width;
+    this.middleSquareSize = 0.13 * canvasWidth;
     this.outerSquareSize = this.middleSquareSize * 0.5;
     this.spacing = 0.3 * this.middleSquareSize;
-    this.xOffset = 0.2 * p5.width;
-    this.yHats = p5.height / 2 - this.middleSquareSize * 0.8;
-    this.ySkins = p5.height / 2 + this.middleSquareSize * 0.8;
+    this.xOffset = 0.2 * canvasWidth;
+    this.yHats = canvasHeight / 2 - this.middleSquareSize * 0.8;
+    this.ySkins = canvasHeight / 2 + this.middleSquareSize * 0.8;
 
     this.arrowSize = 40;
 
-    this.previewedPartX = 0.7 * p5.width;
-    this.previewedHatY = p5.height / 2 - this.middleSquareSize / 2;
-    this.previewedSkinY = p5.height / 2 + this.middleSquareSize / 2;
+    this.previewedPartX = 0.7 * canvasWidth;
+    this.previewedHatY = canvasHeight / 2 - this.middleSquareSize / 2;
+    this.previewedSkinY = canvasHeight / 2 + this.middleSquareSize / 2;
 
   };
 
