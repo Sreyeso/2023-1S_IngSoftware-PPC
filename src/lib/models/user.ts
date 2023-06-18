@@ -40,7 +40,7 @@ export default class UserModel{
     GemAmount: user[5],
     CoinAmount: user[6],
     HiScore: user[7],
-    CurrentAspect: ["default_ppc.png","default_ppc.png"],
+    CurrentAspect: [["default_ppc.png"],["default_ppc.png"]],
     GachaObjects: [["default_ppc.png"],["default_ppc.png"]],
   });
   return newUser;
