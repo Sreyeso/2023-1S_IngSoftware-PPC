@@ -12,7 +12,8 @@ type Data={ name:string }
 
 // const sessionsPathFile = path.join("@","authentication","sessions.json")
 //const sessionsPathFile = '/src/pages/api/sessions.json'
-const sessionsPathFile = '/sessions.json'
+// const sessionsPathFile = '/sessions.json'
+const sessionsPathFile = '/var/task/.next/server/pages/api/sessions.json'
 
 export default async function handleLogin(req: NextApiRequest, res: NextApiResponse<Data>) {
     let dbo = new DBO().db;
