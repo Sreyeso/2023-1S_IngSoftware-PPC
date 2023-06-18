@@ -117,14 +117,14 @@ export default class App extends Component<Clients> {
   done: boolean = false;
   dripMsg: string = "";
 
-  preload = (p5: any) => {
+  preload = (p5: p5|any) => {
     this.skin_names = this.props.gachaObjects[0];
     this.hat_names = this.props.gachaObjects[1];
     for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/allSkins/${this.skin_names[i]}`)); }
     for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allSkins/${this.hat_names[i]}`)); }
   };
 
-  windowResized = (p5: any) => {
+  windowResized = (p5: p5) => {
     //Window Size
     const marginPercentage = 0.15;
     const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
@@ -147,7 +147,7 @@ export default class App extends Component<Clients> {
 
   };
 
-  setup = (p5: any, canvasParentRef: Element) => {
+  setup = (p5: p5, canvasParentRef: Element) => {
 
     //Window Size
     const marginPercentage = 0.15;
@@ -221,14 +221,14 @@ export default class App extends Component<Clients> {
     }
   };
 
-  mouseInsideSquare(p5: any, x: number, y: number, size: number) {
+  mouseInsideSquare(p5: p5, x: number, y: number, size: number) {
     return (p5.mouseX > x - size / 2 &&
       p5.mouseX < x + size / 2 &&
       p5.mouseY > y - size / 2 &&
       p5.mouseY < y + size / 2);
   }
 
-  draw = (p5: any) => {
+  draw = (p5: p5) => {
     p5.background(this.bgShadeOfGray, 125);
 
     // Display the hat selection squares
@@ -268,7 +268,7 @@ export default class App extends Component<Clients> {
       const opacityOut = p5.map(elapsedTime, 0, this.fadeInTime, 255, 125);
       const outerOpacity = i != 0 ? opacityOut : 0; // Set full opacity for the middle square
       const strokeWeight = i === 0 ? this.strokeWidth : 1; // Set thicker stroke for the middle square
-      const strokeColor = (i === 0 && this.selector == "hat") ? this.rarityColor(rarity) : p5.color(0, 0); // Set red stroke color for the middle square
+      const strokeColor = (i === 0 && this.selector == "hat") ? p5.color(this.rarityColor(rarity)) : p5.color(0, 0); // Set red stroke color for the middle square
 
       // Set stroke properties
       p5.push();
@@ -365,7 +365,7 @@ export default class App extends Component<Clients> {
       const opacityOut = p5.map(elapsedTime, 0, this.fadeInTime, 255, 125);
       const outerOpacity = i != 0 ? opacityOut : 0; // Set full opacity for the middle square
       const strokeWeight = i === 0 ? this.strokeWidth : 1; // Set thicker stroke for the middle square
-      const strokeColor = (i === 0 && this.selector == "skin") ? this.rarityColor(rarity) : p5.color(0, 0); // Set red stroke color for the middle square
+      const strokeColor = (i === 0 && this.selector == "skin") ? p5.color(this.rarityColor(rarity)) : p5.color(0, 0); // Set red stroke color for the middle square
 
       // Set stroke properties
       p5.push();
@@ -442,7 +442,7 @@ export default class App extends Component<Clients> {
 
   };
 
-  keyPressed = (p5: any) => {
+  keyPressed = (p5: p5) => {
 
     if (!this.done) {
       if (!this.confirm) {
@@ -529,7 +529,6 @@ export default class App extends Component<Clients> {
             preload={this.preload}
             setup={this.setup}
             draw={this.draw}
-            windowResized={this.windowResized}
             keyPressed={this.keyPressed}
             
           />

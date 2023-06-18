@@ -102,12 +102,12 @@ export default class App extends Component<Clients> {
         this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
       };
 
-      windowResized = (p5:any) =>  {
+      windowResized = (p5:p5) =>  {
         //game.resize();  //Resize the game
         //p5.resizeCanvas(p5.windowWidth,p5.windowHeight);  //Resize the canvas
       };
 
-      setup = (p5:any, canvasParentRef:Element) => {
+      setup = (p5:p5, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
         this.game = new GameLogic(
@@ -117,12 +117,12 @@ export default class App extends Component<Clients> {
         p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
     };
 
-    draw = (p5:any) => {
+    draw = (p5:p5) => {
         p5.background('white');
         this.gameFinished=this.game.handleGame(this.debug);
     };
 
-    keyPressed = (p5:any) => {
+    keyPressed = (p5:p5) => {
       if(this.game){this.game.keyInteractions(p5.keyCode);}
       if(p5.keyCode && this.gameFinished==true){
         let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);

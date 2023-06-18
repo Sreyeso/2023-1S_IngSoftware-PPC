@@ -181,7 +181,7 @@ export default class App extends Component<Clients> {
 
   gachaInstance: any;
 
-  preload = (p5: any) => {
+  preload = (p5: p5) => {
     // Load graphical assets
     this.userCoins = this.props.userCoins;
     this.userGems = this.props.userGems;
@@ -195,7 +195,7 @@ export default class App extends Component<Clients> {
     //for (let i = 0; i < this.allHat_names.length; i++) { this.allHatImages.push(p5.loadImage(`/sprites/allHats/${this.allHat_names[i]}`)); }
   };
 
-  windowResized = (p5: any) => {
+  windowResized = (p5: p5) => {
     if (!this.confirmation) {
       //Window Size
       const marginPercentage = 0.15;
@@ -230,7 +230,7 @@ export default class App extends Component<Clients> {
     }
   }
 
-  setup = (p5: any, canvasParentRef: Element) => {
+  setup = (p5: p5, canvasParentRef: Element) => {
 
     //Initial setup
     const marginPercentage = 0.15;
@@ -301,7 +301,7 @@ export default class App extends Component<Clients> {
     }
   };
 
-  draw = (p5: any) => {
+  draw = (p5: p5) => {
     p5.background(this.bgShadeOfGray, 125);
 
     if (!this.confirmation) {
@@ -533,7 +533,7 @@ export default class App extends Component<Clients> {
 
   };
 
-  keyPressed = (p5: any) => {
+  keyPressed = (p5: p5) => {
 
     if (!this.confirmation) {
       if (p5.keyCode === p5.UP_ARROW) {
@@ -665,7 +665,7 @@ export default class App extends Component<Clients> {
 
   };
 
-  mouseClicked = (p5: any) => {
+  mouseClicked = (p5: p5) => {
     if (!this.confirmation) {
       this.keySelector = "";
       // Check if the mouse clicked inside square A
@@ -698,11 +698,8 @@ export default class App extends Component<Clients> {
             preload={this.preload}
             setup={this.setup}
             draw={this.draw}
-            windowResized={this.windowResized}
             keyPressed={this.keyPressed}
             mouseClicked={this.mouseClicked}
-            
-
           />
         </div>
       </div>
