@@ -181,7 +181,7 @@ function StartButton(){
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        navigator('/game')
+        open('/game')
     }
 
     return (
