@@ -16,7 +16,10 @@ export default class Tile {
   // Method to draw the tile at a given position and size
   draw(x: number, y: number, tile_size: number) {
       if(this.image!=null){
+        this.p.push();
+        this.p.noTint();
         this.p.image(this.image, x, y, tile_size, tile_size); // Draw the tile image at the given position and size
+        this.p.pop();
       }
   }
 

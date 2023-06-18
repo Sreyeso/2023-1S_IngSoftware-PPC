@@ -17,8 +17,8 @@ export default class UserModel{
   collection:any;
   userCoins:number=0;
   userGems:number=0;
-  userSkin:string[]=["default_ppc.png","default_ppc.png"];
-  gachaObjects:string[][]=[["default_ppc.png"],["default_ppc.png"]];
+  userSkin:string[]=["default_ppc.png","none.png"];
+  gachaObjects:string[][]=[["default_ppc.png"],["none.png"]];
   maxScore:number=0;
 
   constructor(db:Db) {
@@ -40,8 +40,8 @@ export default class UserModel{
     GemAmount: user[5],
     CoinAmount: user[6],
     HiScore: user[7],
-    CurrentAspect: ["default_ppc.png","default_ppc.png"],
-    GachaObjects: [["default_ppc.png"],["default_ppc.png"]],
+    CurrentAspect: ["default_ppc.png","none.png"],
+    GachaObjects: [["default_ppc.png"],["none.png"]],
   });
   return newUser;
 }

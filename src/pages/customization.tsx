@@ -64,7 +64,7 @@ export default class App extends Component<Clients> {
   currentHatIndex: number = 0; // Current index in the hat array
 
   skin_names: string[] = ["default_ppc.png"]; // File names of the users unlocked skin aspects
-  hat_names: string[] = ["default_ppc.png"]; // File names of the users unlocked hat aspects
+  hat_names: string[] = ["none.png"]; // File names of the users unlocked hat aspects
   playerSkins: any[] = []; // Actual images of the users unlocked skin aspects
   playerHats: any[] = []; // Actual images of the users unlocked aspects
 
@@ -95,6 +95,32 @@ export default class App extends Component<Clients> {
     , "rainbow.gif"
     , "waka_waka.gif"];
 
+    commonHat_names: string[] = ["plant.png"
+    , "balloon.png"
+    , "cherry.png"
+    , "graduation.png"
+    , "none.png"
+    , "pirate.png"
+    , "santa.png"
+    , "wizard.png"];
+  rareHat_names: string[] = ["angel.png"
+    , "birthday.png"
+    , "crown.png"
+    , "helicopter.png"
+    , "leprechaun.png"
+    , "magic.png"];
+  epicHat_names: string[] = ["antenna.png"
+    , "dunce.png"
+    , "explosion.png"
+    , "flemish.png"
+    , "one_piece.png"
+    , "sims.png"
+    , "sombrero.png"];
+  legendaryHat_names: string[] = ["carlos.png"
+    , "ez_clap.png"
+    , "hand.png"
+    , "teemo.png"];
+
   lastKeyPressTimeHat: number = 0;
   lastKeyPressTimeSkin: number = 0;
   fadeInTime = 500; // Fade-in duration in milliseconds
@@ -121,7 +147,7 @@ export default class App extends Component<Clients> {
     this.skin_names = this.props.gachaObjects[0];
     this.hat_names = this.props.gachaObjects[1];
     for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/allSkins/${this.skin_names[i]}`)); }
-    for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allSkins/${this.hat_names[i]}`)); }
+    for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allHats/${this.hat_names[i]}`)); }
   };
 
   windowResized = (p5: p5) => {
@@ -243,16 +269,16 @@ export default class App extends Component<Clients> {
       const hatName = this.hat_names[wrappedIndex];
       let rarity: string;
 
-      if (this.commonSkin_names.includes(hatName)) {
+      if (this.commonHat_names.includes(hatName)) {
         rarity = "common";
-      } else if (this.rareSkin_names.includes(hatName)) {
+      } else if (this.rareHat_names.includes(hatName)) {
         rarity = "rare";
-      } else if (this.epicSkin_names.includes(hatName)) {
+      } else if (this.epicHat_names.includes(hatName)) {
         rarity = "epic";
-      } else if (this.legendarySkin_names.includes(hatName)) {
+      } else if (this.legendaryHat_names.includes(hatName)) {
         rarity = "legendary";
       } else {
-        rarity = "none"; // The skin name doesn't exist in any of the arrays
+        rarity = "none"; // The hat name doesn't exist in any of the arrays
       }
 
       // Calculate the size of the current square

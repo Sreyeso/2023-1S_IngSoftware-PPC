@@ -75,6 +75,7 @@ export default class App extends Component<Clients> {
       sound_names:string[] = ["main.mp3","boing2.mp3"];
 
       player_Skin: any;
+      player_Hat: any;
       defaultLevel_Graphics: any[]=[];
       desertLevel_Graphics: any[]=[];
       hellLevel_Graphics: any[]=[];
@@ -96,22 +97,24 @@ export default class App extends Component<Clients> {
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.defaultLevel_Graphics.push(p5.loadImage(`/sprites/defaultLevel/${this.defaultTile_names[i]}`));}
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${this.defaultTile_names[i]}`));}
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${this.defaultTile_names[i]}`));}
-        //for (let i = 0; i < this.player_names.length; i++) {this.player_Skins.push(p5.loadImage(`/sprites/playerSkins/${this.player_names[i]}`));}
         this.player_Skin=p5.loadImage(`/sprites/allSkins/${this.props.userSkin[0]}`);
+        this.player_Hat=p5.loadImage(`/sprites/allHats/${this.props.userSkin[1]}`);
         for (let i = 0; i < this.sound_names.length; i++) {this.gameSounds.push(p5.loadSound(`/sounds/${this.sound_names[i]}`));}
         this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
       };
 
       windowResized = (p5:p5) =>  {
-        //game.resize();  //Resize the game
-        //p5.resizeCanvas(p5.windowWidth,p5.windowHeight);  //Resize the canvas
+        if(this.game){
+          p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
+        }
+        
       };
 
       setup = (p5:p5, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
         this.game = new GameLogic(
-          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:this.player_Skin}, //userData
+          {userCoins:this.props.userCoins,userGems:this.props.userGems,skin:this.player_Skin,hat:this.player_Hat}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           this.generalAssets,this.levelGraphics,this.levelLayouts,this.gameSounds,p5);
         p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size

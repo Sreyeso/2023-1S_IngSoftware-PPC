@@ -86,7 +86,11 @@ export default class App extends Component<Clients> {
   legendarySkin_names: string[] = ["hello_world.gif"
     , "hypnotic_blue.gif"
     , "rainbow.gif"
-    , "waka_waka.gif"];
+    , "waka_waka.gif"
+    ,"clown.gif" 
+    ,"laughing-dog.gif"
+    ,"rgb.gif"
+  ];
 
   allSkin_names: string[] = [
     ...this.commonSkin_names,
@@ -95,32 +99,31 @@ export default class App extends Component<Clients> {
     ...this.legendarySkin_names
   ];
 
-  commonHat_names: string[] = ["default_ppc.png"
-    , "love_letter.png"
-    , "mistery.png"
-    , "red_mushroom.png"
-    , "orchid.png"
-    , "pollo.png"
-    , "tetris.png"
-    , "third_love.png"];
-  rareHat_names: string[] = ["hamburguer.png"
-    , "monster_ball.png"
-    , "pizza.png"
-    , "purple_toxic.png"
-    , "rex.png"
-    , "sushi.png"
-    , "watermelon.png"];
-  epicHat_names: string[] = ["creeper.png"
-    , "invaders.gif"
-    , "japan_night.png"
-    , "nyan_poptart.png"
-    , "retrowave.png"
-    , "sans.png"
-    , "waka_ghost.gif"];
-  legendaryHat_names: string[] = ["hello_world.gif"
-    , "hypnotic_blue.gif"
-    , "rainbow.gif"
-    , "waka_waka.gif"];
+  commonHat_names: string[] = ["plant.png"
+    , "balloon.png"
+    , "cherry.png"
+    , "graduation.png"
+    , "none.png"
+    , "pirate.png"
+    , "santa.png"
+    , "wizard.png"];
+  rareHat_names: string[] = ["angel.png"
+    , "birthday.png"
+    , "crown.png"
+    , "helicopter.png"
+    , "leprechaun.png"
+    , "magic.png"];
+  epicHat_names: string[] = ["antenna.png"
+    , "dunce.png"
+    , "explosion.png"
+    , "flemish.png"
+    , "one_piece.png"
+    , "sims.png"
+    , "sombrero.png"];
+  legendaryHat_names: string[] = ["carlos.png"
+    , "ez_clap.png"
+    , "hand.png"
+    , "teemo.png"];
 
   allHat_names: string[] = [
     ...this.commonHat_names,
@@ -131,14 +134,14 @@ export default class App extends Component<Clients> {
 
   //Graphical assets
 
-  allSkinImages: p5.Image[] = [];
-  allHatImages: p5.Image[] = [];
+  allSkinImages: any[] = [];
+  allHatImages: any[] = [];
 
-  leftArray: p5.Image[]|any[] = []; //Images of the skins in the left scrolling bar
-  rightArray: p5.Image[]|any[] = []; //Images of the hats in the right scrolling bar
-  unknown: p5.Image|any; //Question mark sprite
-  gachaMachine: p5.Image|any; //Gacha machine sprite
-  gachaGIF: p5.Image|any; //Gacha machine GIF
+  leftArray: any[] = []; //Images of the skins in the left scrolling bar
+  rightArray: any[] = []; //Images of the hats in the right scrolling bar
+  unknown: any; //Question mark sprite
+  gachaMachine: any; //Gacha machine sprite
+  gachaGIF: any; //Gacha machine GIF
 
   //Logic control
   scrollLeft: number = 0; //Scroll offset of the bars
@@ -162,8 +165,8 @@ export default class App extends Component<Clients> {
   prevSquareHatY: number = 0;
   confirmTextY: number = 0;
 
-  previewedSkin: p5.Image|any;
-  previewedHat: p5.Image|any;
+  previewedSkin: any;
+  previewedHat: any;
   selector: string = "";
   gachaMode: string = "";
   keySelector: string = "";
@@ -188,9 +191,7 @@ export default class App extends Component<Clients> {
     this.unknown = p5.loadImage('/sprites/generalAssets/unknown.png');
 
     for (let i = 0; i < this.allSkin_names.length; i++) { this.allSkinImages.push(p5.loadImage(`/sprites/allSkins/${this.allSkin_names[i]}`)); }
-
-    // pending
-    //for (let i = 0; i < this.allHat_names.length; i++) { this.allHatImages.push(p5.loadImage(`/sprites/allHats/${this.allHat_names[i]}`)); }
+    for (let i = 0; i < this.allHat_names.length; i++) { this.allHatImages.push(p5.loadImage(`/sprites/allHats/${this.allHat_names[i]}`)); }
   };
 
   windowResized = (p5: p5) => {
@@ -258,16 +259,14 @@ export default class App extends Component<Clients> {
 
     p5.textSize(this.squareSize * 0.5);
 
-    const shuffledArray = this.allSkinImages.slice(); //copy values and not reference
-    this.shuffleArray(shuffledArray);
+    const shuffledSkinsArray = this.allSkinImages.slice(); //copy values and not reference
+    const shuffledHatsArray = this.allHatImages.slice(); //copy values and not reference
+    this.shuffleArray(shuffledHatsArray);
+    this.shuffleArray(shuffledHatsArray);
 
     // Load the randomized skin images into the leftArray
-    this.leftArray = shuffledArray.slice();
-
-    //Pending
-    this.allHat_names = this.allSkin_names.slice();
-    this.allHatImages = this.allSkinImages.slice();
-    this.rightArray = this.leftArray.slice();
+    this.leftArray = shuffledSkinsArray.slice();
+    this.rightArray = shuffledHatsArray.slice();
 
     this.previewedSkin = this.unknown;
     this.previewedHat = this.unknown;
@@ -308,10 +307,7 @@ export default class App extends Component<Clients> {
     if (!this.confirmation) {
 
       // Display the gachaMachine image
-      if(this.gachaMachine){
-        p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
-      }
-      
+      p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
 
       // Iterate over the leftArray and display its values
       for (let i = 0; i < this.leftArray.length; i++) {
@@ -354,10 +350,7 @@ export default class App extends Component<Clients> {
         p5.pop();
 
         // Display the image inside the square
-        if(skin){
-          p5.image(skin, x, y, this.squareSize, this.squareSize);
-        }
-        
+        p5.image(skin, x, y, this.squareSize, this.squareSize);
       }
 
       // Iterate over the rightArray and display its values
@@ -370,13 +363,13 @@ export default class App extends Component<Clients> {
 
         let rarity: string;
 
-        if (this.commonSkin_names.includes(hatName)) {
+        if (this.commonHat_names.includes(hatName)) {
           rarity = "common";
-        } else if (this.rareSkin_names.includes(hatName)) {
+        } else if (this.rareHat_names.includes(hatName)) {
           rarity = "rare";
-        } else if (this.epicSkin_names.includes(hatName)) {
+        } else if (this.epicHat_names.includes(hatName)) {
           rarity = "epic";
-        } else if (this.legendarySkin_names.includes(hatName)) {
+        } else if (this.legendaryHat_names.includes(hatName)) {
           rarity = "legendary";
         } else {
           rarity = "none"; // The skin name doesn't exist in any of the arrays
@@ -401,10 +394,8 @@ export default class App extends Component<Clients> {
         p5.pop();
 
         // Display the image inside the square
-        if(hat){
-          p5.image(hat, x, y, this.squareSize, this.squareSize);
-        }
-        
+        p5.image(hat, x, y, this.squareSize, this.squareSize);
+
       }
 
       this.scrollLeft += 1;
@@ -475,13 +466,9 @@ export default class App extends Component<Clients> {
         p5.rect(this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
       }
 
-      if(this.previewedSkin){
-        p5.image(this.previewedSkin, this.prevSquareSkinX, this.prevSquareSkinY, this.previewSquareSize, this.previewSquareSize);
-      }
-      if(this.previewedHat){
-        p5.image(this.previewedHat, this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
-      }
-      
+      p5.image(this.previewedSkin, this.prevSquareSkinX, this.prevSquareSkinY, this.previewSquareSize, this.previewSquareSize);
+      p5.image(this.previewedHat, this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
+
       p5.pop();
 
       p5.push();
@@ -524,16 +511,14 @@ export default class App extends Component<Clients> {
 
       if (this.gachaInstance.scrollAmount > 0) {
         // Display the GIF
-        if(this.gachaGIF){
-          p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
-        }
-        
+        p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
+
       } else {
         // Display the gachaMachine image
-        if(this.gachaMachine){
-          p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
-        }
-        
+
+        p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
+
+
 
         p5.push();
         p5.fill("black");
@@ -721,7 +706,7 @@ export default class App extends Component<Clients> {
             windowResized={this.windowResized}
             keyPressed={this.keyPressed}
             mouseClicked={this.mouseClicked}
-            
+
 
           />
         </div>

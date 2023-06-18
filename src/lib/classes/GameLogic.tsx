@@ -39,6 +39,7 @@ export default class GameLogic {
     collectedGems:number=0;
 
     playerSkin: p5.Image;
+    playerHat: p5.Image;
 
     p:p5;
     
@@ -46,7 +47,7 @@ export default class GameLogic {
         return Math.floor(Math.random() * max);
     }
 
-    constructor(userData:any|{userCoins:number,userGems:number,image:any},
+    constructor(userData:any|{userCoins:number,userGems:number,skin:any,hat:any},
                 gameDetails:any|{playerSizeModifier:number,gravityModifier:number,maxscrollSpeed:number},
                 generalAssets:any,levelGraphics:any[],levelLayouts:any,gameSounds:any[],
                 p:p5) {
@@ -58,7 +59,8 @@ export default class GameLogic {
 
         this.userCoins=userData.userCoins;
         this.userGems=userData.userGems;
-        this.playerSkin=userData.image;
+        this.playerSkin=userData.skin;
+        this.playerHat=userData.hat
         this.p=p;               
         
         let startLvlID = GameLogic.getRandomInt(this.levelLayouts.defaultLevelLayouts.length);
@@ -89,25 +91,17 @@ export default class GameLogic {
             jumps : 2,
 
             //Player defined
-            image : this.playerSkin},
+            skin : this.playerSkin,
+            hat: this.playerHat},
             this.p);
 
         this.bg=this.levelGraphics[0][21];
 
+        for (let i = 0; i < this.gameSounds.length; i++) {this.gameSounds[i].setVolume(0.1)};
+
         this.maxscrollSpeed=gameDetails.maxscrollSpeed;
 
     }
-
-    // resize(){
-    //     //Calculate new centering adjustment for the current level based on its size
-    //     this.xOffset = (this.p.windowWidth - this.level.levelWidth) / 2;
-    //     this.yOffset = (this.p.windowHeight - this.level.levelHeight) / 2;
-    //     //Adjust the player accordingly based on the size changes
-    //     this.player.movePlayer(this.xOffset-this.prevxOffset,this.yOffset-this.prevyOffset);
-    //     //Save the new value of the offset
-    //     this.prevxOffset=this.xOffset;
-    //     this.prevyOffset=this.yOffset;
-    // }
 
     handleGame(debug:boolean){
         if(this.gameStarted){
@@ -502,7 +496,6 @@ export default class GameLogic {
     keyInteractions(keyCode:number){
         if(keyCode){
             if(this.gameStarted==false){
-                this.gameSounds[0].setVolume(0.1);
                 this.gameSounds[0].play();
                 this.gameStarted=true;
             }
@@ -512,7 +505,6 @@ export default class GameLogic {
             case(87): // w
             case(32): //spacebar
                 this.player.isJumping=true;
-                this.gameSounds[1].setVolume(0.1);
                 this.gameSounds[1].play();
             break;
             case(80): // p
