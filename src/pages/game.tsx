@@ -185,13 +185,13 @@ function StartButton(){
     }
 
     return (
-        <a 
-            type="button"
-            onClick={startGame} 
+        <Link
+            href="/game" 
+            className="btn btn-primary button"
             
         >
             <img src = '/assets/START GAME.png'></img>    
-        </a>
+        </Link>
     );
 }
 function ProfileButton(){
