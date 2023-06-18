@@ -9,7 +9,8 @@ import path from 'path'
 
 type Data={ name:string }
 
-const sessionsPathFile = path.join("@","authentication","sessions.json")
+// const sessionsPathFile = path.join("@","authentication","sessions.json")
+const sessionsPathFile = 'src/authentication/sessions.json'
 
 export default async function handleLogin(req: NextApiRequest, res: NextApiResponse<Data>) {
     let dbo = new DBO().db;
