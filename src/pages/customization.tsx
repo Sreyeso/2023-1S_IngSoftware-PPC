@@ -19,7 +19,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 
 export async function getServerSideProps() {
   let DB: DBO | null = null; // Initialize DB variable with null
-  
+
   let isConnected = false;
   let userSkin = 0;
   let gachaObjects = [];
@@ -33,14 +33,14 @@ export async function getServerSideProps() {
 
     if (userData) {
       userSkin = userData.CurrentAspect;
-      gachaObjects= userData.GachaObjects;
+      gachaObjects = userData.GachaObjects;
       isConnected = true;
     } else {
       console.log("ERROR FETCHING USER DATA");
     }
 
     return {
-      props: { isConnected , userSkin, gachaObjects},
+      props: { isConnected, userSkin, gachaObjects },
     };
   } catch (e) {
     console.error(e);
@@ -69,31 +69,31 @@ export default class App extends Component<Clients> {
   playerHats: any[] = []; // Actual images of the users unlocked aspects
 
   commonSkin_names: string[] = ["default_ppc.png"
-                              , "love_letter.png"
-                              , "mistery.png"
-                              , "red_mushroom.png"
-                              , "orchid.png"
-                              , "pollo.png"
-                              , "tetris.png"
-                              , "third_love.png"];
+    , "love_letter.png"
+    , "mistery.png"
+    , "red_mushroom.png"
+    , "orchid.png"
+    , "pollo.png"
+    , "tetris.png"
+    , "third_love.png"];
   rareSkin_names: string[] = ["hamburguer.png"
-                            , "monster_ball.png"
-                            , "pizza.png"
-                            , "purple_toxic.png"
-                            , "rex.png"
-                            , "sushi.png"
-                            , "watermelon.png"];
+    , "monster_ball.png"
+    , "pizza.png"
+    , "purple_toxic.png"
+    , "rex.png"
+    , "sushi.png"
+    , "watermelon.png"];
   epicSkin_names: string[] = ["creeper.png"
-                            , "invaders.gif"
-                            , "japan_night.png"
-                            , "nyan_poptart.png"
-                            , "retrowave.png"
-                            , "sans.png"
-                            , "waka_ghost.gif"];
+    , "invaders.gif"
+    , "japan_night.png"
+    , "nyan_poptart.png"
+    , "retrowave.png"
+    , "sans.png"
+    , "waka_ghost.gif"];
   legendarySkin_names: string[] = ["hello_world.gif"
-                            , "hypnotic_blue.gif"
-                            , "rainbow.gif"
-                            , "waka_waka.gif"];
+    , "hypnotic_blue.gif"
+    , "rainbow.gif"
+    , "waka_waka.gif"];
 
   lastKeyPressTimeHat: number = 0;
   lastKeyPressTimeSkin: number = 0;
@@ -151,7 +151,25 @@ export default class App extends Component<Clients> {
 
     //Initial setup
     p5.createCanvas(0, 0).parent(canvasParentRef);
-    this.windowResized(p5);
+    //Window Size
+    const marginPercentage = 0.15;
+    const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
+    const canvasHeight = p5.windowHeight * (1 - 2 * marginPercentage);
+    p5.resizeCanvas(canvasWidth, canvasHeight);
+
+    // Calculate the positions of the three squares
+    this.middleSquareSize = 0.13 * canvasWidth;
+    this.outerSquareSize = this.middleSquareSize * 0.5;
+    this.spacing = 0.3 * this.middleSquareSize;
+    this.xOffset = 0.2 * canvasWidth;
+    this.yHats = canvasHeight / 2 - this.middleSquareSize * 0.8;
+    this.ySkins = canvasHeight / 2 + this.middleSquareSize * 0.8;
+
+    this.arrowSize = 40;
+
+    this.previewedPartX = 0.7 * canvasWidth;
+    this.previewedHatY = canvasHeight / 2 - this.middleSquareSize / 2;
+    this.previewedSkinY = canvasHeight / 2 + this.middleSquareSize / 2;
 
     // Set the starting index
     this.currentSkinIndex = this.skin_names.indexOf(this.props.userSkin[0]);
