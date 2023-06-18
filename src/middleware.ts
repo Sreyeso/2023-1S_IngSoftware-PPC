@@ -15,6 +15,7 @@ export function middleware(req: NextRequest){
     const cookie = req.cookies.get('session')?.value
 
     const sessionsJson = sessions as Record<string,string>
+    console.log(sessionsJson)
 
     const protectedRoutes = ['/game','/profile']
     
