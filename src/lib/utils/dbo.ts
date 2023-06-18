@@ -28,7 +28,7 @@ export default class DBO {
  */
   async end() {
     await this.client.close();
-    //console.log('disconnected');
+    console.log('disconnected');
   }
   /**
  *  Initialize the DB connection
@@ -36,7 +36,7 @@ export default class DBO {
  */
   async init() {
     await this.client.connect();
-    //console.log('connected');
+    console.log('connected');
     //this.db = this.client.db("PolloRunner");
     //this.test=this.db.collections();
     //this.Users = new Users(this.db);

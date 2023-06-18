@@ -18,6 +18,43 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
   ssr: false    //Disable server side rendering
 });
 
+export async function getServerSideProps() {
+  let DB: DBO | null = null; // Initialize DB variable with null
+
+  let isConnected = false;
+  let userCoins = 0;
+  let userGems = 0;
+
+  try {
+    // Database object
+    DB = new DBO();
+    // User data object
+    const UDO = new UserModel(DB.db);
+    let userData = await UDO.getUser("bingus");
+
+    if (userData) {
+      userCoins = userData.CoinAmount;
+      userGems = userData.GemAmount;
+      isConnected = true;
+    } else {
+      console.log("ERROR FETCHING USER DATA");
+    }
+
+    return {
+      props: { isConnected, userCoins, userGems },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { isConnected },
+    };
+  } finally {
+    if (DB) {
+      DB.end();
+    }
+  }
+}
+
 export default class App extends Component<Clients> {
 
   bgShadeOfGray: number = 200; //Background color
@@ -58,10 +95,32 @@ export default class App extends Component<Clients> {
     ...this.legendarySkin_names
   ];
 
-  commonHat_names: string[] = [];
-  rareHat_names: string[] = [];
-  epicHat_names: string[] = [];
-  legendaryHat_names: string[] = [];
+  commonHat_names: string[] = ["default_ppc.png"
+    , "love_letter.png"
+    , "mistery.png"
+    , "red_mushroom.png"
+    , "orchid.png"
+    , "pollo.png"
+    , "tetris.png"
+    , "third_love.png"];
+  rareHat_names: string[] = ["hamburguer.png"
+    , "monster_ball.png"
+    , "pizza.png"
+    , "purple_toxic.png"
+    , "rex.png"
+    , "sushi.png"
+    , "watermelon.png"];
+  epicHat_names: string[] = ["creeper.png"
+    , "invaders.gif"
+    , "japan_night.png"
+    , "nyan_poptart.png"
+    , "retrowave.png"
+    , "sans.png"
+    , "waka_ghost.gif"];
+  legendaryHat_names: string[] = ["hello_world.gif"
+    , "hypnotic_blue.gif"
+    , "rainbow.gif"
+    , "waka_waka.gif"];
 
   allHat_names: string[] = [
     ...this.commonHat_names,
@@ -109,13 +168,23 @@ export default class App extends Component<Clients> {
   gachaMode: string = "";
   keySelector: string = "";
 
+
+  userCoins: number = 0;
+  userGems: number = 0;
+  gemPrice: number = 0;
+  coinPrice: number = 0;
+
+
   enter: boolean = false;
   confirmation: boolean = false;
+  error: boolean = false;
 
   gachaInstance: any;
 
   preload = (p5: any) => {
     // Load graphical assets
+    this.userCoins = this.props.userCoins;
+    this.userGems = this.props.userGems;
     this.gachaMachine = p5.loadImage('/sprites/generalAssets/gachaMachine.png');
     this.gachaGIF = p5.loadImage('/sprites/generalAssets/gachaGIF.gif');
     this.unknown = p5.loadImage('/sprites/generalAssets/unknown.png');
@@ -127,32 +196,34 @@ export default class App extends Component<Clients> {
   };
 
   windowResized = (p5: any) => {
-    //Window Size
-    const marginPercentage = 0.15;
-    const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
-    const canvasHeight = p5.windowHeight * (1 - 2 * marginPercentage);
-    p5.resizeCanvas(canvasWidth, canvasHeight);
+    if (!this.confirmation) {
+      //Window Size
+      const marginPercentage = 0.15;
+      const canvasWidth = p5.windowWidth * (1 - 2 * marginPercentage);
+      const canvasHeight = p5.windowHeight * (1 - 2 * marginPercentage);
+      p5.resizeCanvas(canvasWidth, canvasHeight);
 
-    //Position and sizing of things
-    this.squareSize = 0.05 * p5.width;
-    this.spacing = 0.3 * this.squareSize;
-    this.startY = this.squareSize / 2 + this.spacing;
-    this.imageSize = this.squareSize * 4;
-    this.previewSquareSize = this.imageSize * 0.8;
-    this.imgX = p5.width / 2;
-    this.imgY = this.prevSquareSkinY = this.prevSquareHatY = p5.height * 0.35;
-    this.selSquareAX = this.imgX - this.squareSize;
-    this.selSquareAY = this.imgY + this.imageSize * 0.7;
-    this.selSquareBX = this.imgX + this.squareSize;
-    this.selSquareBY = this.imgY + this.imageSize * 0.7;
-    this.prevSquareSkinX = p5.width * 0.25;
-    this.prevSquareHatX = p5.width * 0.75;
-    this.confirmTextY = p5.height * 0.8;
+      //Position and sizing of things
+      this.squareSize = 0.05 * p5.width;
+      this.spacing = 0.3 * this.squareSize;
+      this.startY = this.squareSize / 2 + this.spacing;
+      this.imageSize = this.squareSize * 4;
+      this.previewSquareSize = this.imageSize * 0.8;
+      this.imgX = p5.width / 2;
+      this.imgY = this.prevSquareSkinY = this.prevSquareHatY = p5.height * 0.35;
+      this.selSquareAX = this.imgX - this.squareSize;
+      this.selSquareAY = this.imgY + this.imageSize * 0.7;
+      this.selSquareBX = this.imgX + this.squareSize;
+      this.selSquareBY = this.imgY + this.imageSize * 0.7;
+      this.prevSquareSkinX = p5.width * 0.25;
+      this.prevSquareHatX = p5.width * 0.75;
+      this.confirmTextY = p5.height * 0.8;
 
-    p5.textSize(this.squareSize  * 0.5);
+      p5.textSize(this.squareSize * 0.5);
+    }
   };
 
-  shuffleArray(array:any[]) {
+  shuffleArray(array: any[]) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -168,7 +239,7 @@ export default class App extends Component<Clients> {
     p5.textAlign(p5.CENTER, p5.CENTER);
     this.windowResized(p5);
 
-    const shuffledArray= this.allSkinImages.slice(); //copy values and not reference
+    const shuffledArray = this.allSkinImages.slice(); //copy values and not reference
     this.shuffleArray(shuffledArray);
 
     // Load the randomized skin images into the leftArray
@@ -177,16 +248,13 @@ export default class App extends Component<Clients> {
     //Pending
     this.allHat_names = this.allSkin_names.slice();
     this.allHatImages = this.allSkinImages.slice();
-    this.rightArray=this.leftArray.slice();
+    this.rightArray = this.leftArray.slice();
 
     this.previewedSkin = this.unknown;
     this.previewedHat = this.unknown;
     this.selector = "skin";
     this.gachaMode = "normal";
     this.keySelector = "unlock";
-
-    //TESTING
-    //this.gachaInstance = new Gacha(p5,this.allSkinImages.splice(0,10),[0.4,0.2,0.2]);
 
   };
 
@@ -229,7 +297,7 @@ export default class App extends Component<Clients> {
         const skinName = this.allSkin_names[this.allSkinImages.indexOf(skin)];
 
         let rarity: string;
-  
+
         if (this.commonSkin_names.includes(skinName)) {
           rarity = "common";
         } else if (this.rareSkin_names.includes(skinName)) {
@@ -273,7 +341,7 @@ export default class App extends Component<Clients> {
         const hatName = this.allHat_names[this.allHatImages.indexOf(hat)];
 
         let rarity: string;
-  
+
         if (this.commonSkin_names.includes(hatName)) {
           rarity = "common";
         } else if (this.rareSkin_names.includes(hatName)) {
@@ -396,46 +464,49 @@ export default class App extends Component<Clients> {
         p5.text("Haz click >\n (previsualizar)", this.prevSquareHatX, this.selSquareAY);
       }
 
-      p5.text(
-        "Desbloquear: "
-        + ((this.selector == "skin") ? "SKINS" : "SOMBREROS")
-        + "\nModo: "
-        + ((this.gachaMode == "special") ? "ESPECIAL\n" : "NORMAL\n")
-        + ((!this.enter) ? "Enter para confirmar" : "Seguro?"),
-        this.imgX, this.confirmTextY);
+      this.gemPrice = (this.gachaMode == "special") ? 30 : 15;
+      this.coinPrice = (this.gachaMode == "special") ? 60 : 15;
+
+      if (!this.error) {
+        p5.text(
+          "Desbloquear: "
+          + ((this.selector == "skin") ? "SKINS" : "SOMBREROS")
+          + "\nModo: "
+          + ((this.gachaMode == "special") ? "ESPECIAL" : "NORMAL") + ` ${this.gemPrice} gemas (${this.userGems}) ${this.coinPrice} monedas (${this.userCoins})` + "\n"
+          + ((!this.enter) ? "Enter para confirmar" : "Seguro?"),
+          this.imgX, this.confirmTextY);
+      } else {
+        p5.text("Recursos insuficientes!",
+          this.imgX, this.confirmTextY);
+      }
+
 
     }
     else {
 
-      if (!this.enter) {
+      this.gachaInstance.drawArray(p5.height * 0.7);
+      this.gachaInstance.scroll();
+
+      if (this.gachaInstance.scrollAmount > 0) {
+        // Display the GIF
+        p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
+      } else {
         // Display the gachaMachine image
         p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
 
-      } else {
-        if(this.gachaInstance.scrollAmount>0){
-            // Display the GIF
-            p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
-        }else{
-            // Display the gachaMachine image
-            p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
-
-            //CODE FOR SKIN ADQUISITION
-
+        p5.push();
+        p5.fill("black");
+        p5.text(
+          "Has desbloqueado "
+          + ((this.selector == "skin") ? this.allSkin_names[this.allSkinImages.indexOf(this.gachaInstance.selectedValue)] : this.allHat_names[this.allHatImages.indexOf(this.gachaInstance.selectedValue)]),
+          this.imgX, p5.height * 0.9);
+        p5.pop();
+        if (!this.enter) {
+          p5.text(
+            "Enter para continuar...",
+            this.imgX, p5.height * 0.95);
         }
-        
       }
-
-      // Print the array horizontally with values inside squares
-      const startX = 47;
-      const y = p5.height * 0.7;
-
-      this.gachaInstance.drawArray(startX, y);
-      this.gachaInstance.drawIndicator(p5.width / 2, y);
-      this.gachaInstance.scroll();
-
-      p5.text(
-        this.gachaInstance.array.indexOf(this.gachaInstance.selectedValue) + " " + this.gachaInstance.array.indexOf(this.gachaInstance.indicatorValue),
-        this.imgX, p5.height * 0.9);
 
     }
 
@@ -473,40 +544,101 @@ export default class App extends Component<Clients> {
         if (!this.enter) {
           this.enter = true;
         } else {
-          this.enter = false;
-          this.confirmation = true;
+          if (this.userCoins >= this.coinPrice && this.userGems >= this.gemPrice) {
+            const costUser = () => {
+              fetch("/api/GachaCostReq", {
+                method: "PUT",
+                body: JSON.stringify({
+                  "coinCost": -this.coinPrice,
+                  "gemCost": -this.gemPrice
+                }),
+                headers: {
+                  "content-type": "application/json",
+                },
+              }).catch((e) => console.log(e));
+            };
+            costUser();
 
-          //missing code for special and normal gacha pulls
+            this.confirmation = true;
+            this.enter = false;
 
-          const nc:number = this.commonSkin_names.length;
-          const nr:number = this.rareSkin_names.length;
-          const ne:number = this.epicSkin_names.length;
-          const nl:number = this.legendarySkin_names.length;
+            let finalArray;
+            let commonElements;
+            let rareElements;
+            let epicElements;
+            let legendaryElements;
 
-          const commonElements : p5.Image[] = [...this.allSkinImages.slice(0,nc)];
-          const rareElements : p5.Image[]= [...this.allSkinImages.slice(nc,nc+nr)];
-          const epicElements: p5.Image[] = [...this.allSkinImages.slice(nc+nr,nc+nr+ne)];
-          const legendaryElements : p5.Image[]= [...this.allSkinImages.slice(nc+nr+ne,nc+nr+ne+nl)];
+            if (this.selector == "skin") {
 
-          this.shuffleArray(commonElements);
-          this.shuffleArray(rareElements);
-          this.shuffleArray(epicElements);
-          this.shuffleArray(legendaryElements);
+              const nc: number = this.commonSkin_names.length;
+              const nr: number = this.rareSkin_names.length;
+              const ne: number = this.epicSkin_names.length;
+              const nl: number = this.legendarySkin_names.length;
 
-          const finalArray = [...commonElements.slice(0, 5), ...rareElements.slice(0, 4), ...epicElements.slice(0, 2), ...legendaryElements.slice(0, 1)];
+              commonElements = [...this.allSkinImages.slice(0, nc)];
+              rareElements = [...this.allSkinImages.slice(nc, nc + nr)];
+              epicElements = [...this.allSkinImages.slice(nc + nr, nc + nr + ne)];
+              legendaryElements = [...this.allSkinImages.slice(nc + nr + ne, nc + nr + ne + nl)];
 
-          this.gachaInstance = new Gacha(p5,finalArray, [0.4, 0.3, 0.2]);
+            } else {
+              const nc: number = this.commonHat_names.length;
+              const nr: number = this.rareHat_names.length;
+              const ne: number = this.epicHat_names.length;
+              const nl: number = this.legendaryHat_names.length;
+
+              commonElements = [...this.allHatImages.slice(0, nc)];
+              rareElements = [...this.allHatImages.slice(nc, nc + nr)];
+              epicElements = [...this.allHatImages.slice(nc + nr, nc + nr + ne)];
+              legendaryElements = [...this.allHatImages.slice(nc + nr + ne, nc + nr + ne + nl)];
+
+            }
+
+            this.shuffleArray(commonElements);
+            this.shuffleArray(rareElements);
+            this.shuffleArray(epicElements);
+            this.shuffleArray(legendaryElements);
+
+            if (this.gachaMode == "special") {
+              finalArray = [...commonElements.slice(0, 3), ...rareElements.slice(0, 3), ...epicElements.slice(0, 3), ...legendaryElements.slice(0, 3)];
+              this.gachaInstance = new Gacha(p5, finalArray, [3, 3, 3, 3], [0.2, 0.3, 0.3], p5.width);
+            } else {
+              finalArray = [...commonElements.slice(0, 5), ...rareElements.slice(0, 4), ...epicElements.slice(0, 2), ...legendaryElements.slice(0, 1)];
+              this.gachaInstance = new Gacha(p5, finalArray, [5, 4, 2, 1], [0.4, 0.3, 0.2], p5.width);
+            }
+
+            this.gachaInstance.generateRandomChoice();
+
+          } else {
+            this.error = true;
+          }
         }
       }
 
       if (p5.keyCode === 27) {
         this.enter = false;
+        this.error = false;
       }
-    }
-    else {
+    } else {
       if (p5.keyCode === p5.ENTER) {
-        this.enter = true;
-        this.gachaInstance.generateRandomChoice();
+        if (this.gachaInstance.scrollAmount < 0) {
+          this.enter = true;
+
+          //CODE FOR SKIN ADQUISITION
+          const GetSkin = () => {
+            fetch("/api/GachaAcquireReq", {
+              method: "PUT",
+              body: JSON.stringify({
+                "object": ((this.selector == "skin") ? this.allSkin_names[this.allSkinImages.indexOf(this.gachaInstance.selectedValue)] : this.allHat_names[this.allHatImages.indexOf(this.gachaInstance.selectedValue)]),
+                "type": this.selector,
+              }),
+              headers: {
+                "content-type": "application/json",
+              },
+            }).catch((e) => console.log(e));
+          };
+          GetSkin();
+          setTimeout(() => { location.reload(); }, 500);
+        }
       }
     }
 

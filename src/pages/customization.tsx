@@ -18,27 +18,38 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
 });
 
 export async function getServerSideProps() {
+  let DB: DBO | null = null; // Initialize DB variable with null
+  
+  let isConnected = false;
+  let userSkin = 0;
+  let gachaObjects = [];
+
   try {
-    //Database object
-    const DB: DBO = new DBO();
-    //User data object
+    // Database object
+    DB = new DBO();
+    // User data object
     const UDO = new UserModel(DB.db);
     let userData = await UDO.getUser("bingus");
-    //let userSkin=await 
-    //retorno Objid, id in array, name ...
 
-    let userSkin: number = userData.CurrentAspect;
-    let unlockedAspects: string[] = userData.GachaObjects;
-
-    DB.end();
-
-    return {
-      props: { isConnected: true, userSkin: userSkin, gachaObjects: unlockedAspects },
+    if (userData) {
+      userSkin = userData.CurrentAspect;
+      gachaObjects= userData.GachaObjects;
+      isConnected = true;
+    } else {
+      console.log("ERROR FETCHING USER DATA");
     }
-  } catch (e) {
-    console.error(e)
+
     return {
-      props: { isConnected: false },
+      props: { isConnected , userSkin, gachaObjects},
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { isConnected },
+    };
+  } finally {
+    if (DB) {
+      DB.end();
     }
   }
 }
@@ -454,7 +465,7 @@ export default class App extends Component<Clients> {
           this.confirm = false;
           // Set the starting index
           this.currentSkinIndex = this.skin_names.indexOf(this.props.userSkin[0]);
-          this.currentHatIndex = this.skin_names.indexOf(this.props.userSkin[1]);
+          this.currentHatIndex = this.hat_names.indexOf(this.props.userSkin[1]);
 
           this.currentHat = this.playerHats[this.currentHatIndex];
           this.currentSkin = this.playerSkins[this.currentSkinIndex];

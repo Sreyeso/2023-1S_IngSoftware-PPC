@@ -26,33 +26,42 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {
 //Server prop function (backend)
 
 export async function getServerSideProps() {
+  let DB: DBO | null = null; // Initialize DB variable with null
+  
+  let isConnected = false;
+  let userCoins = 0;
+  let userGems = 0;
+  let userSkin = 0;
+  let maxScore = 0;
+
   try {
-    //Database object
-    const DB:DBO=new DBO();
-    //User data object
-    const UDO=new UserModel(DB.db);
-    let userData=await UDO.getUser("bingus");
-    //let userSkin=await 
-    //retorno Objid, id in array, name ...
-    let userCoins:number =userData.CoinAmount;
-    let userGems:number=userData.GemAmount;
-    let userSkin:number =userData.CurrentAspect;
-    let maxScore:number =userData.HiScore;
-    //added connection close, but it lacks proper handling of errors and conditions
-    if(userData){
-      //DB.end();
-    }
-    else{
-      console.log("ERROR FETHCING USER DATA")
+    // Database object
+    DB = new DBO();
+    // User data object
+    const UDO = new UserModel(DB.db);
+    let userData = await UDO.getUser("bingus");
+
+    if (userData) {
+      userCoins = userData.CoinAmount;
+      userGems = userData.GemAmount;
+      userSkin = userData.CurrentAspect;
+      maxScore = userData.HiScore;
+      isConnected = true;
+    } else {
+      console.log("ERROR FETCHING USER DATA");
     }
 
     return {
-      props: { isConnected: true, userCoins:userCoins, userGems:userGems ,userSkin:userSkin,maxScore:maxScore},
-    }
+      props: { isConnected, userCoins, userGems, userSkin, maxScore },
+    };
   } catch (e) {
-    console.error(e)
+    console.error(e);
     return {
-      props: { isConnected: false },
+      props: { isConnected },
+    };
+  } finally {
+    if (DB) {
+      DB.end();
     }
   }
 }

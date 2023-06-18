@@ -2,15 +2,15 @@ import DBO from '@/lib/utils/dbo';
 import UserModel from '@/lib/models/user';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export async function connection(body:any){
+export async function connection(body: any) {
   let DB: DBO | null = null; // Initialize DB variable with null
+
   try {
     DB = new DBO();
-    const UDO=new UserModel(DB.db);
+    const UDO = new UserModel(DB.db);
 
-    await UDO.addCoins("bingus",parseInt(body.coins));
-    await UDO.addGems("bingus",parseInt(body.gems));
-    await UDO.setScore("bingus",parseInt(body.score));
+    await UDO.addCoins("bingus",parseInt(body.coinCost));
+    await UDO.addGems("bingus",parseInt(body.gemCost));
 
     return Promise.resolve();
   } catch (e) {

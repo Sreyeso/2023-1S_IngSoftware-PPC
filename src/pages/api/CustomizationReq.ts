@@ -2,52 +2,49 @@ import DBO from '@/lib/utils/dbo';
 import UserModel from '@/lib/models/user';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export async function connection(body:any){
+export async function connection(body: any) {
+  let DB: DBO | null = null; // Initialize DB variable with null
+
   try {
-    //Database object
-    const DB:DBO=new DBO();
+    DB = new DBO();
+    const UDO = new UserModel(DB.db);
 
-    //User data object
-    const UDO=new UserModel(DB.db);
-    await UDO.setAspect("bingus",body.skin,body.hat);
+    await UDO.setAspect("bingus", body.skin, body.hat);
 
-    DB.end();
-
-    return Promise.resolve(); // Resolve the promise when the operations are completed
+    return Promise.resolve();
   } catch (e) {
     console.error(e);
-    return Promise.reject(e); // Reject the promise if an error occurs
-    //return null;
+    return Promise.reject(e);
+  } finally {
+    if (DB !== null) {
+      DB.end(); // Await the closing of the database connection
+    }
   }
-  
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method;
   console.log(req.body);
-  const body = req.body;  
+  const body = req.body;
+  let statusCode = 200;
+
   switch (requestMethod) {
     case 'POST':
-      res.status(200).json({ message: `You submitted the following data: ss` })
+      res.status(statusCode).json({ message: 'You submitted the following data: ss' });
       break;
     case 'PUT':
-      //const _DB=connection(body);
-      connection(body);
-      res.status(200).json({ message: `Entry successfully updated` })
-      /*
-      //added connection close, but it lacks proper handling of errors and conditions
-      if(res.statusCode=200){
-        _DB.end();
+      try {
+        await connection(body);
+        res.status(statusCode).json({ message: 'Entry successfully updated' });
+      } catch (error) {
+        console.error(error);
+        statusCode = 500; // Internal Server Error
+        res.status(statusCode).json({ message: 'An error occurred' });
       }
-      else{
-        console.log("ERROR FETHCING USER DATA")
-      }
-      */
-
-    // handle other HTTP methods
       break;
     default:
-      res.status(401).json({ message: 'Api gaming'})
+      statusCode = 401; // Unauthorized
+      res.status(statusCode).json({ message: 'Api gaming' });
       break;
   }
 }

@@ -14,19 +14,26 @@ export default class Gacha {
     scrollVelocity: number;
     selectedIndex: any;
     indicatorValue: any;
+    commonCuantities :any[];
     rarityChances: any[];
 
-    constructor(p5:any,array: any[], rarityChances: any[]) {
+    width:number;
+    startX:number;
+
+    constructor(p5:any,array: any[], commonCuantities:any[], rarityChances: any[],width:number) {
         this.p5=p5;
         this.array = array;
+        this.commonCuantities = commonCuantities;
         this.rarityChances = rarityChances;
-        this.squareSize = 130;
         this.randomNumber = 0;
         this.selectedValue = 0;
         this.maxScrollAmount = 0;
         this.scrollAmount = 0;
         this.scrollCount = 0;
         this.scrollVelocity = 0;
+        this.width=width;
+        this.squareSize=Math.floor(this.width/100)*10;
+        this.startX=this.width/2 - this.squareSize*4.5;
         this.updateIndicatorValue();
     }
 
@@ -39,9 +46,9 @@ export default class Gacha {
         const epicRarityPercentage = this.rarityChances[2];
 
         // Calculate the cumulative amounts
-        const commonAmount = Math.floor(this.array.length * commonRarityPercentage);
-        const rareAmount = commonAmount + Math.floor(this.array.length * rareRarityPercentage);
-        const epicAmount = rareAmount + Math.floor(this.array.length * epicRarityPercentage);
+        const commonAmount = this.commonCuantities[0];
+        const rareAmount = commonAmount+this.commonCuantities[1];
+        const epicAmount = rareAmount+this.commonCuantities[2];
 
         // Determine the selected value based on the random number
         if (this.randomNumber < commonRarityPercentage) {
@@ -54,7 +61,7 @@ export default class Gacha {
             this.selectedValue = this.array[Math.floor(epicAmount + Math.random() * (this.array.length - epicAmount))];
         }
 
-        let scrollDistance = (this.array.indexOf(this.selectedValue) - this.selectedIndex) * this.squareSize;
+        let scrollDistance = (this.array.indexOf(this.selectedValue) - 5) * this.squareSize;
         if (scrollDistance < 0) {
             scrollDistance += this.array.length * this.squareSize;
         }
@@ -65,9 +72,9 @@ export default class Gacha {
 
     }
 
-    drawArray(startX: number, y: number) {
+    drawArray(y: number) {
         for (let i = 0; i < this.array.length; i++) {
-            const x = startX + i * (this.squareSize) + this.scrollCount;
+            const x = this.startX + i * (this.squareSize) + this.scrollCount;
             const value = this.array[i];
 
             this.p5.image(value, x, y,this.squareSize,this.squareSize);
@@ -82,12 +89,11 @@ export default class Gacha {
             this.p5.pop();
         }
 
+        this.p5.fill("red");
+        this.p5.rect(this.width/2, y, 5, this.squareSize * 1.2);
+
     }
 
-    drawIndicator(x: number, y: number) {
-        this.p5.fill("red");
-        this.p5.rect(x, y, 5, this.squareSize * 1.2);
-    }
 
     updateScrollVelocity() {    
 
@@ -119,7 +125,7 @@ export default class Gacha {
     }
 
     updateIndicatorValue() {
-        this.selectedIndex = Math.floor(this.array.length / 2)-2;
+        this.selectedIndex = 5;
         this.indicatorValue = this.array[this.selectedIndex];
     }
 
