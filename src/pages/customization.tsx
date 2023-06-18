@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
+import Link from 'next/link';
 
 //Class imports
 import DBO from "@/lib/utils/dbo";
@@ -524,7 +525,7 @@ export default class App extends Component<Clients> {
   render() {
     return (
       <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
           <Sketch
             preload={this.preload}
             setup={this.setup}
@@ -534,9 +535,11 @@ export default class App extends Component<Clients> {
             
           />
         </div>
-        <div>
-          <StartButton/>
-        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
+                       <StartButton/>
+                      <ProfileButton/>
+                      <RankingButton/>
+        </div>          
       </div>
     );
   };
@@ -556,20 +559,19 @@ function StartButton(){
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        open('/src/pages/game')
+        open('/game');
     }
 
     return (
-        <button 
-            type="button"
-            onClick={startGame} 
+        <Link
+            href="/game" 
+            className="btn btn-primary button"
             
         >
-            <img src = '/buttons/start.png'></img>    
-        </button>
+            <img src = '/assets/START GAME.png'></img>    
+        </Link>
     );
 }
-/*
 function ProfileButton(){
     //Cuando se presiona el botón, se redirecciona al perfil del jugador
 
@@ -579,43 +581,18 @@ function ProfileButton(){
 
     async function openProfile(){
         showMessageScreen({name: "Entrando al perfil del jugador..."})
-        open('http://localhost:3000/sketch')
+        open('/customization')
     }
     
     return (
-        <button 
-            type="button"
-            onClick={openProfile} 
-            className={styles.button}
+        <Link 
+            href="/customization" 
+            className="btn btn-primary button"
         >
-            <img src = {profileButton}></img>    
-        </button>
+            <img src = '/assets/PROFILE.png'></img>    
+        </Link>
     );
 }
-
-function RankingButton(){
-    //Cuando se presiona el botón, se redirecciona al juego
-
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }
-
-    async function openRanking(){
-        showMessageScreen({name: "Entrando a el Ranking..."})
-        open('http://localhost:3000/sketch')
-    }
-    
-    return (
-        <button 
-            type="button"
-            onClick={openRanking} 
-            className={styles.button}
-        >
-            <img src = {rankingButton}></img>    
-        </button>
-    );
-}
-
 function GachaButton(){
     //Cuando se presiona el botón, se redirecciona al juego
 
@@ -625,17 +602,37 @@ function GachaButton(){
 
     async function openGacha(){
         showMessageScreen({name: "Entrando al GACHA..."})
-        open('http://localhost:3000/gacha')
+        open('/gacha')
     }
     
     return (
-        <button 
-            type="button"
-            onClick={openGacha} 
-            className={styles.button}
+        <Link 
+            href="/gacha" 
+            className="btn btn-primary button"
         >
-            <img src = {gachaButton}></img>    
-        </button>
+            <img src = '/assets/GACHA.png'></img>    
+        </Link>
     );
-}*/
+}
+function RankingButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openRanking(){
+        showMessageScreen({name: "Entrando a el Ranking..."})
+        open('/sketch')
+    }
+    
+    return (
+        <Link 
+            href="/rankings" 
+            className="btn btn-primary button"
+        >
+            <img src = '/assets/RANKINGS.png'></img>    
+        </Link>
+    );
+}
 

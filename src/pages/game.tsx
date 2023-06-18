@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
 import Link from 'next/link';
+import Image from 'next/image';
 //Class imports
 import GameLogic from "../lib/classes/GameLogic";
 import DBO from "@/lib/utils/dbo";
@@ -191,7 +192,7 @@ function StartButton(){
             className="btn btn-primary button"
             
         >
-            <img src = '/assets/START GAME.png'></img>    
+            <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
         </Link>
     );
 }
