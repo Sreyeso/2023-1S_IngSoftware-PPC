@@ -697,11 +697,11 @@ export default class App extends Component<Clients> {
           <Sketch
             preload={this.preload}
             setup={this.setup}
+            draw={this.draw}
             windowResized={this.windowResized}
-
             keyPressed={this.keyPressed}
             mouseClicked={this.mouseClicked}
-            draw={this.draw}
+            
 
           />
         </div>
