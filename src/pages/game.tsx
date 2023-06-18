@@ -181,7 +181,7 @@ function StartButton(){
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        open('/game')
+        navigator('/game')
     }
 
     return (
@@ -207,11 +207,10 @@ function ProfileButton(){
     }
     
     return (
-        <button 
-            type="button"
-            onClick={openProfile} 
+        <link 
+            href="/signup" className="btn btn-primary"
         >
             <img src = '/assets/PROFILE.png'></img>    
-        </button>
+        </link>
     );
 }
