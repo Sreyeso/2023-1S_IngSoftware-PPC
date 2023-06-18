@@ -60,7 +60,8 @@ function StartButton(){
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        open('http://localhost:3000/sketch')
+        window.open('sketch')
+        window.close()
     }
 
     return (
@@ -83,7 +84,8 @@ function ProfileButton(){
 
     async function openProfile(){
         showMessageScreen({name: "Entrando al perfil del jugador..."})
-        open('http://localhost:3000/sketch')
+        window.open('sketch')
+        window.close()
     }
     
     return (
@@ -106,7 +108,8 @@ function RankingButton(){
 
     async function openRanking(){
         showMessageScreen({name: "Entrando a el Ranking..."})
-        open('http://localhost:3000/sketch')
+        window.open('sketch')
+        window.close()
     }
     
     return (
@@ -129,7 +132,8 @@ function GachaButton(){
 
     async function openGacha(){
         showMessageScreen({name: "Entrando al GACHA..."})
-        open('http://localhost:3000/gacha')
+        window.open('gacha')
+        window.close()
     }
     
     return (
