@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sessions from'@/authentication/sessions.json'
 
+/*
+    El propósito de este middleware es verificar si el usuario está logueado
+    Si el usuario está logueado, en su navegador debe haber una cookie.
+    En este middleware se detecta si existe esa cookie, si el valor de dicha
+    cookie efectivamente está contenido en sessions.json (Que es el archivo
+    que guarda las sesiones existentes de los usuarios) y si hace falta o no
+    redireccionar a una u otra página en consecuencia
+*/
+
 export function middleware(req: NextRequest){
     console.log("request: ", req.nextUrl.pathname);
 
@@ -10,14 +19,15 @@ export function middleware(req: NextRequest){
 
     const protectedRoutes = ['/sketch','/profile']
     
-    if (verifyPathname(protectedRoutes, req)){
-        if(!cookie || !sessionsJson[cookie]){
+    if (verifyPathname(protectedRoutes, req) && (!cookie || !sessionsJson[cookie])){
+        //if(!cookie || !sessionsJson[cookie]){ //Esto significa que el usuario no está autenticado
             const response = NextResponse.redirect(new URL('/login', req.url));
             response.cookies.delete('session');
             return response;
-        }
+        //}
     }
-    else if(verifyPathname(['/join_ppc','/login'],req) && cookie && sessionsJson[cookie]){
+    else if(verifyPathname(['/join_ppc','/login','/restore_password'],req) && cookie && sessionsJson[cookie]){
+        //El usuario está logueado, por lo que es necesario sacarlo de estas páginas
         const response = NextResponse.redirect(new URL('/sketch', req.url));
         return response;
     }
