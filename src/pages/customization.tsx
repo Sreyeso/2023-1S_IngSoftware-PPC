@@ -495,7 +495,7 @@ export default class App extends Component<Clients> {
           CustomizeUser();
           this.dripMsg = this.randomDripMessage();
           // Call location.reload() after the delay
-          setTimeout(() => { location.reload(); }, 500);
+          setTimeout(() => { location.reload(); }, 1000);
           this.done = true;
         }
       }

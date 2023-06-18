@@ -637,7 +637,7 @@ export default class App extends Component<Clients> {
             }).catch((e) => console.log(e));
           };
           GetSkin();
-          setTimeout(() => { location.reload(); }, 500);
+          setTimeout(() => { location.reload(); }, 1000);
         }
       }
     }

@@ -120,7 +120,6 @@ export default class App extends Component<Clients> {
     draw = (p5:any) => {
         p5.background('white');
         this.gameFinished=this.game.handleGame(this.debug);
-
     };
 
     keyPressed = (p5:any) => {
@@ -141,7 +140,7 @@ export default class App extends Component<Clients> {
           }).catch((e) => console.log(e));
         };
         updateUser();
-        setTimeout(() => { location.reload(); }, 500);
+        setTimeout(() => { location.reload(); }, 1000);
       }
     }
 
