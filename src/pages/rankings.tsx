@@ -12,6 +12,7 @@ import UserModel from "@/lib/models/user";
     let userGems = 0;
     let userSkin = 0;
     let maxScore = 0;
+    let region = "Base";
   
     try {
       // Database object
@@ -28,12 +29,13 @@ import UserModel from "@/lib/models/user";
         userSkin = userData.CurrentAspect[0];
         maxScore = userData.HiScore;
         isConnected = true;
+        region = userData.Region;
       } else {
         console.log("ERROR FETCHING USER DATA");
       }
   
       return {
-        props: { isConnected, userCoins, userGems, userSkin, maxScore, userName },
+        props: { isConnected, userCoins, userGems, userSkin, maxScore, userName, region },
       };
     } catch (e) {
       console.error(e);
