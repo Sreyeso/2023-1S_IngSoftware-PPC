@@ -67,16 +67,16 @@ export async function getServerSideProps(ctx: { req: any; }) {
     <table>
         <tbody>
         <tr>
-            <th>{this.props.AllCoins}{this.props.AllGems}{this.props.maxScore}</th>
+            <th>Estadísticas</th>
         </tr>
         <tr>
-            <td>Anom</td>
+            <td>Monedas obtenidas por todos los jugadores: {this.props.AllCoins}</td>
         </tr>
         <tr>
-            <td>Megha</td>
+            <td>Gemas obtenidas por todos los jugadores: {this.props.AllGems}</td>
         </tr>
         <tr>
-            <td>Subham</td>
+            <td>Puntuación máxima personal: {this.props.maxScore}</td>
         </tr>
         </tbody>
     </table>
