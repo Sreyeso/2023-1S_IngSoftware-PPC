@@ -3,7 +3,7 @@ import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import Clients from "@/lib/models/user";
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
   
   let isConnected = false;
@@ -19,7 +19,10 @@ export async function getServerSideProps() {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
-    let userData = await UDO.getUser("bingustest");
+    // Get logged user
+    const {req} = ctx;
+    const userName:string= req.headers.user;
+    let userData = await UDO.getUser(userName);
     let objectCoins = await UDO.getAllCoins()
     let objectGems = await UDO.getAllGems();
     if (userData) {
@@ -41,7 +44,7 @@ export async function getServerSideProps() {
     }
 
     return {
-      props: { isConnected, userCoins, userGems, userSkin, maxScore, AllCoins , AllGems},
+      props: { isConnected, userName, userCoins, userGems, userSkin, maxScore, AllCoins , AllGems},
     };
   } catch (e) {
     console.error(e);
@@ -64,7 +67,7 @@ export async function getServerSideProps() {
     <table>
         <tbody>
         <tr>
-            <th>{this.props.AllCoins}{this.props.AllGems}</th>
+            <th>{this.props.AllCoins}{this.props.AllGems}{this.props.maxScore}</th>
         </tr>
         <tr>
             <td>Anom</td>

@@ -16,6 +16,7 @@ export interface Clients extends Document {
 export default class UserModel{
   userName:string="";
   AllCoins:number=0;
+  AllGems:number=0;
   collection:any;
   userCoins:number=0;
   userGems:number=0;
