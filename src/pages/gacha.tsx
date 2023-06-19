@@ -323,9 +323,9 @@ export default class App extends Component<Clients> {
 
   draw = (p5: p5) => {
     p5.background(this.bgShadeOfGray, 125);
-    console.log(this.currentSong.isPlaying(),this.currentSong.currentTime(),this.currentSong.duration());
+    console.log(this.currentSong.isPlaying(),this.currentSong.currentTime() >= this.currentSong.duration());
     
-    if (!this.currentSong.isPlaying() && this.currentSong.currentTime() >= this.currentSong.duration()) {
+    if (!this.currentSong.isPlaying() && this.currentSong.currentTime() <= this.currentSong.duration()) {
       console.log("se acabo la cancion");
       this.currentSong= this.randomSong();
       this.currentSong.play();

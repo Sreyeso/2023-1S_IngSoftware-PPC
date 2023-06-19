@@ -132,7 +132,7 @@ export default class App extends Component<Clients> {
           this.gameSounds[3].play();
           this.deathSound=true;
         }
-        if(!this.gameFinished && (!this.gameSounds[0].isPlaying() && this.gameSounds[0].currentTime() >= this.gameSounds[0].duration())) {
+        if(!this.gameFinished && (!this.gameSounds[0].isPlaying() && this.gameSounds[0].currentTime() <= this.gameSounds[0].duration())) {
           this.gameSounds[0].loop();
         }
 

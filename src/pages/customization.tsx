@@ -476,7 +476,7 @@ export default class App extends Component<Clients> {
     p5.text(this.dripMsg, this.previewedPartX, this.previewedSkinY + this.middleSquareSize / 2 + this.spacing);
     p5.pop();
 
-    if (!this.music.isPlaying() && this.music.currentTime() >= this.music.duration()) {
+    if (!this.music.isPlaying() && this.music.currentTime() <= this.music.duration()) {
       this.music.loop();
     }
 
