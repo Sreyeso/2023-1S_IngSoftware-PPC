@@ -18,6 +18,7 @@ export async function getServerSideProps() {
     // User data object
     const UDO = new UserModel(DB.db);
     let userData = await UDO.getUser("bingustest");
+    let AllCoins = await UDO.getAllCoins()
     if (userData) {
       userCoins = userData.CoinAmount;
       userGems = userData.GemAmount;
@@ -29,7 +30,7 @@ export async function getServerSideProps() {
     }
 
     return {
-      props: { isConnected, userCoins, userGems, userSkin, maxScore },
+      props: { isConnected, userCoins, userGems, userSkin, maxScore, AllCoins },
     };
   } catch (e) {
     console.error(e);
@@ -52,7 +53,7 @@ export async function getServerSideProps() {
     <table>
         <tbody>
         <tr>
-            <th>{this.props.userCoins}</th>
+            <th>{this.props.AllCoins}</th>
         </tr>
         <tr>
             <td>Anom</td>
