@@ -71,11 +71,6 @@
     text-decoration: #999999;
 }
 
-/* .selection[value=""] { */
-/* .selection:invalid { */
-/* .allInside ::select{     */
-/* .select.selector{ */
-/* .select * { */
 .gridInputs select[value=""]{
     color:aliceblue;
     text-decoration: #999999;
@@ -112,7 +107,6 @@
 }
 
 .button:hover{
-    /* box-shadow: 0 0 20px -10px rgba(0,0,0,150);  */
     transform: scale(1.03);
     cursor: pointer;
 }

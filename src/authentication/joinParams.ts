@@ -1,5 +1,3 @@
-import path from 'path'
-
 const regions = [
     "Sudamérica",
     "Norteamérica Este", 
@@ -12,7 +10,5 @@ const regions = [
 
 const genders = ["Femenino", "Masculino", "Otro"]
 
-const dirname = __dirname
-
-export default { regions, genders, dirname }
+export default { regions, genders }
 

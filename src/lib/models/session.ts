@@ -43,4 +43,5 @@ export default class SessionModel{
     const  findbyUser= this.collection.findOne({UserName:user});
     return findbyUser;
   }
+
 }
