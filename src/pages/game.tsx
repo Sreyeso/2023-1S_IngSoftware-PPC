@@ -76,7 +76,7 @@ export default class App extends Component<Clients> {
       defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
       
       generalAssets:any[]=[];
-      sound_names:string[] = ["main.mp3","boing2.mp3"];
+      sound_names:string[] = ["FindPou_MP_ 6amerWa7cher1980_Zakeh.mp3","sm64coin.mp3","spyrogem.mp3","gmoddeath.mp3"];
 
       player_Skin: any;
       player_Hat: any;
@@ -90,6 +90,7 @@ export default class App extends Component<Clients> {
 
       game:GameLogic|any=undefined;
       gameFinished:boolean|undefined=false;
+      deathSound:boolean=false;
 
       //Debug control
       debug:boolean=false;
@@ -127,6 +128,10 @@ export default class App extends Component<Clients> {
     draw = (p5:p5) => {
         p5.background('white');
         this.gameFinished=this.game.handleGame(this.debug);
+        if(this.gameFinished && !this.deathSound){
+          this.gameSounds[3].play();
+          this.deathSound=true;
+        }
     };
 
     keyPressed = (p5:p5) => {

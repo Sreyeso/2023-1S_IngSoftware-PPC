@@ -145,6 +145,7 @@ export default class GameLogic {
 
                 }
             }else{
+                    this.gameSounds[0].stop();
                     this.level.tintScreen(this.xOffset,this.yOffset,"black");
                     this.showGameInfo(this.generalAssets[1]); // Death screen
 
@@ -280,7 +281,10 @@ export default class GameLogic {
         let playerBottom = this.player.y + this.player.height;
 
         if(playerLeft<this.xOffset){ //Left side
-            if(this.player.rightCollisionFlag){ this.player.isAlive=false; } //Squished by tile and (left) playfield border death trigger
+            if(this.player.rightCollisionFlag){ 
+                this.player.isAlive=false;
+                } //Squished by tile and (left) playfield border death trigger
+    
             this.player.x=this.xOffset;
         }
         if(playerRight>this.xOffset+this.level.levelWidth-this.level.tile_size){
@@ -460,8 +464,10 @@ export default class GameLogic {
                         if (this.player.x < centerX + radiusX && this.player.x+this.player.width > centerX - radiusX && this.player.y < centerY + radiusY && this.player.y+this.player.height > centerY - radiusY) {
                             if(this.level.layout[i][j].code=="coi"){
                                 this.collectedCoins++;
+                                this.gameSounds[1].play();
                             }else{
                                 this.collectedGems++;
+                                this.gameSounds[2].play();
                             }
                             this.level.layout[i][j].code = "000";
                             this.level.layout[i][j].image = this.levelGraphics[0][0];
@@ -505,7 +511,6 @@ export default class GameLogic {
             case(87): // w
             case(32): //spacebar
                 this.player.isJumping=true;
-                this.gameSounds[1].play();
             break;
             case(80): // p
             case(27): // esc

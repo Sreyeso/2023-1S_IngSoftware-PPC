@@ -148,7 +148,11 @@ export default class App extends Component<Clients> {
   done: boolean = false;
   dripMsg: string = "";
 
+  music:any;
+  playingMusic:boolean=false;
+
   preload = (p5: p5|any) => {
+    this.music=p5.loadSound(`/sounds/RecRoom_NewMenu.mp3`);
     this.skin_names = this.props.gachaObjects[0];
     this.hat_names = this.props.gachaObjects[1];
     for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/allSkins/${this.skin_names[i]}`)); }
@@ -475,6 +479,11 @@ export default class App extends Component<Clients> {
 
   keyPressed = (p5: p5) => {
 
+    if(!this.playingMusic){
+      this.music.play();
+      this.playingMusic=true;
+    }
+
     if (!this.done) {
       if (!this.confirm) {
         if (p5.keyCode === p5.UP_ARROW) {
@@ -551,7 +560,14 @@ export default class App extends Component<Clients> {
       }
 
     }
-  }
+  };
+
+  mouseClicked = (p5: p5) => {
+    if(!this.playingMusic){
+      this.music.play();
+      this.playingMusic=true;
+    }
+  };
 
   render() {
     return (
@@ -563,7 +579,8 @@ export default class App extends Component<Clients> {
             draw={this.draw}
             windowResized={this.windowResized}
             keyPressed={this.keyPressed}
-            
+            mouseClicked={this.mouseClicked}
+        
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>

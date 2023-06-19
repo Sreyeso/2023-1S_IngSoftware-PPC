@@ -189,8 +189,14 @@ export default class App extends Component<Clients> {
   error: boolean = false;
 
   gachaInstance: any;
+  playingMusic:boolean=false;
 
-  preload = (p5: p5) => {
+  //music
+
+  menuMusic_names:string[]=["Spel2_ShopA.mp3","Spel2_ShopTurkey.mp3","Spel2_ShopB.mp3","Spel2_ShopC.mp3"];
+  gachaMenuMusic:any[]=[];
+
+  preload = (p5: any) => {
     // Load graphical assets
     this.gachaMachine = p5.loadImage('/sprites/generalAssets/gachaMachine.png');
     this.gachaGIF = p5.loadImage('/sprites/generalAssets/gachaGIF.gif');
@@ -198,6 +204,7 @@ export default class App extends Component<Clients> {
 
     for (let i = 0; i < this.allSkin_names.length; i++) { this.allSkinImages.push(p5.loadImage(`/sprites/allSkins/${this.allSkin_names[i]}`)); }
     for (let i = 0; i < this.allHat_names.length; i++) { this.allHatImages.push(p5.loadImage(`/sprites/allHats/${this.allHat_names[i]}`)); }
+    for (let i = 0; i < this.menuMusic_names.length; i++) {this.gachaMenuMusic.push(p5.loadSound(`/sounds/${this.menuMusic_names[i]}`));}
   };
 
   windowResized = (p5: p5) => {
@@ -546,6 +553,11 @@ export default class App extends Component<Clients> {
 
   keyPressed = (p5: p5) => {
 
+    if(!this.playingMusic){
+      this.gachaMenuMusic[Math.floor(Math.random() * this.gachaMenuMusic.length)].play();
+      this.playingMusic=true;
+    }
+
     if (!this.confirmation) {
       if (p5.keyCode === p5.UP_ARROW) {
         this.keySelector = "unlock";
@@ -671,6 +683,7 @@ export default class App extends Component<Clients> {
             }).catch((e) => console.log(e));
           };
           GetSkin();
+          for (let i = 0; i < this.menuMusic_names.length; i++) {this.gachaMenuMusic[i].stop();}
           setTimeout(() => { location.reload(); }, 1000);
         }
       }
@@ -679,6 +692,10 @@ export default class App extends Component<Clients> {
   };
 
   mouseClicked = (p5: p5) => {
+    if(!this.playingMusic){
+      this.gachaMenuMusic[Math.floor(Math.random() * this.gachaMenuMusic.length)].play();
+      this.playingMusic=true;
+    }
     if (!this.confirmation) {
       this.keySelector = "";
       // Check if the mouse clicked inside square A
