@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
+import Clients from "@/lib/models/user";
 
 export async function getServerSideProps() {
   let DB: DBO | null = null; // Initialize DB variable with null
@@ -16,8 +17,7 @@ export async function getServerSideProps() {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
-    let userData = await UDO.getUser("bingus");
-
+    let userData = await UDO.getUser("bingustest");
     if (userData) {
       userCoins = userData.CoinAmount;
       userGems = userData.GemAmount;
@@ -44,7 +44,7 @@ export async function getServerSideProps() {
 }
 
 
-  export default class Statistics extends Component{
+  export default class Statistics extends Component<Clients>{
     render() {
     return(
     <div>
@@ -52,7 +52,7 @@ export async function getServerSideProps() {
     <table>
         <tbody>
         <tr>
-            <th>{this.props.coins}</th>
+            <th>{this.props.userCoins}</th>
         </tr>
         <tr>
             <td>Anom</td>
