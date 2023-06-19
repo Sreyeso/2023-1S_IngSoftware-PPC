@@ -234,6 +234,7 @@ function GachaButton(){
         <Link 
             href="/gacha" 
             className="btn btn-primary button"
+            onClick={openGacha}
         >
             <Image src = '/assets/GACHA.png'alt="lol,lmao"></Image> 
         </Link>
