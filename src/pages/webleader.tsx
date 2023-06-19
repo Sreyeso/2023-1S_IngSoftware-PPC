@@ -12,7 +12,7 @@ export async function getServerSideProps() {
       //let userSkin=await 
       //retorno Objid, id in array, name ...
       return {
-        props: { isConnected: true, userName:userData.UserName , region:userData.Region ,userSkin:userData.CurrentAspect,maxScore:userData.HiScore},
+        props: { isConnected: true, userName:userData.UserName , region:userData.Region ,userSkin:userData.CurrentAspect[0],maxScore:userData.HiScore},
       }
     } catch (e) {
       console.error(e)
@@ -37,7 +37,7 @@ export default class Leaderboard extends Component{
     <button><img src="/sprites/generalAssets/LOG-OUT.png" alt="Logout"/></button>
     <button><img src="/sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
     <a href="\leaderboard"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
-    <button><img src="/sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
+    <a href="\stats"><button><img src="/sprites/generalAssets/GACHA.png" alt="Gacha"/></button></a>
     </div>
     </div>);
     }
