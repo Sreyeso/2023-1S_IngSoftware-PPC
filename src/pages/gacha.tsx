@@ -72,6 +72,29 @@ export default class App extends Component<Clients> {
   showMessageScreen(js:any) {
     console.log(js);
     // Call the function of the App class
+    if(this.gachaInstance){
+      if (!(this.gachaInstance.scrollAmount > 0) && this.confirmation==true) {
+        this.enter = true;
+  
+        //CODE FOR SKIN ADQUISITION
+        const GetSkin = () => {
+          fetch("/api/GachaAcquireReq", {
+            method: "PUT",
+            body: JSON.stringify({
+              "object": ((this.selector == "skin") ? this.allSkin_names[this.allSkinImages.indexOf(this.gachaInstance.selectedValue)] : this.allHat_names[this.allHatImages.indexOf(this.gachaInstance.selectedValue)]),
+              "type": this.selector,
+              "user": this.props.userName
+            }),
+            headers: {
+              "content-type": "application/json",
+            },
+          }).catch((e) => console.log(e));
+        };
+        GetSkin();
+      }
+    }
+    
+
     this.currentSong.stop();
     this.buttonPress=true;
     this.playingMusic=false;
