@@ -42,7 +42,7 @@ export async function middleware(req: NextRequest, res: NextResponse){
     if(!cookie)
         cookie = '' as string
 
-    const protectedRoutes = ['/game','/profile']
+    const protectedRoutes = ['/game','/profile','/gacha','/customization']
         
     if (verifyPathname(protectedRoutes, req)){
         if(cookie === '' || user === null){
@@ -74,5 +74,5 @@ function verifyPathname (listOfUrls: string[] = [], req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/game','/profile','/restore_password','/join_ppc','/login']
+    matcher: ['/game','/profile','/restore_password','/join_ppc','/login','/gacha','/customization']
 }
