@@ -4,7 +4,7 @@ import UserModel from "@/lib/models/user";
 
 
 
-  export async function getServerSideProps() {
+  export async function getServerSideProps(ctx: { req: any; }) {
     let DB: DBO | null = null; // Initialize DB variable with null
     
     let isConnected = false;
@@ -12,21 +12,21 @@ import UserModel from "@/lib/models/user";
     let userGems = 0;
     let userSkin = 0;
     let maxScore = 0;
-    let userName = 0;
   
     try {
       // Database object
       DB = new DBO();
       // User data object
       const UDO = new UserModel(DB.db);
-      let userData = await UDO.getUser("bingustest");
+      const {req} = ctx;
+      const userName:string= req.headers.user;
+      let userData = await UDO.getUser(userName);
   
       if (userData) {
         userCoins = userData.CoinAmount;
         userGems = userData.GemAmount;
         userSkin = userData.CurrentAspect[0];
         maxScore = userData.HiScore;
-        userName = userData.UserName;
         isConnected = true;
       } else {
         console.log("ERROR FETCHING USER DATA");
@@ -70,7 +70,7 @@ export default class Leaderboard extends Component{
 
 
 
-export function Profiles({datos}){
+export function Profiles({datos}:any){
     return(
         <div id="profile">
             {Item(datos[0],"01")}
@@ -87,7 +87,7 @@ export function Profiles({datos}){
     )
 }
 
-function Item(datos,number){
+function Item(datos:any,number:any){
     let imagen = `/sprites/allSkins/${datos.userSkin}`
     return (
         <div className="flex">
