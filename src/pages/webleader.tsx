@@ -1,27 +1,52 @@
 import React, { Component } from "react";
-import DBO from "@/lib/dbo";
+import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 
-export async function getServerSideProps() {
+
+
+  export async function getServerSideProps() {
+    let DB: DBO | null = null; // Initialize DB variable with null
+    
+    let isConnected = false;
+    let userCoins = 0;
+    let userGems = 0;
+    let userSkin = 0;
+    let maxScore = 0;
+    let userName = 0;
+  
     try {
-      //Database object
-      const DB:DBO=new DBO();
-      //User data object
-      const UDO=new UserModel(DB.db);
-      let userData=await UDO.getUser("bingustest");
-      //let userSkin=await 
-      //retorno Objid, id in array, name ...
-      return {
-        props: { isConnected: true, userName:userData.UserName , region:userData.Region ,userSkin:userData.CurrentAspect[0],maxScore:userData.HiScore},
+      // Database object
+      DB = new DBO();
+      // User data object
+      const UDO = new UserModel(DB.db);
+      let userData = await UDO.getUser("bingustest");
+  
+      if (userData) {
+        userCoins = userData.CoinAmount;
+        userGems = userData.GemAmount;
+        userSkin = userData.CurrentAspect[0];
+        maxScore = userData.HiScore;
+        userName = userData.UserName;
+        isConnected = true;
+      } else {
+        console.log("ERROR FETCHING USER DATA");
       }
-    } catch (e) {
-      console.error(e)
+  
       return {
-        props: { isConnected: false },
+        props: { isConnected, userCoins, userGems, userSkin, maxScore, userName },
+      };
+    } catch (e) {
+      console.error(e);
+      return {
+        props: { isConnected },
+      };
+    } finally {
+      if (DB) {
+        DB.end();
       }
     }
   }
-
+  
 
 //tuto tomado de: https://www.youtube.com/watch?v=p_046Qe19p0
 
@@ -63,7 +88,7 @@ export function Profiles({datos}){
 }
 
 function Item(datos,number){
-    let imagen = `/sprites/playerSkins/${datos.userSkin}`
+    let imagen = `/sprites/allSkins/${datos.userSkin}`
     return (
         <div className="flex">
             <div className="item">

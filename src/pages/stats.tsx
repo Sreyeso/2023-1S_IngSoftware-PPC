@@ -1,28 +1,50 @@
 import React, { Component } from "react";
-import DBO from "@/lib/dbo";
+import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 
 export async function getServerSideProps() {
-    try {
-      //Database object
-      const DB:DBO=new DBO();
-      //User data object
-      const UDO=new UserModel(DB.db);
-      let userData=await UDO.getUser("bingustest");
-      //let userSkin=await 
-      //retorno Objid, id in array, name ...
-      return {
-        props: { isConnected: true, userName:userData.UserName , region:userData.Region ,userSkin:userData.CurrentAspect,maxScore:userData.HiScore},
-      }
-    } catch (e) {
-      console.error(e)
-      return {
-        props: { isConnected: false },
-      }
+  let DB: DBO | null = null; // Initialize DB variable with null
+  
+  let isConnected = false;
+  let userCoins = 0;
+  let userGems = 0;
+  let userSkin = 0;
+  let maxScore = 0;
+
+  try {
+    // Database object
+    DB = new DBO();
+    // User data object
+    const UDO = new UserModel(DB.db);
+    let userData = await UDO.getUser("bingus");
+
+    if (userData) {
+      userCoins = userData.CoinAmount;
+      userGems = userData.GemAmount;
+      userSkin = userData.CurrentAspect;
+      maxScore = userData.HiScore;
+      isConnected = true;
+    } else {
+      console.log("ERROR FETCHING USER DATA");
+    }
+
+    return {
+      props: { isConnected, userCoins, userGems, userSkin, maxScore },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { isConnected },
+    };
+  } finally {
+    if (DB) {
+      DB.end();
     }
   }
+}
 
-  export default class Leaderboard extends Component{
+
+  export default class Statistics extends Component{
     render() {
     return(
     <div>
@@ -30,7 +52,7 @@ export async function getServerSideProps() {
     <table>
         <tbody>
         <tr>
-            <th>Stats</th>
+            <th>{this.props.coins}</th>
         </tr>
         <tr>
             <td>Anom</td>

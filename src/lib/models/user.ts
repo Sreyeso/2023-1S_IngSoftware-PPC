@@ -55,6 +55,22 @@ export default class UserModel{
     const  findUser= this.collection.findOne({UserName:user});
     return findUser;
   }
+
+  async getAllCoins(){
+    const test = this.collection.aggregate({
+        $group:{
+        _id:'',
+        "CoinAmount": {$sum: '$CoinAmount'}
+        }
+        },{
+        $project: {
+            _id: 0,
+            "TotalCoins": '$CoinAmount'
+        }
+    });
+    return test;
+  }
+
   async verifyMail(){
 
   }
