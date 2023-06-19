@@ -4,6 +4,17 @@ import {GetServerSideProps } from "next";
 
 type props = {user: string}
 
+export function getServerSideProps(ctx: { req: any; }){
+    const {req} = ctx;
+    const username = req.headers.user
+    return {
+        props: {
+            user: username
+        }
+
+    }
+}
+
 export default function Profile(props: props){
 
     const {user} = props;
@@ -30,13 +41,3 @@ export default function Profile(props: props){
     )
 }
 
-export function getServerSideProps(ctx: { req: any; }): GetServerSideProps{
-    const {req} = ctx;
-    const username = req.headers.user
-    return {
-        props: {
-            user: username
-        }
-
-    }
-}
