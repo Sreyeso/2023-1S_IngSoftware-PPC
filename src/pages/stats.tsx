@@ -85,7 +85,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
             <td>Puntuación máxima personal: {this.props.maxScore}</td>
         </tr>
         <tr>
-            <td>Cantidad de skins: {this.props.skinCount}</td>
+            <td>Cantidad de skins test 1: {this.props.skinCount}</td>
         </tr>
         </tbody>
     </table>
