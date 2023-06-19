@@ -678,6 +678,7 @@ export default class App extends Component<Clients> {
               body: JSON.stringify({
                 "object": ((this.selector == "skin") ? this.allSkin_names[this.allSkinImages.indexOf(this.gachaInstance.selectedValue)] : this.allHat_names[this.allHatImages.indexOf(this.gachaInstance.selectedValue)]),
                 "type": this.selector,
+                "user": this.props.userName
               }),
               headers: {
                 "content-type": "application/json",
