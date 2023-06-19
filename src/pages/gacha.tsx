@@ -2,6 +2,9 @@
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
+import Link from 'next/link';
+import Image from 'next/image';
+
 
 //Class imports
 import DBO from "@/lib/utils/dbo";
@@ -18,9 +21,9 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
   ssr: false    //Disable server side rendering
 });
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
-
+  
   let isConnected = false;
   let userCoins = 0;
   let userGems = 0;
@@ -30,7 +33,10 @@ export async function getServerSideProps() {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
-    let userData = await UDO.getUser("bingus");
+    // Get logged user
+    const {req} = ctx;
+    const userName:string= req.headers.user;
+    let userData = await UDO.getUser(userName);
 
     if (userData) {
       userCoins = userData.CoinAmount;
@@ -41,7 +47,7 @@ export async function getServerSideProps() {
     }
 
     return {
-      props: { isConnected, userCoins, userGems },
+      props: { isConnected, userCoins, userGems, userName },
     };
   } catch (e) {
     console.error(e);
@@ -86,7 +92,11 @@ export default class App extends Component<Clients> {
   legendarySkin_names: string[] = ["hello_world.gif"
     , "hypnotic_blue.gif"
     , "rainbow.gif"
-    , "waka_waka.gif"];
+    , "waka_waka.gif"
+    ,"clown.gif" 
+    ,"laughing-dog.gif"
+    ,"rgb.gif"
+  ];
 
   allSkin_names: string[] = [
     ...this.commonSkin_names,
@@ -95,32 +105,31 @@ export default class App extends Component<Clients> {
     ...this.legendarySkin_names
   ];
 
-  commonHat_names: string[] = ["default_ppc.png"
-    , "love_letter.png"
-    , "mistery.png"
-    , "red_mushroom.png"
-    , "orchid.png"
-    , "pollo.png"
-    , "tetris.png"
-    , "third_love.png"];
-  rareHat_names: string[] = ["hamburguer.png"
-    , "monster_ball.png"
-    , "pizza.png"
-    , "purple_toxic.png"
-    , "rex.png"
-    , "sushi.png"
-    , "watermelon.png"];
-  epicHat_names: string[] = ["creeper.png"
-    , "invaders.gif"
-    , "japan_night.png"
-    , "nyan_poptart.png"
-    , "retrowave.png"
-    , "sans.png"
-    , "waka_ghost.gif"];
-  legendaryHat_names: string[] = ["hello_world.gif"
-    , "hypnotic_blue.gif"
-    , "rainbow.gif"
-    , "waka_waka.gif"];
+  commonHat_names: string[] = ["plant.png"
+    , "balloon.png"
+    , "cherry.png"
+    , "graduation.png"
+    , "none.png"
+    , "pirate.png"
+    , "santa.png"
+    , "wizard.png"];
+  rareHat_names: string[] = ["angel.png"
+    , "birthday.png"
+    , "crown.png"
+    , "helicopter.png"
+    , "leprechaun.png"
+    , "magic.png"];
+  epicHat_names: string[] = ["antenna.png"
+    , "dunce.png"
+    , "explosion.png"
+    , "flemish.png"
+    , "one_piece.png"
+    , "sims.png"
+    , "sombrero.png"];
+  legendaryHat_names: string[] = ["carlos.png"
+    , "ez_clap.png"
+    , "hand.png"
+    , "teemo.png"];
 
   allHat_names: string[] = [
     ...this.commonHat_names,
@@ -131,14 +140,14 @@ export default class App extends Component<Clients> {
 
   //Graphical assets
 
-  allSkinImages: p5.Image[] = [];
-  allHatImages: p5.Image[] = [];
+  allSkinImages: any[] = [];
+  allHatImages: any[] = [];
 
-  leftArray: p5.Image[]|any[] = []; //Images of the skins in the left scrolling bar
-  rightArray: p5.Image[]|any[] = []; //Images of the hats in the right scrolling bar
-  unknown: p5.Image|any; //Question mark sprite
-  gachaMachine: p5.Image|any; //Gacha machine sprite
-  gachaGIF: p5.Image|any; //Gacha machine GIF
+  leftArray: any[] = []; //Images of the skins in the left scrolling bar
+  rightArray: any[] = []; //Images of the hats in the right scrolling bar
+  unknown: any; //Question mark sprite
+  gachaMachine: any; //Gacha machine sprite
+  gachaGIF: any; //Gacha machine GIF
 
   //Logic control
   scrollLeft: number = 0; //Scroll offset of the bars
@@ -162,8 +171,8 @@ export default class App extends Component<Clients> {
   prevSquareHatY: number = 0;
   confirmTextY: number = 0;
 
-  previewedSkin: p5.Image|any;
-  previewedHat: p5.Image|any;
+  previewedSkin: any;
+  previewedHat: any;
   selector: string = "";
   gachaMode: string = "";
   keySelector: string = "";
@@ -180,17 +189,25 @@ export default class App extends Component<Clients> {
   error: boolean = false;
 
   gachaInstance: any;
+  
+  currentSong:any;
+  playingMusic:boolean=false;
 
-  preload = (p5: p5) => {
+
+  //music
+
+  menuMusic_names:string[]=["Spel2_ShopA.mp3","Spel2_ShopTurkey.mp3","Spel2_ShopB.mp3","Spel2_ShopC.mp3"];
+  gachaMenuMusic:any[]=[];
+
+  preload = (p5: any) => {
     // Load graphical assets
     this.gachaMachine = p5.loadImage('/sprites/generalAssets/gachaMachine.png');
     this.gachaGIF = p5.loadImage('/sprites/generalAssets/gachaGIF.gif');
     this.unknown = p5.loadImage('/sprites/generalAssets/unknown.png');
 
     for (let i = 0; i < this.allSkin_names.length; i++) { this.allSkinImages.push(p5.loadImage(`/sprites/allSkins/${this.allSkin_names[i]}`)); }
-
-    // pending
-    //for (let i = 0; i < this.allHat_names.length; i++) { this.allHatImages.push(p5.loadImage(`/sprites/allHats/${this.allHat_names[i]}`)); }
+    for (let i = 0; i < this.allHat_names.length; i++) { this.allHatImages.push(p5.loadImage(`/sprites/allHats/${this.allHat_names[i]}`)); }
+    for (let i = 0; i < this.menuMusic_names.length; i++) {this.gachaMenuMusic.push(p5.loadSound(`/sounds/${this.menuMusic_names[i]}`));}
   };
 
   windowResized = (p5: p5) => {
@@ -258,16 +275,14 @@ export default class App extends Component<Clients> {
 
     p5.textSize(this.squareSize * 0.5);
 
-    const shuffledArray = this.allSkinImages.slice(); //copy values and not reference
-    this.shuffleArray(shuffledArray);
+    const shuffledSkinsArray = this.allSkinImages.slice(); //copy values and not reference
+    const shuffledHatsArray = this.allHatImages.slice(); //copy values and not reference
+    this.shuffleArray(shuffledHatsArray);
+    this.shuffleArray(shuffledHatsArray);
 
     // Load the randomized skin images into the leftArray
-    this.leftArray = shuffledArray.slice();
-
-    //Pending
-    this.allHat_names = this.allSkin_names.slice();
-    this.allHatImages = this.allSkinImages.slice();
-    this.rightArray = this.leftArray.slice();
+    this.leftArray = shuffledSkinsArray.slice();
+    this.rightArray = shuffledHatsArray.slice();
 
     this.previewedSkin = this.unknown;
     this.previewedHat = this.unknown;
@@ -277,6 +292,7 @@ export default class App extends Component<Clients> {
 
     this.userCoins = this.props.userCoins;
     this.userGems = this.props.userGems;
+    this.currentSong=this.randomSong();
 
   };
 
@@ -305,13 +321,16 @@ export default class App extends Component<Clients> {
   draw = (p5: p5) => {
     p5.background(this.bgShadeOfGray, 125);
 
+    
+    if (!this.currentSong.isPlaying() && this.currentSong.currentTime() >= this.currentSong.duration()) {
+      this.currentSong= this.randomSong();
+      this.currentSong.play();
+    }
+
     if (!this.confirmation) {
 
       // Display the gachaMachine image
-      if(this.gachaMachine){
-        p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
-      }
-      
+      p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
 
       // Iterate over the leftArray and display its values
       for (let i = 0; i < this.leftArray.length; i++) {
@@ -354,10 +373,7 @@ export default class App extends Component<Clients> {
         p5.pop();
 
         // Display the image inside the square
-        if(skin){
-          p5.image(skin, x, y, this.squareSize, this.squareSize);
-        }
-        
+        p5.image(skin, x, y, this.squareSize, this.squareSize);
       }
 
       // Iterate over the rightArray and display its values
@@ -370,13 +386,13 @@ export default class App extends Component<Clients> {
 
         let rarity: string;
 
-        if (this.commonSkin_names.includes(hatName)) {
+        if (this.commonHat_names.includes(hatName)) {
           rarity = "common";
-        } else if (this.rareSkin_names.includes(hatName)) {
+        } else if (this.rareHat_names.includes(hatName)) {
           rarity = "rare";
-        } else if (this.epicSkin_names.includes(hatName)) {
+        } else if (this.epicHat_names.includes(hatName)) {
           rarity = "epic";
-        } else if (this.legendarySkin_names.includes(hatName)) {
+        } else if (this.legendaryHat_names.includes(hatName)) {
           rarity = "legendary";
         } else {
           rarity = "none"; // The skin name doesn't exist in any of the arrays
@@ -401,10 +417,8 @@ export default class App extends Component<Clients> {
         p5.pop();
 
         // Display the image inside the square
-        if(hat){
-          p5.image(hat, x, y, this.squareSize, this.squareSize);
-        }
-        
+        p5.image(hat, x, y, this.squareSize, this.squareSize);
+
       }
 
       this.scrollLeft += 1;
@@ -475,13 +489,9 @@ export default class App extends Component<Clients> {
         p5.rect(this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
       }
 
-      if(this.previewedSkin){
-        p5.image(this.previewedSkin, this.prevSquareSkinX, this.prevSquareSkinY, this.previewSquareSize, this.previewSquareSize);
-      }
-      if(this.previewedHat){
-        p5.image(this.previewedHat, this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
-      }
-      
+      p5.image(this.previewedSkin, this.prevSquareSkinX, this.prevSquareSkinY, this.previewSquareSize, this.previewSquareSize);
+      p5.image(this.previewedHat, this.prevSquareHatX, this.prevSquareHatY, this.previewSquareSize, this.previewSquareSize);
+
       p5.pop();
 
       p5.push();
@@ -499,8 +509,8 @@ export default class App extends Component<Clients> {
         p5.text("Haz click >\n (previsualizar)", this.prevSquareHatX, this.selSquareAY);
       }
 
-      this.gemPrice = (this.gachaMode == "special") ? 30 : 15;
-      this.coinPrice = (this.gachaMode == "special") ? 60 : 15;
+      this.gemPrice = (this.gachaMode == "special") ? 30 : 0;
+      this.coinPrice = (this.gachaMode == "special") ? 0 : 30;
 
       if (!this.error) {
         p5.text(
@@ -524,16 +534,14 @@ export default class App extends Component<Clients> {
 
       if (this.gachaInstance.scrollAmount > 0) {
         // Display the GIF
-        if(this.gachaGIF){
-          p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
-        }
-        
+        p5.image(this.gachaGIF, this.imgX, this.imgY, this.imageSize * 1.19, this.imageSize * 1.19);
+
       } else {
         // Display the gachaMachine image
-        if(this.gachaMachine){
-          p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
-        }
-        
+
+        p5.image(this.gachaMachine, this.imgX, this.imgY, this.imageSize, this.imageSize);
+
+
 
         p5.push();
         p5.fill("black");
@@ -551,9 +559,20 @@ export default class App extends Component<Clients> {
 
     }
 
+    
+
   };
 
+  randomSong(){
+    return this.gachaMenuMusic[Math.floor(Math.random() * this.gachaMenuMusic.length)];
+  }
+
   keyPressed = (p5: p5) => {
+
+    if(!this.playingMusic){
+      this.currentSong.play();
+      this.playingMusic=true;
+    }
 
     if (!this.confirmation) {
       if (p5.keyCode === p5.UP_ARROW) {
@@ -591,7 +610,8 @@ export default class App extends Component<Clients> {
                 method: "PUT",
                 body: JSON.stringify({
                   "coinCost": -this.coinPrice,
-                  "gemCost": -this.gemPrice
+                  "gemCost": -this.gemPrice,
+                  "user": this.props.userName
                 }),
                 headers: {
                   "content-type": "application/json",
@@ -671,6 +691,7 @@ export default class App extends Component<Clients> {
               body: JSON.stringify({
                 "object": ((this.selector == "skin") ? this.allSkin_names[this.allSkinImages.indexOf(this.gachaInstance.selectedValue)] : this.allHat_names[this.allHatImages.indexOf(this.gachaInstance.selectedValue)]),
                 "type": this.selector,
+                "user": this.props.userName
               }),
               headers: {
                 "content-type": "application/json",
@@ -678,6 +699,7 @@ export default class App extends Component<Clients> {
             }).catch((e) => console.log(e));
           };
           GetSkin();
+          for (let i = 0; i < this.menuMusic_names.length; i++) {this.gachaMenuMusic[i].stop();}
           setTimeout(() => { location.reload(); }, 1000);
         }
       }
@@ -686,6 +708,11 @@ export default class App extends Component<Clients> {
   };
 
   mouseClicked = (p5: p5) => {
+    if(!this.playingMusic){
+      this.currentSong.play();
+      this.playingMusic=true;
+    }
+
     if (!this.confirmation) {
       this.keySelector = "";
       // Check if the mouse clicked inside square A
@@ -713,7 +740,7 @@ export default class App extends Component<Clients> {
   render() {
     return (
       <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <Sketch
             preload={this.preload}
             setup={this.setup}
@@ -721,13 +748,106 @@ export default class App extends Component<Clients> {
             windowResized={this.windowResized}
             keyPressed={this.keyPressed}
             mouseClicked={this.mouseClicked}
-            
+
 
           />
         </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
+                       <StartButton/>
+                      <ProfileButton/>
+                      <RankingButton/>
+        </div>          
       </div>
     );
   };
 
 }
 
+type jsAnswer = {
+    name: string;
+}
+function StartButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }   
+
+    async function startGame(){
+        showMessageScreen({name: "Iniciando Juego..."})
+        open('/game');
+    }
+
+    return (
+        <Link
+            href="/game" 
+            className="btn btn-primary button"
+            
+        >
+            <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
+        </Link>
+    );
+}
+function ProfileButton(){
+    //Cuando se presiona el botón, se redirecciona al perfil del jugador
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openProfile(){
+        showMessageScreen({name: "Entrando al perfil del jugador..."})
+        open('/customization')
+    }
+    
+    return (
+        <Link 
+            href="/customization" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/PROFILE.png'alt="lol,lmao"></Image> 
+        </Link>
+    );
+}
+function GachaButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openGacha(){
+        showMessageScreen({name: "Entrando al GACHA..."})
+        open('/gacha')
+    }
+    
+    return (
+        <Link 
+            href="/gacha" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/GACHA.png'alt="lol,lmao"></Image> 
+        </Link>
+    );
+}
+function RankingButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openRanking(){
+        showMessageScreen({name: "Entrando a el Ranking..."})
+        open('/sketch')
+    }
+    
+    return (
+        <Link 
+            href="/rankings" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"></Image>   
+        </Link>
+    );
+}

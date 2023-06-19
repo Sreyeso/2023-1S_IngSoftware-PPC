@@ -1,0 +1,12 @@
+.provisional{
+
+}
+
+.logoutButton{
+    border: transparent;
+    background: transparent;
+}
+
+.logoutButton:hover{
+    cursor: pointer;
+}

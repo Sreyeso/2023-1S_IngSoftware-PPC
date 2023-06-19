@@ -11,7 +11,8 @@ export default class Player {
   width: number;
   height: number;
   isAlive:boolean=true;
-  image:p5.Image;
+  skin:p5.Image;
+  hat:p5.Image;
   prevX: number;
   prevY: number;
   isJumping: boolean = false;
@@ -25,7 +26,7 @@ export default class Player {
   // the p5 instance used for drawing
   p: p5;
 //
-  constructor(parameters:any|{width:number,height:number,gravity:number,jumpVelocity:number,jumps:number,speed:number,initialX:number,initialY:number,image:any}, p: p5) {
+  constructor(parameters:any|{width:number,height:number,gravity:number,jumpVelocity:number,jumps:number,speed:number,initialX:number,initialY:number,skin:any,hat:any}, p: p5) {
     // initialize position and size
     this.width = parameters.width || 20;
     this.height = parameters.height || 20;
@@ -41,7 +42,8 @@ export default class Player {
 
     this.x = this.prevX = parameters.initialX || 0;
     this.y = this.prevY = parameters.initialY || 0;
-    this.image=parameters.image || null;
+    this.skin=parameters.skin || null;
+    this.hat=parameters.hat || null;
 
     // store the p5 instance
     this.p = p;
@@ -78,11 +80,15 @@ export default class Player {
 
   draw() {
     this.p.push();
-      if(this.image && this.isAlive){
-        this.p.image(this.image,this.x, this.y, this.width, this.height);
+      if(this.skin && this.isAlive){
+        this.p.image(this.skin,this.x, this.y, this.width, this.height);
       }else{
         this.p.fill("red");
         this.p.rect(this.x, this.y, this.width, this.height);
+      }
+
+      if(this.hat && this.isAlive){
+        this.p.image(this.hat,this.x, this.y-this.height, this.width, this.height);
       }
     this.p.pop();
   }
