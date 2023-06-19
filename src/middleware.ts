@@ -1,34 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server';
-import sessions from'@/authentication/sessions.json'
 
 /*
     El propósito de este middleware es verificar si el usuario está logueado
-    Si el usuario está logueado, en su navegador debe haber una cookie.
+    Si el usuario está logueado, en su navegador debe haber una cookie, y en la 
+    bd debe existir dicha cookie.
     En este middleware se detecta si existe esa cookie, si el valor de dicha
-    cookie efectivamente está contenido en sessions.json (Que es el archivo
+    cookie efectivamente está contenido en la bd (Que es el archivo
     que guarda las sesiones existentes de los usuarios) y si hace falta o no
     redireccionar a una u otra página en consecuencia
 */
 
-export function middleware(req: NextRequest){
-    console.log("request: ", req.nextUrl.pathname);
+export async function middleware(req: NextRequest, res: NextResponse){
 
-    const cookie = req.cookies.get('session')?.value
+    let cookie = req.cookies.get('session')?.value
 
-    const sessionsJson = sessions as Record<string,string>
+    let user: string | null
+    if(cookie){
+        try{
+        const res = await fetch(req.nextUrl.origin + '/api/getSessions',{
+            method: "GET",
+            headers:{
+                id: cookie
+            }
+        });
+        const sessionJson = await res.json();
+        if (res.status === 500)
+            user = null
+        else
+            user = sessionJson.username;
 
-    const protectedRoutes = ['/sketch','/profile']
-    
-    if (verifyPathname(protectedRoutes, req) && (!cookie || !sessionsJson[cookie])){
-        //if(!cookie || !sessionsJson[cookie]){ //Esto significa que el usuario no está autenticado
+        }
+        catch(error){
+            console.error(`error ${error}`)
+            const response = NextResponse.redirect(new URL('/login', req.url));
+            response.cookies.delete('session')
+            return NextResponse.next()
+        }
+    }else
+        user = null
+
+    if(!cookie)
+        cookie = '' as string
+
+    const protectedRoutes = ['/game','/profile','/gacha','/customization']
+        
+    if (verifyPathname(protectedRoutes, req)){
+        if(cookie === '' || user === null){
             const response = NextResponse.redirect(new URL('/login', req.url));
             response.cookies.delete('session');
             return response;
-        //}
+        }else{
+            const response = NextResponse.next();
+            response.headers.set('user',user)
+            return response
+        }
     }
-    else if(verifyPathname(['/join_ppc','/login','/restore_password'],req) && cookie && sessionsJson[cookie]){
+    else if(verifyPathname(['/join_ppc','/login','/restore_password'],req) && cookie && user !== null){
         //El usuario está logueado, por lo que es necesario sacarlo de estas páginas
-        const response = NextResponse.redirect(new URL('/sketch', req.url));
+        const response = NextResponse.redirect(new URL('/game', req.url));
         return response;
     }
 
@@ -45,5 +74,5 @@ function verifyPathname (listOfUrls: string[] = [], req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/sketch','/profile','/restore_password','/join_ppc','/login']
+    matcher: ['/game','/profile','/restore_password','/join_ppc','/login','/gacha','/customization']
 }

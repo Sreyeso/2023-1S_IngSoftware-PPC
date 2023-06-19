@@ -1,29 +1,24 @@
 import Head from "next/head";
-import { useEffect } from 'react'
-import cookie from 'js-cookie'
 import styles from '@/styles/Profile.module.css'
-import Cookies from "js-cookie";
+import {GetServerSideProps } from "next";
+import Image from 'next/image';
 
-export default function Profile(/*{token}*/){
-    
-    let cookie = Cookies
+type props = {user: string}
 
-    
-    async function logedIn(){
-        // const res = await fetch('/api/handleLogin',{
-        //     method: "GET"
-        // })
-        // let resText = await res.json()
-        // console.log(resText)
+export function getServerSideProps(ctx: { req: any; }){
+    const {req} = ctx;
+    const username = req.headers.user
+    return {
+        props: {
+            user: username
+        }
 
-        let session = cookie.get('session')
-        console.log(session)
-        
     }
+}
 
-    useEffect(() => {
-        logedIn()
-    })
+export default function Profile(props: props){
+
+    const {user} = props;
 
     return(
         <>
@@ -35,14 +30,11 @@ export default function Profile(/*{token}*/){
             <main>
                 <div>
                     <h1 className = {styles.provisional}>Profile information doing</h1>
-                    {/* <h2>{token}</h2> */}
+                    <h2>{user}</h2>
                     <button 
                     className = {styles.logoutButton}
-                    onClick={e => {
-                        // e.preventDefault();
-                        // cookie.remove("token");
-                    }}>
-                        <img src='/buttons/LOG-OUT.png'></img>
+                    onClick={e => {}}>
+                        <Image src='/buttons/LOG-OUT.png'alt="lol,lmao"></Image>
                     </button>
                 </div>
             </main>
@@ -50,6 +42,3 @@ export default function Profile(/*{token}*/){
     )
 }
 
-// export function getServerSideProps({ req, res }){
-//     return { props: {token: req.cookies.token}}
-// }

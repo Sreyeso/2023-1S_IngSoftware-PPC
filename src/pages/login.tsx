@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from '@/styles/Login.module.css'
 import Head from 'next/head'
 import { useState } from 'react'
@@ -25,7 +26,7 @@ export default function Login(){
         displayMessage([resText.name]);
     
         if(res.status === 200){
-            router.push('/sketch'); //Redirección al juego
+            router.push('/game'); //Redirección al juego
         }
     }
 
@@ -44,8 +45,8 @@ export default function Login(){
                 </div>
                 <div className = {styles.allInside}>
                     <div className = {styles.logoPPC}>
-                        <img src = "/backgrounds/logo_PPC.png"> 
-                        </img>
+                        <Image src = "/backgrounds/logo_PPC.png"alt="lol,lmao"> 
+                        </Image>
                     </div>
                     <form className = {styles.loginForm}>
                         <div className = {styles.textDiv}>
@@ -71,8 +72,8 @@ export default function Login(){
                                 e.preventDefault();
                                 sendCreds();
                             }}>
-                                <img src = {'/buttons/LOG-IN.png'}>
-                                </img>
+                                <Image src = {'/buttons/LOG-IN.png'}alt="lol,lmao">
+                                </Image>
                             </button>
                         </div>
                         <div className={styles.linksTest}>

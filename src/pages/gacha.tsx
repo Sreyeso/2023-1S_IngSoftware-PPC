@@ -2,6 +2,9 @@
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
+import Link from 'next/link';
+import Image from 'next/image';
+
 
 //Class imports
 import DBO from "@/lib/utils/dbo";
@@ -18,9 +21,9 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
   ssr: false    //Disable server side rendering
 });
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
-
+  
   let isConnected = false;
   let userCoins = 0;
   let userGems = 0;
@@ -30,7 +33,10 @@ export async function getServerSideProps() {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
-    let userData = await UDO.getUser("bingus");
+    // Get logged user
+    const {req} = ctx;
+    const userName:string= req.headers.user;
+    let userData = await UDO.getUser(userName);
 
     if (userData) {
       userCoins = userData.CoinAmount;
@@ -41,7 +47,7 @@ export async function getServerSideProps() {
     }
 
     return {
-      props: { isConnected, userCoins, userGems },
+      props: { isConnected, userCoins, userGems, userName },
     };
   } catch (e) {
     console.error(e);
@@ -576,7 +582,8 @@ export default class App extends Component<Clients> {
                 method: "PUT",
                 body: JSON.stringify({
                   "coinCost": -this.coinPrice,
-                  "gemCost": -this.gemPrice
+                  "gemCost": -this.gemPrice,
+                  "user": this.props.userName
                 }),
                 headers: {
                   "content-type": "application/json",
@@ -656,6 +663,7 @@ export default class App extends Component<Clients> {
               body: JSON.stringify({
                 "object": ((this.selector == "skin") ? this.allSkin_names[this.allSkinImages.indexOf(this.gachaInstance.selectedValue)] : this.allHat_names[this.allHatImages.indexOf(this.gachaInstance.selectedValue)]),
                 "type": this.selector,
+                "user": this.props.userName
               }),
               headers: {
                 "content-type": "application/json",
@@ -698,7 +706,7 @@ export default class App extends Component<Clients> {
   render() {
     return (
       <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <Sketch
             preload={this.preload}
             setup={this.setup}
@@ -710,9 +718,102 @@ export default class App extends Component<Clients> {
 
           />
         </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
+                       <StartButton/>
+                      <ProfileButton/>
+                      <RankingButton/>
+        </div>          
       </div>
     );
   };
 
 }
 
+type jsAnswer = {
+    name: string;
+}
+function StartButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }   
+
+    async function startGame(){
+        showMessageScreen({name: "Iniciando Juego..."})
+        open('/game');
+    }
+
+    return (
+        <Link
+            href="/game" 
+            className="btn btn-primary button"
+            
+        >
+            <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
+        </Link>
+    );
+}
+function ProfileButton(){
+    //Cuando se presiona el botón, se redirecciona al perfil del jugador
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openProfile(){
+        showMessageScreen({name: "Entrando al perfil del jugador..."})
+        open('/customization')
+    }
+    
+    return (
+        <Link 
+            href="/customization" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/PROFILE.png'alt="lol,lmao"></Image> 
+        </Link>
+    );
+}
+function GachaButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openGacha(){
+        showMessageScreen({name: "Entrando al GACHA..."})
+        open('/gacha')
+    }
+    
+    return (
+        <Link 
+            href="/gacha" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/GACHA.png'alt="lol,lmao"></Image> 
+        </Link>
+    );
+}
+function RankingButton(){
+    //Cuando se presiona el botón, se redirecciona al juego
+
+    function showMessageScreen (js: jsAnswer) {
+        console.log(js);
+    }
+
+    async function openRanking(){
+        showMessageScreen({name: "Entrando a el Ranking..."})
+        open('/sketch')
+    }
+    
+    return (
+        <Link 
+            href="/rankings" 
+            className="btn btn-primary button"
+        >
+            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"></Image>   
+        </Link>
+    );
+}
