@@ -212,6 +212,7 @@ function ProfileButton(){
         <Link 
             href="/customization" 
             className="btn btn-primary button"
+            onClick={openProfile}
         >
             <Image src = '/assets/PROFILE.png'alt="lol,lmao"></Image> 
         </Link>
