@@ -28,24 +28,20 @@ export async function getServerSideProps() {
     <div>
     <div className="stats">
     <table>
+        <tbody>
         <tr>
             <th>Stats</th>
         </tr>
         <tr>
             <td>Anom</td>
-            <td>19</td>
-            <td>Male</td>
         </tr>
         <tr>
             <td>Megha</td>
-            <td>19</td>
-            <td>Female</td>
         </tr>
         <tr>
             <td>Subham</td>
-            <td>25</td>
-            <td>Male</td>
         </tr>
+        </tbody>
     </table>
     </div>
       <div className="flex">
