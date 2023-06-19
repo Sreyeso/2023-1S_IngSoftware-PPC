@@ -11,6 +11,7 @@ export async function getServerSideProps() {
   let userGems = 0;
   let userSkin = 0;
   let maxScore = 0;
+  let AllCoins = 0;
 
   try {
     // Database object
@@ -18,7 +19,8 @@ export async function getServerSideProps() {
     // User data object
     const UDO = new UserModel(DB.db);
     let userData = await UDO.getUser("bingustest");
-    let AllCoins = await UDO.getAllCoins()
+    let objectCoins = await UDO.getAllCoins()
+    console.log(AllCoins)
     if (userData) {
       userCoins = userData.CoinAmount;
       userGems = userData.GemAmount;
@@ -27,6 +29,10 @@ export async function getServerSideProps() {
       isConnected = true;
     } else {
       console.log("ERROR FETCHING USER DATA");
+    }
+
+    if (objectCoins){
+      AllCoins = objectCoins.TotalCoins;
     }
 
     return {
