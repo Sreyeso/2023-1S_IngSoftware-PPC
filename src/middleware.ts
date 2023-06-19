@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
     redireccionar a una u otra página en consecuencia
 */
 
-export async function middleware(req: NextRequest){
+export async function middleware(req: NextRequest, res: NextResponse){
 
     let cookie = req.cookies.get('session')?.value
 
@@ -44,10 +44,16 @@ export async function middleware(req: NextRequest){
 
     const protectedRoutes = ['/game','/profile']
         
-    if (verifyPathname(protectedRoutes, req) && (cookie === '' || user === null)){
-        const response = NextResponse.redirect(new URL('/login', req.url));
-        response.cookies.delete('session');
-        return response;
+    if (verifyPathname(protectedRoutes, req)){
+        if(cookie === '' || user === null){
+            const response = NextResponse.redirect(new URL('/login', req.url));
+            response.cookies.delete('session');
+            return response;
+        }else{
+            const response = NextResponse.next();
+            response.headers.set('user',user)
+            return response
+        }
     }
     else if(verifyPathname(['/join_ppc','/login','/restore_password'],req) && cookie && user !== null){
         //El usuario está logueado, por lo que es necesario sacarlo de estas páginas
