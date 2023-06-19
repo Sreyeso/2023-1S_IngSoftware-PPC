@@ -21,9 +21,9 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
   ssr: false    //Disable server side rendering
 });
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
-
+  
   let isConnected = false;
   let userCoins = 0;
   let userGems = 0;
@@ -33,7 +33,10 @@ export async function getServerSideProps() {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
-    let userData = await UDO.getUser("bingus");
+    // Get logged user
+    const {req} = ctx;
+    const userName:string= req.headers.user;
+    let userData = await UDO.getUser(userName);
 
     if (userData) {
       userCoins = userData.CoinAmount;
@@ -44,7 +47,7 @@ export async function getServerSideProps() {
     }
 
     return {
-      props: { isConnected, userCoins, userGems },
+      props: { isConnected, userCoins, userGems, userName },
     };
   } catch (e) {
     console.error(e);
