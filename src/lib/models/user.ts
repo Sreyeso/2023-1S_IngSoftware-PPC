@@ -95,7 +95,7 @@ export default class UserModel{
       $match: {UserName:user}},{
       $project: {_id: 0, innerArrayLengths: 
         { $map: { input: "$GachaObjects", in: { $size: "$$this" } } }}}]).toArray();
-    return skins[0].innerArrayLengths;
+    return skins.innerArrayLengths;
   }
 
   async verifyMail(mail: string){
