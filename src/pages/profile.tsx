@@ -1,10 +1,10 @@
 import Head from "next/head";
 import styles from '@/styles/Profile.module.css'
-import {GetServerSideProps } from "next";
+import { GetServerSideProps } from "next";
 
-type props = {user: string}
+interface UserProps {user: string}
 
-export default function Profile(props: props){
+export default function Profile(props: UserProps){
 
     const {user} = props;
 
@@ -30,13 +30,13 @@ export default function Profile(props: props){
     )
 }
 
-export function getServerSideProps(ctx: { req: any; }): GetServerSideProps{
+export const getServerSideProps: GetServerSideProps<UserProps> = async (ctx) => {
     const {req} = ctx;
-    const username = req.headers.user
+    const user = req.headers.user as string
+    
     return {
-        props: {
-            user: username
+        props:{
+            user
         }
-
     }
 }
