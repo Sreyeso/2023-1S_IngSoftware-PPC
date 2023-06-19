@@ -130,13 +130,15 @@ export default class App extends Component<Clients> {
       if(this.game){this.game.keyInteractions(p5.keyCode);}
       if(p5.keyCode && this.gameFinished==true){
         let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
+        let userName = this.props.userName;
         const updateUser = () => {
           fetch("/api/GameReq", {
             method: "PUT",
             body: JSON.stringify({
               "coins":this.game.collectedCoins,
               "gems":this.game.collectedGems,
-              "score":score
+              "score":score,
+              "user":userName
             }),
             headers: {
               "content-type": "application/json",
