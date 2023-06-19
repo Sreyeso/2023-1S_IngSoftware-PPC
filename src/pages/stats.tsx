@@ -13,6 +13,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
   let maxScore = 0;
   let AllCoins = 0;
   let AllGems = 0;
+  let skinCount = 0;
 
   try {
     // Database object
@@ -25,6 +26,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
     let userData = await UDO.getUser(userName);
     let objectCoins = await UDO.getAllCoins()
     let objectGems = await UDO.getAllGems();
+    let objectsCount = await UDO.getSkinsPercent(userName);
     if (userData) {
       userCoins = userData.CoinAmount;
       userGems = userData.GemAmount;
@@ -43,8 +45,12 @@ export async function getServerSideProps(ctx: { req: any; }) {
       AllGems = objectGems[0].TotalGems;
     }
 
+    if (skinCount){
+      skinCount = objectsCount[0].ArraySizes[0];
+    }
+
     return {
-      props: { isConnected, userName, userCoins, userGems, userSkin, maxScore, AllCoins , AllGems},
+      props: { isConnected, userName, userCoins, userGems, userSkin, maxScore, AllCoins , AllGems , skinCount},
     };
   } catch (e) {
     console.error(e);
@@ -77,6 +83,9 @@ export async function getServerSideProps(ctx: { req: any; }) {
         </tr>
         <tr>
             <td>Puntuación máxima personal: {this.props.maxScore}</td>
+        </tr>
+        <tr>
+            <td>Cantidad de skins: {this.props.skinCount}</td>
         </tr>
         </tbody>
     </table>
