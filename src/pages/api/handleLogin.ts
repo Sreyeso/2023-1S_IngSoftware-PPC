@@ -5,12 +5,8 @@ import DBO from "@/lib/utils/dbo";
 import bcryptjs from 'bcryptjs' 
 import { Credentials } from '@/authentication/variousTypes'
 import { v4 as uuidv4 } from 'uuid'
-import fs from 'fs'
-import path from 'path'
 
 type Data={ name: string }
-
-//const sessionsPathFile = path.join("@","authentication","sessions.json")
 
 export default async function handleLogin(req: NextApiRequest, res: NextApiResponse<Data>) {
     let dbo = new DBO().db;
@@ -31,18 +27,10 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
         else{
 
             const sessionId: string = uuidv4(); //Obtener un id aleatorio para la sesión
+            
+            const ses = await sessions.addSession([username, sessionId])
 
-            //const sessions = fs.readFileSync(sessionsPathFile, 'utf-8');
-            //const sessionsJson = JSON.parse(sessions)
-
-            //sessionsJson[sessionId] = username
-
-            //const updatedSessions = JSON.stringify(sessionsJson, null, 2)
-            //fs.writeFileSync(sessionsPathFile, updatedSessions, 'utf-8')
-
-            sessions.addSession([username, sessionId])
-
-            res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; path=/; secure; SameSite=Strict`) //Esto le indicará al navegador que cree
+            res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; path=/; HttpOnly; secure; SameSite=Strict`) //Esto le indicará al navegador que cree
             //una cookie con la sesión
 
             res.status(status).json({name: "Login existoso"});
@@ -62,11 +50,7 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
         else{
         //OJO. BUSCAR ALGUNA LIBRERÍA QUE HAGA ESTO POR Mí    
             
-            //const sessions = fs.readFileSync(sessionsPathFile, 'utf-8');
-            //const sessionsJson = JSON.parse(sessions)
-
-            //const session = sessionsJson[sessionId]
-            let session = await sessions.getSessionHash(sessionId)
+            let session = await sessions.getSessionbyHash(sessionId)
 
             if (!session)
                 res.status(401).json({name: "No autenticado"})
