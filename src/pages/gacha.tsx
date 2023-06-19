@@ -63,6 +63,19 @@ export async function getServerSideProps(ctx: { req: any; }) {
 
 export default class App extends Component<Clients> {
 
+  constructor(props:any) {
+    super(props);
+    // Bind the function to the class instance
+    this.showMessageScreen = this.showMessageScreen.bind(this);
+  }
+
+  showMessageScreen(js:any) {
+    console.log(js);
+    // Call the function of the App class
+    this.currentSong.stop();
+    this.buttonPress=true;
+    this.playingMusic=false;
+  }
   bgShadeOfGray: number = 200; //Background color
 
   //Preload
@@ -192,6 +205,7 @@ export default class App extends Component<Clients> {
   
   currentSong:any;
   playingMusic:boolean=false;
+  buttonPress:boolean=false;
 
 
   //music
@@ -323,10 +337,8 @@ export default class App extends Component<Clients> {
 
   draw = (p5: p5) => {
     p5.background(this.bgShadeOfGray, 125);
-    console.log(this.currentSong.isPlaying(),this.currentSong.currentTime() >= this.currentSong.duration());
-    
-    if (!this.currentSong.isPlaying() && this.currentSong.currentTime() <= this.currentSong.duration()) {
-      console.log("se acabo la cancion");
+
+    if (this.playingMusic && !this.currentSong.isPlaying() && this.currentSong.currentTime() <= this.currentSong.duration()) {
       this.currentSong= this.randomSong();
       this.currentSong.play();
     }
@@ -573,8 +585,7 @@ export default class App extends Component<Clients> {
 
   keyPressed = (p5: p5) => {
 
-    if(!this.playingMusic){
-      this.currentSong.play();
+    if(!this.buttonPress){
       this.playingMusic=true;
     }
 
@@ -713,8 +724,8 @@ export default class App extends Component<Clients> {
   };
 
   mouseClicked = (p5: p5) => {
-    if(!this.playingMusic){
-      this.currentSong.play();
+
+    if(!this.buttonPress){
       this.playingMusic=true;
     }
 
@@ -741,7 +752,7 @@ export default class App extends Component<Clients> {
       }
     }
   };
-
+  
   render() {
     return (
       <div>
@@ -753,106 +764,75 @@ export default class App extends Component<Clients> {
             windowResized={this.windowResized}
             keyPressed={this.keyPressed}
             mouseClicked={this.mouseClicked}
-
-
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
-                       <StartButton/>
-                      <ProfileButton/>
-                      <RankingButton/>
-        </div>          
+          <StartButton showMessageScreen={this.showMessageScreen} />
+          <ProfileButton showMessageScreen={this.showMessageScreen} />
+          <RankingButton showMessageScreen={this.showMessageScreen} />
+        </div>
       </div>
     );
-  };
+  }
 
 }
 
 type jsAnswer = {
     name: string;
 }
-function StartButton(){
-    //Cuando se presiona el botón, se redirecciona al juego
 
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }   
+type ButtonProps = {
+  showMessageScreen: (js: jsAnswer) => void;
+};
 
-    async function startGame(){
-        showMessageScreen({name: "Iniciando Juego..."})
-        open('/game');
-    }
+function StartButton(props: ButtonProps) {
+  async function startGame() {
+    props.showMessageScreen({ name: 'Iniciando Juego...' });
+    window.location.href = '/game';
+  }
 
-    return (
-        <Link
-            href="/game" 
-            className="btn btn-primary button"
-            
-        >
-            <Image src = '/assets/START GAME.png' alt="lol,lmao" height="100" width="100"></Image>    
-        </Link>
-    );
+  return (
+    <button className="btn btn-primary button" onClick={startGame}>
+      <Image src="/assets/START GAME.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
 }
-function ProfileButton(){
-    //Cuando se presiona el botón, se redirecciona al perfil del jugador
 
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }
+function ProfileButton(props: ButtonProps) {
+  async function openProfile() {
+    props.showMessageScreen({ name: 'Entrando al perfil del jugador...' });
+    window.location.href = '/customization';
+  }
 
-    async function openProfile(){
-        showMessageScreen({name: "Entrando al perfil del jugador..."})
-        open('/customization')
-    }
-    
-    return (
-        <Link 
-            href="/customization" 
-            className="btn btn-primary button"
-        >
-            <Image src = '/assets/PROFILE.png'alt="lol,lmao" height="100" width="100"></Image> 
-        </Link>
-    );
+  return (
+    <button className="btn btn-primary button" onClick={openProfile}>
+      <Image src="/assets/PROFILE.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
 }
-function GachaButton(){
-    //Cuando se presiona el botón, se redirecciona al juego
 
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }
+function GachaButton(props: ButtonProps) {
+  async function openGacha() {
+    props.showMessageScreen({ name: 'Entrando al GACHA...' });
+    window.location.href = '/gacha';
+  }
 
-    async function openGacha(){
-        showMessageScreen({name: "Entrando al GACHA..."})
-        open('/gacha')
-    }
-    
-    return (
-        <Link 
-            href="/gacha" 
-            className="btn btn-primary button"
-        >
-            <Image src = '/assets/GACHA.png'alt="lol,lmao" height="100" width="100"></Image> 
-        </Link>
-    );
+  return (
+    <button className="btn btn-primary button" onClick={openGacha}>
+      <Image src="/assets/GACHA.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
 }
-function RankingButton(){
-    //Cuando se presiona el botón, se redirecciona al juego
 
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }
+function RankingButton(props: ButtonProps) {
+  async function openRanking() {
+    props.showMessageScreen({ name: 'Entrando al Ranking...' });
+    window.location.href = '/rankings';
+  }
 
-    async function openRanking(){
-        showMessageScreen({name: "Entrando a el Ranking..."})
-        open('/sketch')
-    }
-    
-    return (
-        <Link 
-            href="/rankings" 
-            className="btn btn-primary button"
-        >
-            <Image src = '/assets/RANKINGS.png'alt="lol,lmao" height="100" width="100"></Image>   
-        </Link>
-    );
+  return (
+    <button className="btn btn-primary button" onClick={openRanking}>
+      <Image src="/assets/RANKINGS.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
 }

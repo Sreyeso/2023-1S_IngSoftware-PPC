@@ -11,6 +11,7 @@ import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
+import Profile from "./profile";
 
 // Will only import `react-p5` on client-side
 const Sketch = dynamic(() => import("react-p5").then((mod) => {
@@ -72,6 +73,39 @@ export async function getServerSideProps(ctx: { req: any; }) {
 
 export default class App extends Component<Clients> {
 
+      constructor(props:any) {
+        super(props);
+        // Bind the function to the class instance
+        this.showMessageScreen = this.showMessageScreen.bind(this);
+      }
+
+      showMessageScreen(js:any) {
+        console.log(js);
+        // Call the function of the App class
+        this.game.gameSounds[0].stop();
+        this.game.playingMusic=false;
+        
+        if(this.gameFinished==true){
+          let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
+          let userName = this.props.userName;
+          const updateUser = () => {
+            fetch("/api/GameReq", {
+              method: "PUT",
+              body: JSON.stringify({
+                "coins":this.game.collectedCoins,
+                "gems":this.game.collectedGems,
+                "score":score,
+                "user":userName
+              }),
+              headers: {
+                "content-type": "application/json",
+              },
+            }).catch((e) => console.log(e));
+          };
+          updateUser();
+        }
+      }
+
       general_assets_names: string[] = ["pause.png","exit.png","start.png"];
       defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
       
@@ -132,9 +166,6 @@ export default class App extends Component<Clients> {
           this.gameSounds[3].play();
           this.deathSound=true;
         }
-        if(!this.gameFinished && (!this.gameSounds[0].isPlaying() && this.gameSounds[0].currentTime() <= this.gameSounds[0].duration())) {
-          this.gameSounds[0].loop();
-        }
 
     };
 
@@ -177,9 +208,9 @@ export default class App extends Component<Clients> {
                 />      
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
-                      <GachaButton/>
-                      <ProfileButton/>
-                      <RankingButton/>
+                  <GachaButton showMessageScreen={this.showMessageScreen} />
+                  <ProfileButton showMessageScreen={this.showMessageScreen} />
+                  <RankingButton showMessageScreen={this.showMessageScreen} />
                 </div>          
               
             </div>
@@ -191,88 +222,59 @@ export default class App extends Component<Clients> {
 type jsAnswer = {
     name: string;
 }
-function StartButton(){
-    //Cuando se presiona el botón, se redirecciona al juego
 
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }   
+type ButtonProps = {
+  showMessageScreen: (js: jsAnswer) => void;
+};
 
-    async function startGame(){
-        showMessageScreen({name: "Iniciando Juego..."})
-    }
+function StartButton(props: ButtonProps) {
+  async function startGame() {
+    props.showMessageScreen({ name: 'Iniciando Juego...' });
+    window.location.href = '/game';
+  }
 
-    return (
-        <Link
-            href="/game" 
-            className="btn btn-primary button"
-            onClick={startGame}
-        >
-            <Image src = '/assets/START GAME.png' alt="lol,lmao" height="100" width="100"></Image>    
-        </Link>
-    );
-}
-function ProfileButton(){
-    //Cuando se presiona el botón, se redirecciona al perfil del jugador
-
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }
-
-    async function openProfile(){
-        showMessageScreen({name: "Entrando al perfil del jugador..."})
-    }
-    
-    return (
-        <Link 
-            href="/customization" 
-            className="btn btn-primary button"
-            onClick={openProfile}
-        >
-            <Image src = '/assets/PROFILE.png'alt="lol,lmao" height="100" width="100"></Image> 
-        </Link>
-    );
-}
-function GachaButton(){
-    //Cuando se presiona el botón, se redirecciona al juego
-
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }
-
-    async function openGacha(){
-        showMessageScreen({name: "Entrando al GACHA..."})
-    }
-    
-    return (
-        <Link 
-            href="/gacha" 
-            className="btn btn-primary button"
-            onClick={openGacha}
-        >
-            <Image src = '/assets/GACHA.png'alt="lol,lmao" height="100" width="100"></Image> 
-        </Link>
-    );
-}
-function RankingButton(){
-    //Cuando se presiona el botón, se redirecciona al juego
-
-    function showMessageScreen (js: jsAnswer) {
-        console.log(js);
-    }
-
-    async function openRanking(){
-        showMessageScreen({name: "Entrando a el Ranking..."})
-        open('/sketch')
-    }
-    
-    return (
-        <Link 
-            href="/rankings" 
-            className="btn btn-primary button"
-        >
-            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"height="100" width="100"></Image>   
-        </Link>
-    );
+  return (
+    <button className="btn btn-primary button" onClick={startGame}>
+      <Image src="/assets/START GAME.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
 }
 
+function ProfileButton(props: ButtonProps) {
+  async function openProfile() {
+    props.showMessageScreen({ name: 'Entrando al perfil del jugador...' });
+    window.location.href = '/customization';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openProfile}>
+      <Image src="/assets/PROFILE.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function GachaButton(props: ButtonProps) {
+  async function openGacha() {
+    props.showMessageScreen({ name: 'Entrando al GACHA...' });
+    window.location.href = '/gacha';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openGacha}>
+      <Image src="/assets/GACHA.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function RankingButton(props: ButtonProps) {
+  async function openRanking() {
+    props.showMessageScreen({ name: 'Entrando al Ranking...' });
+    window.location.href = '/rankings';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openRanking}>
+      <Image src="/assets/RANKINGS.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}

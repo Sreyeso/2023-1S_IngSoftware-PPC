@@ -41,6 +41,8 @@ export default class GameLogic {
     playerSkin: p5.Image;
     playerHat: p5.Image;
 
+    playingMusic:boolean=false;
+
     p:p5;
     
     static getRandomInt(max:number) {
@@ -98,7 +100,6 @@ export default class GameLogic {
         this.bg=this.levelGraphics[0][21];
 
         for (let i = 0; i < this.gameSounds.length; i++) {this.gameSounds[i].setVolume(0.1)};
-
         this.maxscrollSpeed=gameDetails.maxscrollSpeed;
 
     }
@@ -117,6 +118,10 @@ export default class GameLogic {
 
             //MOVEMENT
             if(this.player.isAlive){ //If the player is dead none of this happens
+
+            if( this.playingMusic && !this.gameSounds[0].isPlaying() && this.gameSounds[0].currentTime() <= this.gameSounds[0].duration()) {
+                this.gameSounds[0].loop();
+            }
 
             //Visually show pause cooldown and score
                 this.p.push();
@@ -485,9 +490,11 @@ export default class GameLogic {
         if(this.pause==false && this.pauseTimer==0){
             this.pause=true;
             this.gameSounds[0].pause();
+            this.playingMusic=false;
             this.pauseTimer=pauseCooldown;
         }else{
             this.gameSounds[0].play();
+            this.playingMusic=true;
             this.pause=false;
         }
     }
@@ -505,6 +512,7 @@ export default class GameLogic {
         if(keyCode){
             if(this.gameStarted==false){
                 this.gameSounds[0].play();
+                this.playingMusic=true;
                 this.gameStarted=true;
             }
         }
