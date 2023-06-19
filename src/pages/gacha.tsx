@@ -292,6 +292,7 @@ export default class App extends Component<Clients> {
 
     this.userCoins = this.props.userCoins;
     this.userGems = this.props.userGems;
+    this.currentSong=this.randomSong();
 
   };
 
@@ -569,7 +570,6 @@ export default class App extends Component<Clients> {
   keyPressed = (p5: p5) => {
 
     if(!this.playingMusic){
-      this.currentSong = this.randomSong();
       this.currentSong.play();
       this.playingMusic=true;
     }
@@ -709,7 +709,6 @@ export default class App extends Component<Clients> {
 
   mouseClicked = (p5: p5) => {
     if(!this.playingMusic){
-      this.currentSong = this.randomSong();
       this.currentSong.play();
       this.playingMusic=true;
     }

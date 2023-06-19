@@ -131,11 +131,11 @@ export default class App extends Component<Clients> {
         if(this.gameFinished && !this.deathSound){
           this.gameSounds[3].play();
           this.deathSound=true;
-        }else{
-          if (!this.gameSounds[0].isPlaying() && this.gameSounds[0].currentTime() >= this.gameSounds[0].duration()) {
-            this.gameSounds[0].loop();
-          }
         }
+        if(!this.gameFinished && (!this.gameSounds[0].isPlaying() && this.gameSounds[0].currentTime() >= this.gameSounds[0].duration())) {
+          this.gameSounds[0].loop();
+        }
+
     };
 
     keyPressed = (p5:p5) => {
