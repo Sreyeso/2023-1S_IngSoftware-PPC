@@ -59,7 +59,7 @@ export default class UserModel{
   }
 
   async getAllCoins(){
-    const test = this.collection.aggregate([{
+    const globalCoins = this.collection.aggregate([{
         $group:{
         _id:'',
         "CoinAmount": {$sum: '$CoinAmount'}
@@ -70,7 +70,22 @@ export default class UserModel{
             "TotalCoins": '$CoinAmount'
         }
     }]).toArray();
-    return test;
+    return globalCoins;
+  }
+
+  async getAllGems(){
+    const globalGems = this.collection.aggregate([{
+        $group:{
+        _id:'',
+        "GemAmount": {$sum: '$GemAmount'}
+        }
+        },{
+        $project: {
+            _id: 0,
+            "TotalGems": '$GemAmount'
+        }
+    }]).toArray();
+    return globalGems;
   }
 
   async verifyMail(mail: string){
