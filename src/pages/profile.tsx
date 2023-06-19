@@ -1,6 +1,7 @@
 import Head from "next/head";
 import styles from '@/styles/Profile.module.css'
 import {GetServerSideProps } from "next";
+import Image from 'next/image';
 
 type props = {user: string}
 
@@ -33,7 +34,7 @@ export default function Profile(props: props){
                     <button 
                     className = {styles.logoutButton}
                     onClick={e => {}}>
-                        <img src='/buttons/LOG-OUT.png'></img>
+                        <Image src='/buttons/LOG-OUT.png'alt="lol,lmao"></Image>
                     </button>
                 </div>
             </main>
