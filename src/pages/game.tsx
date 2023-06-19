@@ -131,6 +131,10 @@ export default class App extends Component<Clients> {
         if(this.gameFinished && !this.deathSound){
           this.gameSounds[3].play();
           this.deathSound=true;
+        }else{
+          if (!this.gameSounds[0].isPlaying() && this.gameSounds[0].currentTime() >= this.gameSounds[0].duration()) {
+            this.gameSounds[0].loop();
+          }
         }
     };
 
@@ -173,7 +177,7 @@ export default class App extends Component<Clients> {
                 />      
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
-                       <GachaButton/>
+                      <GachaButton/>
                       <ProfileButton/>
                       <RankingButton/>
                 </div>          

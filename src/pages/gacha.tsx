@@ -189,7 +189,10 @@ export default class App extends Component<Clients> {
   error: boolean = false;
 
   gachaInstance: any;
+  
+  currentSong:any;
   playingMusic:boolean=false;
+
 
   //music
 
@@ -316,6 +319,12 @@ export default class App extends Component<Clients> {
 
   draw = (p5: p5) => {
     p5.background(this.bgShadeOfGray, 125);
+
+    
+    if (!this.currentSong.isPlaying() && this.currentSong.currentTime() >= this.currentSong.duration()) {
+      this.currentSong= this.randomSong();
+      this.currentSong.play();
+    }
 
     if (!this.confirmation) {
 
@@ -499,8 +508,8 @@ export default class App extends Component<Clients> {
         p5.text("Haz click >\n (previsualizar)", this.prevSquareHatX, this.selSquareAY);
       }
 
-      this.gemPrice = (this.gachaMode == "special") ? 30 : 15;
-      this.coinPrice = (this.gachaMode == "special") ? 60 : 15;
+      this.gemPrice = (this.gachaMode == "special") ? 30 : 0;
+      this.coinPrice = (this.gachaMode == "special") ? 0 : 30;
 
       if (!this.error) {
         p5.text(
@@ -549,12 +558,19 @@ export default class App extends Component<Clients> {
 
     }
 
+    
+
   };
+
+  randomSong(){
+    return this.gachaMenuMusic[Math.floor(Math.random() * this.gachaMenuMusic.length)];
+  }
 
   keyPressed = (p5: p5) => {
 
     if(!this.playingMusic){
-      this.gachaMenuMusic[Math.floor(Math.random() * this.gachaMenuMusic.length)].play();
+      this.currentSong = this.randomSong();
+      this.currentSong.play();
       this.playingMusic=true;
     }
 
@@ -693,9 +709,11 @@ export default class App extends Component<Clients> {
 
   mouseClicked = (p5: p5) => {
     if(!this.playingMusic){
-      this.gachaMenuMusic[Math.floor(Math.random() * this.gachaMenuMusic.length)].play();
+      this.currentSong = this.randomSong();
+      this.currentSong.play();
       this.playingMusic=true;
     }
+
     if (!this.confirmation) {
       this.keySelector = "";
       // Check if the mouse clicked inside square A

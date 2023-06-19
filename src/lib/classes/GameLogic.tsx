@@ -484,8 +484,10 @@ export default class GameLogic {
     pauseGame(){
         if(this.pause==false && this.pauseTimer==0){
             this.pause=true;
+            this.gameSounds[0].pause();
             this.pauseTimer=pauseCooldown;
         }else{
+            this.gameSounds[0].play();
             this.pause=false;
         }
     }
