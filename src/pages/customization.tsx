@@ -212,6 +212,7 @@ export default class App extends Component<Clients> {
 
     this.currentHat = this.playerHats[this.currentHatIndex];
     this.currentSkin = this.playerSkins[this.currentSkinIndex];
+    this.music.setVolume(0.1);
   };
 
   rarityColor(rarity: string) {

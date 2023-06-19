@@ -290,9 +290,12 @@ export default class App extends Component<Clients> {
     this.gachaMode = "normal";
     this.keySelector = "unlock";
 
+    for (let i = 0; i < this.menuMusic_names.length; i++) {this.gachaMenuMusic[i].setVolume(0.1);}
+
     this.userCoins = this.props.userCoins;
     this.userGems = this.props.userGems;
     this.currentSong=this.randomSong();
+
 
   };
 
