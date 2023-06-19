@@ -183,7 +183,6 @@ function StartButton(){
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        open('/game');
     }
 
     return (
@@ -205,7 +204,6 @@ function ProfileButton(){
 
     async function openProfile(){
         showMessageScreen({name: "Entrando al perfil del jugador..."})
-        open('/customization')
     }
     
     return (
@@ -227,7 +225,6 @@ function GachaButton(){
 
     async function openGacha(){
         showMessageScreen({name: "Entrando al GACHA..."})
-        open('/gacha')
     }
     
     return (
