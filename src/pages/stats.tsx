@@ -46,7 +46,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
     }
 
     if (skinCount){
-      skinCount = objectsCount[0].ArraySizes[0];
+      skinCount = objectsCount[0].ArraySizes;
     }
 
     return {
