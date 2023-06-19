@@ -4,7 +4,7 @@ import DBO from "@/lib/utils/dbo";
 
 type Data={ cookie: string | null, username: string | null}
 
-export default async function handleLogin(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function getSessions(req: NextApiRequest, res: NextApiResponse<Data>) {
     let dbo = new DBO().db;
     let sessions = new SessionModel(dbo);
 
@@ -15,7 +15,7 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
 
             userSession = await sessions.getSessionbyHash(sessionId)
             let cookie: string | null = null
-            let username: string | null = null
+            let username: string | null = null  
             if (userSession !== null){
                 cookie = userSession.sessionId
                 username = userSession.UserName

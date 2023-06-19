@@ -27,6 +27,8 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
         else{
 
             const sessionId: string = uuidv4(); //Obtener un id aleatorio para la sesión
+            
+            const ses = await sessions.addSession([username, sessionId])
 
             res.setHeader('Set-Cookie', `session=${sessionId}; Expires=24; path=/; HttpOnly; secure; SameSite=Strict`) //Esto le indicará al navegador que cree
             //una cookie con la sesión
