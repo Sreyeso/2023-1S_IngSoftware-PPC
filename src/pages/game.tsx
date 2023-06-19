@@ -190,7 +190,7 @@ function StartButton(){
         <Link
             href="/game" 
             className="btn btn-primary button"
-            
+            onClick={startGame}
         >
             <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
         </Link>
