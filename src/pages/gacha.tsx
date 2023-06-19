@@ -597,7 +597,8 @@ export default class App extends Component<Clients> {
                 method: "PUT",
                 body: JSON.stringify({
                   "coinCost": -this.coinPrice,
-                  "gemCost": -this.gemPrice
+                  "gemCost": -this.gemPrice,
+                  "user": this.props.userName
                 }),
                 headers: {
                   "content-type": "application/json",

@@ -509,6 +509,7 @@ export default class App extends Component<Clients> {
               body: JSON.stringify({
                 "skin": this.skin_names[this.currentSkinIndex],
                 "hat": this.hat_names[this.currentHatIndex],
+                "user":this.props.userName
               }),
               headers: {
                 "content-type": "application/json",

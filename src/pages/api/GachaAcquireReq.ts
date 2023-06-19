@@ -10,9 +10,9 @@ export async function connection(body: any) {
     const UDO = new UserModel(DB.db);
 
     if(body.type=="skin"){
-      await UDO.addGachaSkin("bingus",body.object);
+      await UDO.addGachaSkin(body.user,body.object);
     }else if(body.type=="hat"){
-      await UDO.addGachaHat("bingus",body.object);
+      await UDO.addGachaHat(body.user,body.object);
     }
 
     return Promise.resolve();
