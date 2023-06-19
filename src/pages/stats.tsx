@@ -45,8 +45,8 @@ export async function getServerSideProps(ctx: { req: any; }) {
       AllGems = objectGems[0].TotalGems;
     }
 
-    if (skinCount){
-      skinCount = objectsCount[0];
+    if (objectsCount){
+      skinCount = objectsCount[0].innerArrayLength;
     }
 
     return {
@@ -85,7 +85,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
             <td>Puntuación máxima personal: {this.props.maxScore}</td>
         </tr>
         <tr>
-            <td>Cantidad de skins test 2: {this.props.skinCount}</td>
+            <td>Cantidad de skins test 3: {this.props.skinCount}</td>
         </tr>
         </tbody>
     </table>

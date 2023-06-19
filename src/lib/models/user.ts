@@ -91,10 +91,7 @@ export default class UserModel{
   }
 
   async getSkinsPercent(user:string){
-    const skins = this.collection.aggregate([{
-      $match: {UserName:user}},{
-      $project: {_id: 0, innerArrayLengths: 
-        { $map: { input: "$GachaObjects", in: { $size: "$$this" } } }}}]).toArray();
+    const skins = this.collection.aggregate([{$match: {UserName: "bingustest"}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
     return skins;
   }
 
