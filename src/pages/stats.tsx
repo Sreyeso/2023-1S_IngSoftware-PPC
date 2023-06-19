@@ -46,7 +46,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
     }
 
     if (skinCount){
-      skinCount = objectsCount[0].ArraySizes;
+      skinCount = objectsCount[0];
     }
 
     return {
@@ -85,7 +85,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
             <td>Puntuación máxima personal: {this.props.maxScore}</td>
         </tr>
         <tr>
-            <td>Cantidad de skins test 1: {this.props.skinCount}</td>
+            <td>Cantidad de skins test 2: {this.props.skinCount}</td>
         </tr>
         </tbody>
     </table>
