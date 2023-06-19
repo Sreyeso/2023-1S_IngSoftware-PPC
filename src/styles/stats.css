@@ -8,6 +8,7 @@ table {
  
 th {
     border-bottom: 0.5em solid rgb(189, 45, 45);
+    text-align: center;
 }
  
 td {
