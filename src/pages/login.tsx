@@ -45,7 +45,7 @@ export default function Login(){
                 </div>
                 <div className = {styles.allInside}>
                     <div className = {styles.logoPPC}>
-                        <Image src = "/backgrounds/logo_PPC.png"alt="lol,lmao"> 
+                        <Image src = "/backgrounds/logo_PPC.png"alt="lol,lmao" height="100" width="100"> 
                         </Image>
                     </div>
                     <form className = {styles.loginForm}>
@@ -72,7 +72,7 @@ export default function Login(){
                                 e.preventDefault();
                                 sendCreds();
                             }}>
-                                <Image src = {'/buttons/LOG-IN.png'}alt="lol,lmao">
+                                <Image src = {'/buttons/LOG-IN.png'}alt="lol,lmao"height="100" width="100">
                                 </Image>
                             </button>
                         </div>

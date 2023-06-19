@@ -789,7 +789,7 @@ function StartButton(){
             className="btn btn-primary button"
             
         >
-            <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
+            <Image src = '/assets/START GAME.png' alt="lol,lmao" height="100" width="100"></Image>    
         </Link>
     );
 }
@@ -810,7 +810,7 @@ function ProfileButton(){
             href="/customization" 
             className="btn btn-primary button"
         >
-            <Image src = '/assets/PROFILE.png'alt="lol,lmao"></Image> 
+            <Image src = '/assets/PROFILE.png'alt="lol,lmao" height="100" width="100"></Image> 
         </Link>
     );
 }
@@ -831,7 +831,7 @@ function GachaButton(){
             href="/gacha" 
             className="btn btn-primary button"
         >
-            <Image src = '/assets/GACHA.png'alt="lol,lmao"></Image> 
+            <Image src = '/assets/GACHA.png'alt="lol,lmao" height="100" width="100"></Image> 
         </Link>
     );
 }
@@ -852,7 +852,7 @@ function RankingButton(){
             href="/rankings" 
             className="btn btn-primary button"
         >
-            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"></Image>   
+            <Image src = '/assets/RANKINGS.png'alt="lol,lmao" height="100" width="100"></Image>   
         </Link>
     );
 }
