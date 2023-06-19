@@ -196,7 +196,7 @@ function StartButton(){
             className="btn btn-primary button"
             onClick={startGame}
         >
-            <Image src = '/assets/START GAME.png' alt="lol,lmao"></Image>    
+            <Image src = '/assets/START GAME.png' alt="lol,lmao" height="100" width="100"></Image>    
         </Link>
     );
 }
@@ -217,7 +217,7 @@ function ProfileButton(){
             className="btn btn-primary button"
             onClick={openProfile}
         >
-            <Image src = '/assets/PROFILE.png'alt="lol,lmao"></Image> 
+            <Image src = '/assets/PROFILE.png'alt="lol,lmao" height="100" width="100"></Image> 
         </Link>
     );
 }
@@ -238,7 +238,7 @@ function GachaButton(){
             className="btn btn-primary button"
             onClick={openGacha}
         >
-            <Image src = '/assets/GACHA.png'alt="lol,lmao"></Image> 
+            <Image src = '/assets/GACHA.png'alt="lol,lmao" height="100" width="100"></Image> 
         </Link>
     );
 }
@@ -259,7 +259,7 @@ function RankingButton(){
             href="/rankings" 
             className="btn btn-primary button"
         >
-            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"></Image>   
+            <Image src = '/assets/RANKINGS.png'alt="lol,lmao"height="100" width="100"></Image>   
         </Link>
     );
 }
