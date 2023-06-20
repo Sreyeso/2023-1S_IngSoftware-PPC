@@ -53,7 +53,7 @@
     color: #F3F3F2;
 }
 
-#profile .flex .item .fullUser{
+#profile .flex .item .fulluser{
     display:flex;
     flex-direction:column;
 }
