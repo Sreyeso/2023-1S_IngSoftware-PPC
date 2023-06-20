@@ -5,77 +5,51 @@
     margin: 0;
 }
 
-:root {
-    --color-dark: #2c3131;
-    --color-light: #f3f3f2;
-  }
-  
-  .board {
+:root{
+    --color-dark: #2C3131;
+    --color-light: #F3F3F2;
+}
+
+
+
+.board {
     text-align: center;
-  }
-  
-  .board .leaderboard {
+    
+}
+
+.board .leaderboard{
     margin-bottom: 1em;
     align-items: center;
-  }
-  
-  #profile {
+}
+
+
+#profile{
     margin-top: 1em;
-  }
-  
-  #profile .flex {
+}
+
+#profile .flex{
     display: flex;
     gap: 1em;
     text-align: left;
     margin-bottom: 1em;
     padding-right: 10em;
     padding-left: 10em;
-  }
-  
-  #profile .flex .item {
-    display: flex;
-    align-items: center;
-  }
-  
-  #profile .flex .image-container {
-    position: relative;
-  }
-  
-  #profile .flex .gorro-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 5rem;
-  }
-  
-  #profile .flex .skin-image {
-    position: relative;
-    width: 5rem;
-  }
-  
-  #profile .flex .info {
-    padding: 0.5em;
-  }
-  
-  .text {
-    color: #f3f3f2;
-  }
+}
 
-.image-container {
-    position: relative;
-  }
-  
-.gorro-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  
-.skin-image {
-    position: relative;
-  }
-
-.item {
+#profile .flex .item{
     display: flex;
     align-items: center;
 }
+
+#profile .flex img{
+    width: 5rem;
+}
+
+#profile .flex .info{
+   padding: .5em;
+}
+
+.text{
+    color: #F3F3F2;
+}
+
