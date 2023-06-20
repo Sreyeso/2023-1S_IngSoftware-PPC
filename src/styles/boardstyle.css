@@ -5,12 +5,6 @@
     margin: 0;
 }
 
-:root{
-    --color-dark: #2C3131;
-    --color-light: #F3F3F2;
-}
-
-
 
 .board {
     text-align: center;
@@ -50,6 +44,10 @@
 }
 
 .text{
-    color: #F3F3F2;
+    color: #2b2b27;
 }
 
+#profile .flex .item .fulluser{
+    display:flex;
+    flex-direction:column;
+}

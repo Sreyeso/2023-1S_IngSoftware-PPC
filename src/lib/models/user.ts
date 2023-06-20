@@ -23,6 +23,7 @@ export default class UserModel{
   userCoins:number=0;
   userGems:number=0;
   ranks:any;
+  userRank:any;
   userSkin:string[]=["default_ppc.png","none.png"];
   gachaObjects:string[][]=[["default_ppc.png"],["none.png"]];
   maxScore:number=0;
@@ -57,40 +58,15 @@ export default class UserModel{
  * @param {string}  user - Give the UserName to find the document
  * @returns {Object} Returns the object user, call the properties to get the individual values
  */
-  async getUser(user:string){
-    const  findUser= this.collection.findOne({UserName:user});
+  async getUser(user: string) {
+    const findUser = await this.collection.findOne(
+      { UserName: user },
+      { projection: { _id: 0, Password: 0 } }
+    );
     return findUser;
   }
+  
 
-  async getAllCoins(){
-    const globalCoins = this.collection.aggregate([{
-        $group:{
-        _id:'',
-        "CoinAmount": {$sum: '$CoinAmount'}
-        }
-        },{
-        $project: {
-            _id: 0,
-            "TotalCoins": '$CoinAmount'
-        }
-    }]).toArray();
-    return globalCoins;
-  }
-
-  async getAllGems(){
-    const globalGems = this.collection.aggregate([{
-        $group:{
-        _id:'',
-        "GemAmount": {$sum: '$GemAmount'}
-        }
-        },{
-        $project: {
-            _id: 0,
-            "TotalGems": '$GemAmount'
-        }
-    }]).toArray();
-    return globalGems;
-  }
 
   async getSkinsPercent(user:string){
     const skins = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
@@ -100,11 +76,6 @@ export default class UserModel{
   async getHatsPercent(user:string){
     const hats = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 1] } }}}]).toArray();
     return hats;
-  }
-
-  async getTop(){
-    const top10 = this.collection.find({}, { _id: 0, UserName: 1, Region: 1, HiScore: 1, CurrentAspect: 1 }).sort({ HiScore: -1 }).limit(10).toArray();
-    return top10;
   }
 
   async verifyMail(mail: string){
