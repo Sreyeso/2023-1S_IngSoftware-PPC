@@ -93,7 +93,6 @@ export default class App extends Component<Clients> {
         GetSkin();
       }
     }
-    
 
     this.currentSong.stop();
     this.buttonPress=true;
@@ -662,10 +661,14 @@ export default class App extends Component<Clients> {
             this.enter = false;
 
             let finalArray;
+            let elementNames;
+
             let commonElements;
             let rareElements;
             let epicElements;
             let legendaryElements;
+
+            let rarities;
 
             if (this.selector == "skin") {
 
@@ -679,6 +682,8 @@ export default class App extends Component<Clients> {
               epicElements = [...this.allSkinImages.slice(nc + nr, nc + nr + ne)];
               legendaryElements = [...this.allSkinImages.slice(nc + nr + ne, nc + nr + ne + nl)];
 
+              rarities=[this.commonSkin_names,this.rareSkin_names,this.epicSkin_names,this.legendarySkin_names];
+
             } else {
               const nc: number = this.commonHat_names.length;
               const nr: number = this.rareHat_names.length;
@@ -690,6 +695,8 @@ export default class App extends Component<Clients> {
               epicElements = [...this.allHatImages.slice(nc + nr, nc + nr + ne)];
               legendaryElements = [...this.allHatImages.slice(nc + nr + ne, nc + nr + ne + nl)];
 
+              rarities=[this.commonHat_names,this.rareHat_names,this.epicHat_names,this.legendaryHat_names];
+
             }
 
             this.shuffleArray(commonElements);
@@ -697,12 +704,30 @@ export default class App extends Component<Clients> {
             this.shuffleArray(epicElements);
             this.shuffleArray(legendaryElements);
 
+            
             if (this.gachaMode == "special") {
               finalArray = [...commonElements.slice(0, 3), ...rareElements.slice(0, 3), ...epicElements.slice(0, 3), ...legendaryElements.slice(0, 3)];
-              this.gachaInstance = new Gacha(p5, finalArray, [3, 3, 3, 3], [0.2, 0.3, 0.3], p5.width);
             } else {
               finalArray = [...commonElements.slice(0, 5), ...rareElements.slice(0, 4), ...epicElements.slice(0, 2), ...legendaryElements.slice(0, 1)];
-              this.gachaInstance = new Gacha(p5, finalArray, [5, 4, 2, 1], [0.4, 0.3, 0.2], p5.width);
+            }
+
+            if (this.selector == "skin") {
+              elementNames = finalArray.map(image => {
+                const index = this.allSkinImages.indexOf(image);
+                return this.allSkin_names[index];
+              });
+            }else{
+              elementNames = finalArray.map(image => {
+                const index = this.allHatImages.indexOf(image);
+                return this.allHat_names[index];
+              });
+            }
+
+
+            if (this.gachaMode == "special") {
+              this.gachaInstance = new Gacha(p5, finalArray,elementNames, [3, 3, 3, 3], [0.2, 0.3, 0.3],rarities, p5.width);
+            } else {
+              this.gachaInstance = new Gacha(p5, finalArray,elementNames, [5, 4, 2, 1], [0.4, 0.3, 0.2],rarities, p5.width);
             }
 
             this.gachaInstance.generateRandomChoice();
@@ -739,6 +764,8 @@ export default class App extends Component<Clients> {
           GetSkin();
           for (let i = 0; i < this.menuMusic_names.length; i++) {this.gachaMenuMusic[i].stop();}
           this.currentSong.stop();
+          this.buttonPress=true;
+          this.playingMusic=false;
           setTimeout(() => { location.reload(); }, 1000);
         }
       }

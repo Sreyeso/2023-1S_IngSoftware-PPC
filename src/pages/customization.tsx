@@ -573,6 +573,9 @@ export default class App extends Component<Clients> {
           CustomizeUser();
           this.dripMsg = this.randomDripMessage();
           // Call location.reload() after the delay
+          this.music.stop();
+          this.buttonPress=true;
+          this.playingMusic=false;
           setTimeout(() => { location.reload(); }, 1000);
           this.done = true;
         }

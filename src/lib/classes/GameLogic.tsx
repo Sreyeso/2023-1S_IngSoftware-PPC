@@ -407,6 +407,7 @@ export default class GameLogic {
                         tileTop = yOffset + (i * this.level.tile_size) + (0.6 * this.level.tile_size);
                         tileBottom = yOffset + ((i + 1) * this.level.tile_size);
 
+
                         dircol = this.detectSquareCollisions(tileLeft,tileRight,tileTop,tileBottom,debug);
                         if(dircol!="none"){
                             /* Death triggers */
@@ -446,7 +447,7 @@ export default class GameLogic {
                         // calculate the bounding box of the tile
                         tileLeft = xOffset + (j * this.level.tile_size)+(0.6 * this.level.tile_size);
                         tileRight = xOffset + ((j + 1) * this.level.tile_size);
-                        tileTop = yOffset + (i * this.level.tile_size) + (0.1 * this.level.tile_size);
+                        tileTop = yOffset + (i * this.level.tile_size) + (0.2 * this.level.tile_size);
                         tileBottom = yOffset + ((i + 1) * this.level.tile_size) - (0.1 * this.level.tile_size);
 
                         dircol = this.detectSquareCollisions(tileLeft,tileRight,tileTop,tileBottom,debug);
@@ -489,12 +490,16 @@ export default class GameLogic {
     pauseGame(){
         if(this.pause==false && this.pauseTimer==0){
             this.pause=true;
-            this.gameSounds[0].pause();
-            this.playingMusic=false;
+            if(this.playingMusic){
+                this.gameSounds[0].pause();
+                this.playingMusic=false;
+            }
             this.pauseTimer=pauseCooldown;
         }else{
-            this.gameSounds[0].play();
-            this.playingMusic=true;
+            if(!this.playingMusic){
+                this.gameSounds[0].play();
+                this.playingMusic=true;
+            }
             this.pause=false;
         }
     }
@@ -510,7 +515,7 @@ export default class GameLogic {
 
     keyInteractions(keyCode:number){
         if(keyCode){
-            if(this.gameStarted==false){
+            if(!this.gameStarted && !this.playingMusic){
                 this.gameSounds[0].play();
                 this.playingMusic=true;
                 this.gameStarted=true;
