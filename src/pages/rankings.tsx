@@ -4,7 +4,6 @@ import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import Clients from "@/lib/models/user";
 
-
 export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null;
   let isConnected = false;
@@ -14,7 +13,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
   let maxScore = 0;
   let region = "Base";
   let ranks = [];
-  let userRank = null; // Add a variable to store the user's rank
+  let userRank;
   try {
     DB = new DBO();
     const UDO = new UserModel(DB.db);
@@ -25,7 +24,6 @@ export async function getServerSideProps(ctx: { req: any; }) {
     let userData = await UDO.getUser(userName);
     let ranksUsers = await SDO.getTop();
 
-    console.log(userData);
     if (userData) {
       userCoins = userData.CoinAmount;
       userGems = userData.GemAmount;
@@ -47,16 +45,18 @@ export async function getServerSideProps(ctx: { req: any; }) {
       ranks = ranks.slice(0, 10);
 
       // Find the user's rank in the ranks array
-      const userIndex = ranks.findIndex(
-        (user: any) => user.UserName === userName
-      );
-      if (userIndex !== -1) { 
+      const userIndex = ranks.findIndex((user: any) => user.UserName === userName);
+
+      if (userIndex === -1) { // User is not in the top 10
+        ranks.push(userData); // Add the user's data to the end of the ranks array
+        userRank = -1;
+      } else { // User is in the top 10
         userRank = userIndex + 1;
       }
     }
 
     return {
-      props: { ranks, userRank },
+      props: { ranks,userName,userRank},
     };
   } catch (e) {
     console.error(e);
@@ -70,18 +70,17 @@ export async function getServerSideProps(ctx: { req: any; }) {
   }
 }
 
-
 //tuto tomado de: https://www.youtube.com/watch?v=p_046Qe19p0
 
 export default class Leaderboard extends Component<Clients> {
   render() {
-    const { ranks, userRank } = this.props;
+    const { ranks, userName,userRank } = this.props;
 
     return (
       <div>
         <div className="board">
           <h1 className="leaderboard">Rankings</h1>
-          <Profiles datos={ranks} userRank={userRank} />
+          <Profiles datos={ranks} userName={userName} userRank={userRank} />
         </div>
         <div>
           <button>
@@ -106,37 +105,47 @@ export default class Leaderboard extends Component<Clients> {
   }
 }
 
-
-export function Profiles({ datos, userRank }: any) {
+export function Profiles({ datos, userName,userRank }: any) {
+  // Filter out undefined elements
   const filteredDatos = datos.filter((dato: any) => dato !== undefined);
-
   return (
     <div id="profile">
       {filteredDatos.map((data: any, index: number) => (
-        <Item key={index} datos={data} number={index + 1} userRank={userRank} />
+        <Item
+          key={index}
+          datos={data}
+          number={index + 1}
+          userName={userName}
+          userRank={userRank}
+        />
       ))}
     </div>
   );
 }
 
-function Item({ datos, number, userRank }: any) {
-  const isUser = userRank !== null && number === userRank;
+function Item({ datos, number, userName, userRank }: any) {
+  const isUser = datos.UserName === userName;
+  const isTop10 = userRank !== -1;
+
+  const itemStyle = {
+    backgroundColor: isUser ? (isTop10 ? 'red' : 'blue') : 'default',
+  };
 
   return (
-    <div className={`flex ${isUser ? "user" : ""}`}>
-      <div className="item">
-        <h1>{number}</h1>
+    <div className="flex">
+      <div className="item" style={itemStyle}>
+        <h1>{isUser ? 'Tú:' : number}</h1>
         <div className="fulluser">
           <img src={`/sprites/allHats/${datos.CurrentAspect[1]}`} alt="userGorro" />
           <img src={`/sprites/allSkins/${datos.CurrentAspect[0]}`} alt="userSkin" />
         </div>
         <div className="info">
-          <h3 className="name text">{datos.UserName}</h3>
+          <h3 className={isUser ? 'user-item' : 'user-rank'}>{datos.UserName}</h3>
           <span>Región: {datos.Region}</span>
         </div>
       </div>
       <div className="item">
-        <span>Score: {datos.HiScore}</span>
+        <span className={isUser ? '' : 'below-top-10'}>Score: {datos.HiScore}</span>
       </div>
     </div>
   );
