@@ -97,7 +97,7 @@ export default class UserModel{
   }
 
   async getHatsPercent(user:string){
-    const hats = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
+    const hats = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 1] } }}}]).toArray();
     return hats;
   }
 
