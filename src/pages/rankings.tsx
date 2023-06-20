@@ -36,16 +36,14 @@ import Clients from "@/lib/models/user";
       }
       
       if (ranksUsers){
-        ranks[0] = ranksUsers[0];
-        ranks[1] = ranksUsers[1];
-        ranks[2] = ranksUsers[2];
-        ranks[3] = ranksUsers[3];
-        ranks[4] = ranksUsers[4];
-        ranks[5] = ranksUsers[5];
-        ranks[6] = ranksUsers[6];
-        ranks[7] = ranksUsers[7];
-        ranks[8] = ranksUsers[8];
-        ranks[9] = ranksUsers[9];
+        for (let i = 0; i < 9; i++) {
+          if (ranksUsers[i].length =! 0){
+            ranks[i] = ranksUsers[i];
+          }
+          else{
+            ranks[i] = [{UserName: 'Vacio', Region: 'None', HiScore: 0, CurrentAspect: ['default_ppc.png','none.png']}]
+          }
+        }
       }
       return {
         props: { ranks,},
