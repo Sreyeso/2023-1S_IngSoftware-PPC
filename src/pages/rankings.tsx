@@ -44,7 +44,7 @@ import Clients from "@/lib/models/user";
             ranks[i] = {UserName: 'Vacio', Region: 'None', HiScore: 0, CurrentAspect: ['default_ppc.png','none.png']};
           }
         }
-        ranks[9] = ranks[i] = {UserName: 'Vacio', Region: 'None', HiScore: 0, CurrentAspect: ['default_ppc.png','none.png']};
+        ranks[9] = {UserName: 'Vacio', Region: 'None', HiScore: 0, CurrentAspect: ['default_ppc.png','none.png']};
       }
       return {
         props: { ranks,},
