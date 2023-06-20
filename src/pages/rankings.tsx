@@ -41,7 +41,7 @@ import Clients from "@/lib/models/user";
             ranks[i] = ranksUsers[i];
           }
           else{
-            ranks[i] = [{UserName: 'Vacio', Region: 'None', HiScore: 0, CurrentAspect: ['default_ppc.png','none.png']}]
+            ranks[i] = {UserName: 'Vacio', Region: 'None', HiScore: 0, CurrentAspect: ['default_ppc.png','none.png']}
           }
         }
       }
