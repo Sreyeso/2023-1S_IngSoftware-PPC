@@ -104,13 +104,15 @@ export function Profiles({datos}:any){
 
 function Item(datos:any,number:any){
     let imagen = `/sprites/allSkins/${datos.CurrentAspect[0]}`
+    let gorro = `/sprites/allHats/${datos.CurrentAspect[1]}`
     return (
         <div className="flex">
             <div className="item">
                 <h1>{number}</h1>
+                <img src={gorro} alt="userGorro"></img>
                 <img src={imagen} alt="userSkin"></img>
                 <div className="info">
-                    <h3 className="name text">{datos.userName}</h3>
+                    <h3 className="name text">{datos.UserName}</h3>
                     <span>Región: {datos.Region}</span>
                 </div>
             </div>
