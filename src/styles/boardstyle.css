@@ -66,3 +66,8 @@
 .skin-image {
     position: relative;
   }
+
+.item {
+    display: flex;
+    align-items: center;
+}
