@@ -97,7 +97,7 @@ export function Profiles({datos}:any){
             {Item(datos[6],"07")}
             {Item(datos[7],"08")}
             {Item(datos[8],"09")}
-            {Item(datos[8],"10")}
+            {Item(datos[9],"10")}
         </div>
     )
 }

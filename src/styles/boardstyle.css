@@ -5,12 +5,6 @@
     margin: 0;
 }
 
-:root{
-    --color-dark: #25d1d1;
-    --color-light: #F3F3F2;
-}
-
-
 
 .board {
     text-align: center;
