@@ -52,3 +52,17 @@
 .text{
     color: #F3F3F2;
 }
+
+.image-container {
+    position: relative;
+  }
+  
+.gorro-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+.skin-image {
+    position: relative;
+  }
