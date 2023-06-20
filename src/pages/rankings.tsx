@@ -36,7 +36,7 @@ import Clients from "@/lib/models/user";
       }
       
       if (ranksUsers){
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 10; i++) {
           if (ranksUsers[i].length =! 0){
             ranks[i] = ranksUsers[i];
           }
@@ -69,7 +69,7 @@ export default class Leaderboard extends Component<Clients>{
     <div>
     <div className="board">
             <h1 className="leaderboard">Rankings</h1>
-            <Profiles datos={[this.props.ranks[0],this.props.ranks[1],this.props.ranks[2],this.props.ranks[3],this.props.ranks[4],this.props.ranks[5],this.props.ranks[6],this.props.ranks[7],this.props.ranks[8],this.props.ranks[8]]}></Profiles>
+            <Profiles datos={[this.props.ranks[0],this.props.ranks[1],this.props.ranks[2],this.props.ranks[3],this.props.ranks[4],this.props.ranks[5],this.props.ranks[6],this.props.ranks[7],this.props.ranks[8],this.props.ranks[9]]}></Profiles>
     </div>
     <div>
     <button><img src="/sprites/generalAssets/LOG-OUT.png" alt="Logout"/></button>
