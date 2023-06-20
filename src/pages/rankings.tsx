@@ -109,7 +109,7 @@ function Item(datos:any,number:any){
         <div className="flex">
             <div className="item">
                 <h1>{number}</h1>
-                <div>
+                <div className="fulluser">
                 <img src={gorro} alt="userGorro"></img>
                 <img src={imagen} alt="userSkin"></img>
                 </div>
