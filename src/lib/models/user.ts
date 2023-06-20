@@ -58,11 +58,8 @@ export default class UserModel{
  * @param {string}  user - Give the UserName to find the document
  * @returns {Object} Returns the object user, call the properties to get the individual values
  */
-  async getUser(user: string) {
-    const findUser = await this.collection.findOne(
-      { UserName: user },
-      { projection: { _id: 0, Password: 0 } }
-    );
+  async getUser(user:string){
+    const  findUser= this.collection.findOne({UserName:user});
     return findUser;
   }
   

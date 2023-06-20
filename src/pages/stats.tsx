@@ -108,7 +108,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
       <div className="flex">
           <button><img src="./sprites/generalAssets/LOG-OUT.png" alt="Iniciar Juego"/></button>
           <button><img src="./sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
-          <a href="\webleader"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
+          <a href="\rankings"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
           <button><img src="./sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
       </div>
     </div>
