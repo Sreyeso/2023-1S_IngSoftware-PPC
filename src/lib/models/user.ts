@@ -18,6 +18,7 @@ export default class UserModel{
   AllCoins:number=0;
   AllGems:number=0;
   skinCount:number=0;
+  hatCount:number=0;
   collection:any;
   userCoins:number=0;
   userGems:number=0;
@@ -91,8 +92,13 @@ export default class UserModel{
   }
 
   async getSkinsPercent(user:string){
-    const skins = this.collection.aggregate([{$match: {UserName: "bingustest"}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
+    const skins = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
     return skins;
+  }
+
+  async getHatsPercent(user:string){
+    const hats = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
+    return hats;
   }
 
   async verifyMail(mail: string){

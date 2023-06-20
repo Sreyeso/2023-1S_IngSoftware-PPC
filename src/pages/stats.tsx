@@ -14,6 +14,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
   let AllCoins = 0;
   let AllGems = 0;
   let skinCount = 0;
+  let hatCount = 0;
 
   try {
     // Database object
@@ -27,6 +28,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
     let objectCoins = await UDO.getAllCoins()
     let objectGems = await UDO.getAllGems();
     let objectsCount = await UDO.getSkinsPercent(userName);
+    let objectshCount = await UDO.getHatsPercent(userName);
     if (userData) {
       userCoins = userData.CoinAmount;
       userGems = userData.GemAmount;
@@ -49,8 +51,12 @@ export async function getServerSideProps(ctx: { req: any; }) {
       skinCount = objectsCount[0].innerArrayLength;
     }
 
+    if (objectshCount){
+      hatCount = objectshCount[0].innerArrayLength;
+    }
+
     return {
-      props: { isConnected, userName, userCoins, userGems, userSkin, maxScore, AllCoins , AllGems , skinCount},
+      props: { isConnected, userName, userCoins, userGems, userSkin, maxScore, AllCoins , AllGems , skinCount, hatCount},
     };
   } catch (e) {
     console.error(e);
@@ -85,7 +91,10 @@ export async function getServerSideProps(ctx: { req: any; }) {
             <td>Puntuación máxima personal: {this.props.maxScore}</td>
         </tr>
         <tr>
-            <td>Cantidad de skins test 3: {this.props.skinCount}</td>
+            <td>Cantidad de skins deesbloqueadas: {this.props.skinCount}</td>
+        </tr>
+        <tr>
+            <td>Cantidad de gorros deesbloqueados: {this.props.hatCount}</td>
         </tr>
         </tbody>
     </table>
