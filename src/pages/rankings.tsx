@@ -109,8 +109,10 @@ function Item(datos:any,number:any){
         <div className="flex">
             <div className="item">
                 <h1>{number}</h1>
-                <img src={gorro} alt="userGorro"></img>
-                <img src={imagen} alt="userSkin"></img>
+                <div className="image-container">
+                <img src={gorro} alt="userGorro" className="gorro-image" />
+                <img src={imagen} alt="userSkin" className="skin-image" />
+                </div>
                 <div className="info">
                     <h3 className="name text">{datos.UserName}</h3>
                     <span>Región: {datos.Region}</span>
