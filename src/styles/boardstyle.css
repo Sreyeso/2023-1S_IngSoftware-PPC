@@ -1,27 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-* > * {
+*>* {
     font-family: "Poppins", cursive;
     margin: 0;
 }
 
-
 .board {
     text-align: center;
-    
 }
 
-.board .leaderboard{
+.board .leaderboard {
     margin-bottom: 1em;
     align-items: center;
 }
 
-
-#profile{
+#profile {
     margin-top: 1em;
 }
 
-#profile .flex{
+#profile .flex {
     display: flex;
     gap: 1em;
     text-align: left;
@@ -30,24 +27,38 @@
     padding-left: 10em;
 }
 
-#profile .flex .item{
+#profile .flex .item {
     display: flex;
     align-items: center;
 }
 
-#profile .flex img{
+#profile .flex img {
     width: 5rem;
 }
 
-#profile .flex .info{
-   padding: .5em;
+#profile .flex .info {
+    padding: 0.5em;
 }
 
-.text{
+.text {
     color: #2b2b27;
 }
 
-#profile .flex .item .fulluser{
-    display:flex;
-    flex-direction:column;
+#profile .flex .item .fulluser {
+    display: flex;
+    flex-direction: column;
+}
+
+/* User-specific styles */
+.user-item {
+    background-color: #e6f7ff;
+    border: 2px solid #1890ff;
+}
+
+.user-rank {
+    color: #595959;
+}
+
+.below-top-10 {
+    color: #595959;
 }
