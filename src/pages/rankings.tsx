@@ -37,7 +37,7 @@ import Clients from "@/lib/models/user";
       
       if (ranksUsers){
         for (let i = 0; i < 10; i++) {
-          if (ranksUsers[i].length =! 0){
+          if (typeof ranksUsers[i] !== 'undefined'){
             ranks[i] = ranksUsers[i];
           }
           else{
