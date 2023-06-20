@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
+import StatsModel from "@/lib/models/stats";
 import Clients from "@/lib/models/user";
 
 export async function getServerSideProps(ctx: { req: any; }) {
@@ -21,14 +22,19 @@ export async function getServerSideProps(ctx: { req: any; }) {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
+
+    //Stats data object
+    const SDO = new StatsModel(DB.db);
     // Get logged user
     const {req} = ctx;
     const userName:string= req.headers.user;
     let userData = await UDO.getUser(userName);
-    let objectCoins = await UDO.getAllCoins()
-    let objectGems = await UDO.getAllGems();
     let objectsCount = await UDO.getSkinsPercent(userName);
     let objectshCount = await UDO.getHatsPercent(userName);
+
+    let objectCoins = await SDO.getAllCoins();
+    let objectGems = await SDO.getAllGems();
+    
     if (userData) {
       userCoins = userData.CoinAmount;
       userGems = userData.GemAmount;
