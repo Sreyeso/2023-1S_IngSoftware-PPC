@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
-
+import Clients from "@/lib/models/user";
 
 
   export async function getServerSideProps(ctx: { req: any; }) {
@@ -13,7 +13,7 @@ import UserModel from "@/lib/models/user";
     let userSkin = 0;
     let maxScore = 0;
     let region = "Base";
-  
+    let ranks = [];
     try {
       // Database object
       DB = new DBO();
@@ -22,6 +22,7 @@ import UserModel from "@/lib/models/user";
       const {req} = ctx;
       const userName:string= req.headers.user;
       let userData = await UDO.getUser(userName);
+      let ranksUsers = await UDO.getTop();
   
       if (userData) {
         userCoins = userData.CoinAmount;
@@ -33,9 +34,21 @@ import UserModel from "@/lib/models/user";
       } else {
         console.log("ERROR FETCHING USER DATA");
       }
-  
+      
+      if (ranksUsers){
+        ranks[0] = ranksUsers[0];
+        ranks[1] = ranksUsers[1];
+        ranks[2] = ranksUsers[2];
+        ranks[3] = ranksUsers[3];
+        ranks[4] = ranksUsers[4];
+        ranks[5] = ranksUsers[5];
+        ranks[6] = ranksUsers[6];
+        ranks[7] = ranksUsers[7];
+        ranks[8] = ranksUsers[8];
+        ranks[9] = ranksUsers[9];
+      }
       return {
-        props: { isConnected, userCoins, userGems, userSkin, maxScore, userName, region },
+        props: { ranks,},
       };
     } catch (e) {
       console.error(e);
@@ -52,13 +65,13 @@ import UserModel from "@/lib/models/user";
 
 //tuto tomado de: https://www.youtube.com/watch?v=p_046Qe19p0
 
-export default class Leaderboard extends Component{
+export default class Leaderboard extends Component<Clients>{
     render() {
     return(
     <div>
     <div className="board">
             <h1 className="leaderboard">Rankings</h1>
-            <Profiles datos={[this.props,this.props,this.props,this.props,this.props,this.props,this.props,this.props,this.props,this.props]}></Profiles>
+            <Profiles datos={[this.props.ranks[0],this.props.ranks[1],this.props.ranks[2],this.props.ranks[3],this.props.ranks[4],this.props.ranks[5],this.props.ranks[6],this.props.ranks[7],this.props.ranks[8],this.props.ranks[9]]}></Profiles>
     </div>
     <div>
     <button><img src="/sprites/generalAssets/LOG-OUT.png" alt="Logout"/></button>
@@ -90,7 +103,7 @@ export function Profiles({datos}:any){
 }
 
 function Item(datos:any,number:any){
-    let imagen = `/sprites/allSkins/${datos.userSkin}`
+    let imagen = `/sprites/allSkins/${datos.CurrentAspect[0]}`
     return (
         <div className="flex">
             <div className="item">
@@ -98,11 +111,11 @@ function Item(datos:any,number:any){
                 <img src={imagen} alt="userSkin"></img>
                 <div className="info">
                     <h3 className="name text">{datos.userName}</h3>
-                    <span>Región: {datos.region}</span>
+                    <span>Región: {datos.Region}</span>
                 </div>
             </div>
             <div className="item">
-                <span>Score: {datos.maxScore}</span>
+                <span>Score: {datos.HiScore}</span>
             </div>
         </div>
     )

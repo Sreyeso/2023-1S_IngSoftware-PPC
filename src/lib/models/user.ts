@@ -22,6 +22,7 @@ export default class UserModel{
   collection:any;
   userCoins:number=0;
   userGems:number=0;
+  ranks:any;
   userSkin:string[]=["default_ppc.png","none.png"];
   gachaObjects:string[][]=[["default_ppc.png"],["none.png"]];
   maxScore:number=0;
@@ -99,6 +100,11 @@ export default class UserModel{
   async getHatsPercent(user:string){
     const hats = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 1] } }}}]).toArray();
     return hats;
+  }
+
+  async getTop(){
+    const top10 = this.collection.find({}, { _id: 0, UserName: 1, Region: 1, HiScore: 1, CurrentAspect: 1 }).sort({ HiScore: -1 }).limit(10).toArray();
+    return top10;
   }
 
   async verifyMail(mail: string){
