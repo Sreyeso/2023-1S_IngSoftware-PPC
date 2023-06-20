@@ -15,9 +15,14 @@ export interface Clients extends Document {
 
 export default class UserModel{
   userName:string="";
+  AllCoins:number=0;
+  AllGems:number=0;
+  skinCount:number=0;
+  hatCount:number=0;
   collection:any;
   userCoins:number=0;
   userGems:number=0;
+  ranks:any;
   userSkin:string[]=["default_ppc.png","none.png"];
   gachaObjects:string[][]=[["default_ppc.png"],["none.png"]];
   maxScore:number=0;
@@ -56,6 +61,52 @@ export default class UserModel{
     const  findUser= this.collection.findOne({UserName:user});
     return findUser;
   }
+
+  async getAllCoins(){
+    const globalCoins = this.collection.aggregate([{
+        $group:{
+        _id:'',
+        "CoinAmount": {$sum: '$CoinAmount'}
+        }
+        },{
+        $project: {
+            _id: 0,
+            "TotalCoins": '$CoinAmount'
+        }
+    }]).toArray();
+    return globalCoins;
+  }
+
+  async getAllGems(){
+    const globalGems = this.collection.aggregate([{
+        $group:{
+        _id:'',
+        "GemAmount": {$sum: '$GemAmount'}
+        }
+        },{
+        $project: {
+            _id: 0,
+            "TotalGems": '$GemAmount'
+        }
+    }]).toArray();
+    return globalGems;
+  }
+
+  async getSkinsPercent(user:string){
+    const skins = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
+    return skins;
+  }
+
+  async getHatsPercent(user:string){
+    const hats = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 1] } }}}]).toArray();
+    return hats;
+  }
+
+  async getTop(){
+    const top10 = this.collection.find({}, { _id: 0, UserName: 1, Region: 1, HiScore: 1, CurrentAspect: 1 }).sort({ HiScore: -1 }).limit(10).toArray();
+    return top10;
+  }
+
   async verifyMail(mail: string){
     const findMail = this.collection.findOne({Mail: mail});
     return findMail;
