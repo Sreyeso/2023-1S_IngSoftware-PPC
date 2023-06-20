@@ -35,7 +35,6 @@ export default class SessionModel{
  * @param {string}  user - Give the UserName to find the document
  * @returns {Object} Returns the object user, call the properties to get the individual values
  */
-
   async getSessionbyHash(sessionid:string){
     const  findbyHash= this.collection.findOne({sessionId:sessionid});
     return findbyHash;

@@ -2,6 +2,8 @@
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
+import Link from 'next/link';
+import Image from 'next/image';
 
 //Class imports
 import DBO from "@/lib/utils/dbo";
@@ -17,7 +19,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch obje
   ssr: false    //Disable server side rendering
 });
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
 
   let isConnected = false;
@@ -29,7 +31,10 @@ export async function getServerSideProps() {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
-    let userData = await UDO.getUser("bingus");
+    // Get logged user
+    const {req} = ctx;
+    const userName:string= req.headers.user;
+    let userData = await UDO.getUser(userName);
 
     if (userData) {
       userSkin = userData.CurrentAspect;
@@ -40,7 +45,7 @@ export async function getServerSideProps() {
     }
 
     return {
-      props: { isConnected, userSkin, gachaObjects },
+      props: { isConnected, userSkin, gachaObjects,userName },
     };
   } catch (e) {
     console.error(e);
@@ -56,6 +61,20 @@ export async function getServerSideProps() {
 
 export default class App extends Component<Clients> {
 
+  constructor(props:any) {
+    super(props);
+    // Bind the function to the class instance
+    this.showMessageScreen = this.showMessageScreen.bind(this);
+  }
+
+  showMessageScreen(js:any) {
+    console.log(js);
+    // Call the function of the App class
+    this.music.stop();
+    this.buttonPress=true;
+    this.playingMusic=false;
+  }
+
   bgShadeOfGray: number = 200;
 
   currentHat: any;
@@ -64,7 +83,7 @@ export default class App extends Component<Clients> {
   currentHatIndex: number = 0; // Current index in the hat array
 
   skin_names: string[] = ["default_ppc.png"]; // File names of the users unlocked skin aspects
-  hat_names: string[] = ["default_ppc.png"]; // File names of the users unlocked hat aspects
+  hat_names: string[] = ["none.png"]; // File names of the users unlocked hat aspects
   playerSkins: any[] = []; // Actual images of the users unlocked skin aspects
   playerHats: any[] = []; // Actual images of the users unlocked aspects
 
@@ -95,6 +114,32 @@ export default class App extends Component<Clients> {
     , "rainbow.gif"
     , "waka_waka.gif"];
 
+    commonHat_names: string[] = ["plant.png"
+    , "balloon.png"
+    , "cherry.png"
+    , "graduation.png"
+    , "none.png"
+    , "pirate.png"
+    , "santa.png"
+    , "wizard.png"];
+  rareHat_names: string[] = ["angel.png"
+    , "birthday.png"
+    , "crown.png"
+    , "helicopter.png"
+    , "leprechaun.png"
+    , "magic.png"];
+  epicHat_names: string[] = ["antenna.png"
+    , "dunce.png"
+    , "explosion.png"
+    , "flemish.png"
+    , "one_piece.png"
+    , "sims.png"
+    , "sombrero.png"];
+  legendaryHat_names: string[] = ["carlos.png"
+    , "ez_clap.png"
+    , "hand.png"
+    , "teemo.png"];
+
   lastKeyPressTimeHat: number = 0;
   lastKeyPressTimeSkin: number = 0;
   fadeInTime = 500; // Fade-in duration in milliseconds
@@ -117,11 +162,16 @@ export default class App extends Component<Clients> {
   done: boolean = false;
   dripMsg: string = "";
 
+  music:any;
+  playingMusic:boolean=false;
+  buttonPress:boolean=false;
+
   preload = (p5: p5|any) => {
+    this.music=p5.loadSound(`/sounds/RecRoom_NewMenu.mp3`);
     this.skin_names = this.props.gachaObjects[0];
     this.hat_names = this.props.gachaObjects[1];
     for (let i = 0; i < this.skin_names.length; i++) { this.playerSkins.push(p5.loadImage(`/sprites/allSkins/${this.skin_names[i]}`)); }
-    for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allSkins/${this.hat_names[i]}`)); }
+    for (let i = 0; i < this.hat_names.length; i++) { this.playerHats.push(p5.loadImage(`/sprites/allHats/${this.hat_names[i]}`)); }
   };
 
   windowResized = (p5: p5) => {
@@ -177,6 +227,7 @@ export default class App extends Component<Clients> {
 
     this.currentHat = this.playerHats[this.currentHatIndex];
     this.currentSkin = this.playerSkins[this.currentSkinIndex];
+    this.music.setVolume(0.1);
   };
 
   rarityColor(rarity: string) {
@@ -243,16 +294,16 @@ export default class App extends Component<Clients> {
       const hatName = this.hat_names[wrappedIndex];
       let rarity: string;
 
-      if (this.commonSkin_names.includes(hatName)) {
+      if (this.commonHat_names.includes(hatName)) {
         rarity = "common";
-      } else if (this.rareSkin_names.includes(hatName)) {
+      } else if (this.rareHat_names.includes(hatName)) {
         rarity = "rare";
-      } else if (this.epicSkin_names.includes(hatName)) {
+      } else if (this.epicHat_names.includes(hatName)) {
         rarity = "epic";
-      } else if (this.legendarySkin_names.includes(hatName)) {
+      } else if (this.legendaryHat_names.includes(hatName)) {
         rarity = "legendary";
       } else {
-        rarity = "none"; // The skin name doesn't exist in any of the arrays
+        rarity = "none"; // The hat name doesn't exist in any of the arrays
       }
 
       // Calculate the size of the current square
@@ -440,9 +491,17 @@ export default class App extends Component<Clients> {
     p5.text(this.dripMsg, this.previewedPartX, this.previewedSkinY + this.middleSquareSize / 2 + this.spacing);
     p5.pop();
 
+    if (this.playingMusic && !this.music.isPlaying() && this.music.currentTime() <= this.music.duration()) {
+      this.music.loop();
+    }
+
   };
 
   keyPressed = (p5: p5) => {
+
+    if(!this.buttonPress){
+      this.playingMusic=true;
+    }
 
     if (!this.done) {
       if (!this.confirm) {
@@ -504,6 +563,7 @@ export default class App extends Component<Clients> {
               body: JSON.stringify({
                 "skin": this.skin_names[this.currentSkinIndex],
                 "hat": this.hat_names[this.currentHatIndex],
+                "user":this.props.userName
               }),
               headers: {
                 "content-type": "application/json",
@@ -513,30 +573,105 @@ export default class App extends Component<Clients> {
           CustomizeUser();
           this.dripMsg = this.randomDripMessage();
           // Call location.reload() after the delay
+          this.music.stop();
+          this.buttonPress=true;
+          this.playingMusic=false;
           setTimeout(() => { location.reload(); }, 1000);
           this.done = true;
         }
       }
 
     }
-  }
+  };
+
+  mouseClicked = (p5: p5) => {
+    if(!this.buttonPress){
+      this.playingMusic=true;
+    }
+  };
 
   render() {
     return (
       <div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <Sketch
             preload={this.preload}
             setup={this.setup}
             draw={this.draw}
             windowResized={this.windowResized}
             keyPressed={this.keyPressed}
-            
+            mouseClicked={this.mouseClicked}
+        
           />
         </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
+          <StartButton showMessageScreen={this.showMessageScreen} />
+          <GachaButton showMessageScreen={this.showMessageScreen} />
+          <RankingButton showMessageScreen={this.showMessageScreen} />
+        </div>        
       </div>
     );
   };
 
 }
 
+
+type jsAnswer = {
+    name: string;
+}
+
+type ButtonProps = {
+  showMessageScreen: (js: jsAnswer) => void;
+};
+
+function StartButton(props: ButtonProps) {
+  async function startGame() {
+    props.showMessageScreen({ name: 'Iniciando Juego...' });
+    window.location.href = '/game';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={startGame}>
+      <Image src="/assets/START GAME.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function ProfileButton(props: ButtonProps) {
+  async function openProfile() {
+    props.showMessageScreen({ name: 'Entrando al perfil del jugador...' });
+    window.location.href = '/customization';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openProfile}>
+      <Image src="/assets/PROFILE.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function GachaButton(props: ButtonProps) {
+  async function openGacha() {
+    props.showMessageScreen({ name: 'Entrando al GACHA...' });
+    window.location.href = '/gacha';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openGacha}>
+      <Image src="/assets/GACHA.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function RankingButton(props: ButtonProps) {
+  async function openRanking() {
+    props.showMessageScreen({ name: 'Entrando al Ranking...' });
+    window.location.href = '/rankings';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openRanking}>
+      <Image src="/assets/RANKINGS.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}

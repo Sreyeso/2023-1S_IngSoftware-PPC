@@ -1,10 +1,30 @@
 import Head from "next/head";
 import styles from '@/styles/Profile.module.css'
+<<<<<<< HEAD
 import { GetServerSideProps } from "next";
+=======
+import {GetServerSideProps } from "next";
+import Image from 'next/image';
+>>>>>>> DesarrolloSantiagoR
 
 interface UserProps {user: string}
 
+<<<<<<< HEAD
 export default function Profile(props: UserProps){
+=======
+export function getServerSideProps(ctx: { req: any; }){
+    const {req} = ctx;
+    const username = req.headers.user
+    return {
+        props: {
+            user: username
+        }
+
+    }
+}
+
+export default function Profile(props: props){
+>>>>>>> DesarrolloSantiagoR
 
     const {user} = props;
 
@@ -22,7 +42,7 @@ export default function Profile(props: UserProps){
                     <button 
                     className = {styles.logoutButton}
                     onClick={e => {}}>
-                        <img src='/buttons/LOG-OUT.png'></img>
+                        <Image src='/buttons/LOG-OUT.png'alt="lol,lmao"></Image>
                     </button>
                 </div>
             </main>
@@ -30,6 +50,7 @@ export default function Profile(props: UserProps){
     )
 }
 
+<<<<<<< HEAD
 export const getServerSideProps: GetServerSideProps<UserProps> = async (ctx) => {
     const {req} = ctx;
     const user = req.headers.user as string
@@ -40,3 +61,5 @@ export const getServerSideProps: GetServerSideProps<UserProps> = async (ctx) => 
         }
     }
 }
+=======
+>>>>>>> DesarrolloSantiagoR

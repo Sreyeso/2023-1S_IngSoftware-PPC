@@ -8,9 +8,9 @@ export async function connection(body:any){
     DB = new DBO();
     const UDO=new UserModel(DB.db);
 
-    await UDO.addCoins("bingus",parseInt(body.coins));
-    await UDO.addGems("bingus",parseInt(body.gems));
-    await UDO.setScore("bingus",parseInt(body.score));
+    await UDO.addCoins(body.user,parseInt(body.coins));
+    await UDO.addGems(body.user,parseInt(body.gems));
+    await UDO.setScore(body.user,parseInt(body.score));
 
     return Promise.resolve();
   } catch (e) {
