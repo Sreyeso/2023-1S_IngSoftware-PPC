@@ -3,43 +3,49 @@ import UserModel from '@/lib/models/user';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export async function connection(body:any){
+  let DB: DBO | null = null; // Initialize DB variable with null
   try {
-    //Database object
-    const DB:DBO=new DBO();
-
-    //User data object
+    DB = new DBO();
     const UDO=new UserModel(DB.db);
-    await UDO.addCoins("bingus",parseInt(body.coins));
-    await UDO.addGems("bingus",parseInt(body.gems));
-    await UDO.setScore("bingus",parseInt(body.score));
-    //let userSkin=await 
-    //retorno Objid, id in array, name ...
-    return Promise.resolve(); // Resolve the promise when the operations are completed
+
+    await UDO.addCoins(body.user,parseInt(body.coins));
+    await UDO.addGems(body.user,parseInt(body.gems));
+    await UDO.setScore(body.user,parseInt(body.score));
+
+    return Promise.resolve();
   } catch (e) {
-    console.error(e)
-    return Promise.reject(e); // Reject the promise if an error occurs
+    console.error(e);
+    return Promise.reject(e);
+  } finally {
+    if (DB !== null) {
+      DB.end(); // Await the closing of the database connection
+    }
   }
-  
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const requestMethod = req.method;
-  const body = req.body;  
+  console.log(req.body);
+  const body = req.body;
+  let statusCode = 200;
+
   switch (requestMethod) {
     case 'POST':
-      res.status(200).json({ message: `You submitted the following data: ss` });
+      res.status(statusCode).json({ message: 'You submitted the following data: ss' });
       break;
     case 'PUT':
-      connection(body)
-      .then(() => {
-        res.status(200).json({ message: `Entry successfully updated` });
-      })
-      .catch((error) => {
+      try {
+        await connection(body);
+        res.status(statusCode).json({ message: 'Entry successfully updated' });
+      } catch (error) {
         console.error(error);
-        res.status(500).json({ message: `Error updating entry` });
-      });
+        statusCode = 500; // Internal Server Error
+        res.status(statusCode).json({ message: 'An error occurred' });
+      }
       break;
     default:
-      res.status(401).json({ message: 'Api gaming' });
+      statusCode = 401; // Unauthorized
+      res.status(statusCode).json({ message: 'Api gaming' });
+      break;
   }
 }

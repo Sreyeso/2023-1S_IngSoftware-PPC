@@ -1,123 +1,101 @@
+//Link vercel desarrollo : https://2023-1-s-ing-software-99kiat0q2-sreyeso.vercel.app/
 // Framework Imports
-//Vercel gamong
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
-import p5Types from "p5"; // Import this for typechecking and intellisense
 import p5 from 'p5';
-
+import Link from 'next/link';
+import Image from 'next/image';
 //Class imports
 import GameLogic from "../lib/classes/GameLogic";
 import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
+import Profile from "./profile";
 
-//Main sketch fuction (AKA Game)
-const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
-    require('p5/lib/addons/p5.sound'); // Sound library imported after react-p5 is loaded
-    return mod.default // returning react-p5 default export
-}),{
-    ssr: false    //Disable server side rendering
+// Will only import `react-p5` on client-side
+const Sketch = dynamic(() => import("react-p5").then((mod) => {
+
+  // importing sound lib only after react-p5 is loaded
+  require('p5/lib/addons/p5.sound');
+
+  // returning react-p5 default export
+  return mod.default
+}), {
+  ssr: false
 });
-//import Sketch from "react-p5";
-
-// Graphic assets
-const general_assets_names: string[] = ["pause.png","exit.png","start.png"];
-const player_names: string[] = ["default_ppc.png","la_creatura.png","love_letter.png","nyan_poptart.png","pollo.png","hypnotic_blue.gif","purple_toxic.png","sans.png"];
-const defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
-
-let generalAssets:any[]=[];
-
-let player_Skins: any[]=[];
-let defaultLevel_Graphics: any[]=[];
-let desertLevel_Graphics: any[]=[];
-let hellLevel_Graphics: any[]=[];
-
-let levelGraphics:any;
-let levelLayouts :any;
-
-//Main game object
-let game:GameLogic;
-let gameFinished:boolean|undefined=false;
-let resultsLogged:boolean=false;
-
-//Debug control
-const debug:boolean=false;
 
 //Server prop function (backend)
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: { req: any; }) {
+  let DB: DBO | null = null; // Initialize DB variable with null
+  
+  let isConnected = false;
+  let userCoins = 0;
+  let userGems = 0;
+  let userSkin = 0;
+  let maxScore = 0;
+
   try {
-    //Database object
-    const DB:DBO=new DBO();
-    //User data object
-    const UDO=new UserModel(DB.db);
-    let userData=await UDO.getUser("bingus");
-    //let userSkin=await 
-    //retorno Objid, id in array, name ...
-    let userCoins:number =userData.CoinAmount;
-    let userGems:number=userData.GemAmount;
-    let userSkin:number =userData.CurrentAspect;
-    let maxScore:number =userData.HiScore;
+    // Database object
+    DB = new DBO();
+    // User data object
+    const UDO = new UserModel(DB.db);
+    // Get logged user
+    const {req} = ctx;
+    const userName:string= req.headers.user;
+    let userData = await UDO.getUser(userName);
 
-
-    return {
-      props: { isConnected: true, userCoins:userCoins, userGems:userGems ,userSkin:userSkin,maxScore:maxScore},
+    if (userData) {
+      userCoins = userData.CoinAmount;
+      userGems = userData.GemAmount;
+      userSkin = userData.CurrentAspect;
+      maxScore = userData.HiScore;
+      isConnected = true;
+    } else {
+      console.log("ERROR FETCHING USER DATA");
     }
-  } catch (e) {
-    console.error(e)
+
     return {
-      props: { isConnected: false },
+      props: { isConnected, userCoins, userGems, userSkin, maxScore, userName },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { isConnected },
+    };
+  } finally {
+    if (DB) {
+      DB.end();
     }
   }
 }
 
-
-
 export default class App extends Component<Clients> {
 
-      preload = (p5:p5) => {
-        levelLayouts=p5.loadJSON('/levelLayouts.json');
-        // Load graphical assets
-        for (let i = 0; i < general_assets_names.length; i++) {generalAssets.push(p5.loadImage(`/sprites/generalAssets/${general_assets_names[i]}`));}
-        for (let i = 0; i < defaultTile_names.length; i++) {defaultLevel_Graphics.push(p5.loadImage(`/sprites/defaultLevel/${defaultTile_names[i]}`));}
-        for (let i = 0; i < defaultTile_names.length; i++) {desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${defaultTile_names[i]}`));}
-        for (let i = 0; i < defaultTile_names.length; i++) {hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${defaultTile_names[i]}`));}
-        for (let i = 0; i < player_names.length; i++) {player_Skins.push(p5.loadImage(`/sprites/playerSkins/${player_names[i]}`));}
-        levelGraphics=[defaultLevel_Graphics,desertLevel_Graphics,hellLevel_Graphics];
+      constructor(props:any) {
+        super(props);
+        // Bind the function to the class instance
+        this.showMessageScreen = this.showMessageScreen.bind(this);
+      }
 
-      };
-
-      windowResized = (p5:p5) =>  {
-        //game.resize();  //Resize the game
-        //p5.resizeCanvas(p5.windowWidth,p5.windowHeight);  //Resize the canvas
-      };
-
-      setup = (p5:p5, canvasParentRef:Element) => {
-        p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
-
-        game = new GameLogic(
-          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:player_Skins[1]}, //userData
-          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
-          generalAssets,levelGraphics,levelLayouts,p5);
-
-          p5.resizeCanvas(game.level.levelWidth-game.level.tile_size,game.level.levelHeight);  //Resize the canvas according to the viewable game size
-    };
-
-    draw = (p5:p5) => {
-        p5.background('white');
-        gameFinished=game.handleGame(debug);
-        if(gameFinished==true && resultsLogged==false){
-
-        let score =  (game.score > this.props.maxScore) ? (game.score) : (this.props.maxScore);
-
+      showMessageScreen(js:any) {
+        console.log(js);
+        // Call the function of the App class
+        this.game.gameSounds[0].stop();
+        this.game.playingMusic=false;
+        
+        if(this.gameFinished==true){
+          let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
+          let userName = this.props.userName;
           const updateUser = () => {
             fetch("/api/GameReq", {
               method: "PUT",
               body: JSON.stringify({
-                "coins":game.collectedCoins,
-                "gems":game.collectedGems,
-                "score":score
+                "coins":this.game.collectedCoins,
+                "gems":this.game.collectedGems,
+                "score":score,
+                "user":userName
               }),
               headers: {
                 "content-type": "application/json",
@@ -125,15 +103,93 @@ export default class App extends Component<Clients> {
             }).catch((e) => console.log(e));
           };
           updateUser();
-          resultsLogged=true;
+        }
+      }
+
+      general_assets_names: string[] = ["pause.png","exit.png","start.png"];
+      defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
+      
+      generalAssets:any[]=[];
+      sound_names:string[] = ["FindPou_MP_ 6amerWa7cher1980_Zakeh.mp3","sm64coin.mp3","spyrogem.mp3","gmoddeath.mp3"];
+
+      player_Skin: any;
+      player_Hat: any;
+      defaultLevel_Graphics: any[]=[];
+      desertLevel_Graphics: any[]=[];
+      hellLevel_Graphics: any[]=[];
+  
+      levelGraphics:any;
+      levelLayouts :any;
+      gameSounds: any[]=[];
+
+      game:GameLogic|any=undefined;
+      gameFinished:boolean|undefined=false;
+      deathSound:boolean=false;
+
+      //Debug control
+      debug:boolean=false;
+
+      preload = (p5:p5|any) => {
+        this.levelLayouts=p5.loadJSON('/levelLayouts.json');
+        // Load graphical assets
+        for (let i = 0; i < this.general_assets_names.length; i++) {this.generalAssets.push(p5.loadImage(`/sprites/generalAssets/${this.general_assets_names[i]}`));}
+        for (let i = 0; i < this.defaultTile_names.length; i++) {this.defaultLevel_Graphics.push(p5.loadImage(`/sprites/defaultLevel/${this.defaultTile_names[i]}`));}
+        for (let i = 0; i < this.defaultTile_names.length; i++) {this.desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${this.defaultTile_names[i]}`));}
+        for (let i = 0; i < this.defaultTile_names.length; i++) {this.hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${this.defaultTile_names[i]}`));}
+        this.player_Skin=p5.loadImage(`/sprites/allSkins/${this.props.userSkin[0]}`);
+        this.player_Hat=p5.loadImage(`/sprites/allHats/${this.props.userSkin[1]}`);
+        for (let i = 0; i < this.sound_names.length; i++) {this.gameSounds.push(p5.loadSound(`/sounds/${this.sound_names[i]}`));}
+        this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
+      };
+
+      windowResized = (p5:p5) =>  {
+        if(this.game){
+          p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
+        }
+        
+      };
+
+      setup = (p5:p5, canvasParentRef:Element) => {
+        p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
+
+        this.game = new GameLogic(
+          {userCoins:this.props.userCoins,userGems:this.props.userGems,skin:this.player_Skin,hat:this.player_Hat}, //userData
+          {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
+          this.generalAssets,this.levelGraphics,this.levelLayouts,this.gameSounds,p5);
+        p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
+    };
+
+    draw = (p5:p5) => {
+        p5.background('white');
+        this.gameFinished=this.game.handleGame(this.debug);
+        if(this.gameFinished && !this.deathSound){
+          this.gameSounds[3].play();
+          this.deathSound=true;
         }
 
     };
 
     keyPressed = (p5:p5) => {
-      if(game){game.keyInteractions(p5.keyCode);}
-      if(p5.keyCode && gameFinished==true && resultsLogged==true){
-        location.reload();
+      if(this.game){this.game.keyInteractions(p5.keyCode);}
+      if(p5.keyCode && this.gameFinished==true){
+        let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
+        let userName = this.props.userName;
+        const updateUser = () => {
+          fetch("/api/GameReq", {
+            method: "PUT",
+            body: JSON.stringify({
+              "coins":this.game.collectedCoins,
+              "gems":this.game.collectedGems,
+              "score":score,
+              "user":userName
+            }),
+            headers: {
+              "content-type": "application/json",
+            },
+          }).catch((e) => console.log(e));
+        };
+        updateUser();
+        setTimeout(() => { location.reload(); }, 1000);
       }
     }
 
@@ -141,18 +197,84 @@ export default class App extends Component<Clients> {
 
         return (
             <div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60vh' }}>
                 <Sketch 
                   preload={this.preload}
                   setup={this.setup}
+                  draw={this.draw}
                   windowResized={this.windowResized}
                   keyPressed={this.keyPressed}
-                  draw={this.draw}
-                />
+                  
+                />      
               </div>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
+                  <GachaButton showMessageScreen={this.showMessageScreen} />
+                  <ProfileButton showMessageScreen={this.showMessageScreen} />
+                  <RankingButton showMessageScreen={this.showMessageScreen} />
+                </div>          
+              
             </div>
         );
     };
 
 }
 
+type jsAnswer = {
+    name: string;
+}
+
+type ButtonProps = {
+  showMessageScreen: (js: jsAnswer) => void;
+};
+
+function StartButton(props: ButtonProps) {
+  async function startGame() {
+    props.showMessageScreen({ name: 'Iniciando Juego...' });
+    window.location.href = '/game';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={startGame}>
+      <Image src="/assets/START GAME.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function ProfileButton(props: ButtonProps) {
+  async function openProfile() {
+    props.showMessageScreen({ name: 'Entrando al perfil del jugador...' });
+    window.location.href = '/customization';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openProfile}>
+      <Image src="/assets/PROFILE.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function GachaButton(props: ButtonProps) {
+  async function openGacha() {
+    props.showMessageScreen({ name: 'Entrando al GACHA...' });
+    window.location.href = '/gacha';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openGacha}>
+      <Image src="/assets/GACHA.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}
+
+function RankingButton(props: ButtonProps) {
+  async function openRanking() {
+    props.showMessageScreen({ name: 'Entrando al Ranking...' });
+    window.location.href = '/rankings';
+  }
+
+  return (
+    <button className="btn btn-primary button" onClick={openRanking}>
+      <Image src="/assets/RANKINGS.png" alt="lol, lmao" height="100" width="100"></Image>
+    </button>
+  );
+}

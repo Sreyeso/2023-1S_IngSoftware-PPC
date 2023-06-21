@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import styles from '../styles/Main.module.css';
 import Head from 'next/head'
-
+import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Sketch from 'react-p5';
@@ -85,8 +86,7 @@ function ProfileButton(){
 
     async function openProfile(){
         showMessageScreen({name: "Entrando al perfil del jugador..."})
-        window.open('sketch')
-        window.close()
+        window.location.href = '/game';
     }
     
     return (
@@ -109,8 +109,7 @@ function RankingButton(){
 
     async function openRanking(){
         showMessageScreen({name: "Entrando a el Ranking..."})
-        window.open('sketch')
-        window.close()
+        window.location.href = '/game';
     }
     
     return (
@@ -133,8 +132,7 @@ function GachaButton(){
 
     async function openGacha(){
         showMessageScreen({name: "Entrando al GACHA..."})
-        window.open('gacha')
-        window.close()
+        window.location.href = '/gacha';
     }
     
     return (
