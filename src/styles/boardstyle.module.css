@@ -27,7 +27,6 @@
     text-align: left;
     margin-bottom: 1em;
     padding-right: 10em;
-    padding-left: 10em;
 }
 
 .flex .item {
@@ -86,6 +85,13 @@
     font-size: 50px; /* Add this line and adjust the value as needed */
     color: #d60e0e;
   }
+  
+  .itemnumber,
+  .fulluser,
+  .info {
+    margin-right: 1px; /* Add spacing between the elements */
+    width:4.2rem;
+  }
 
   
   .userskin,
@@ -96,12 +102,11 @@
   
   .info {
     flex-grow: 1;
-    margin-right: auto;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    height: 100%;
   }
   
   .region {
@@ -144,6 +149,7 @@
   .tablecontainer {
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   .table {
