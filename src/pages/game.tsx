@@ -12,7 +12,6 @@ import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
 import Profile from "./profile";
-import Style from "@/styles/Game.module.css"
 
 import styles from '../styles/stats.module.css';
 import { withRouter, NextRouter } from 'next/router';
@@ -334,12 +333,13 @@ function GachaButton(props: ButtonProps) {
   }
 
   return(
-    <button
+    <Link
     className={styles.PPCButton}
     style={{ width: '15%' }}
-    onClick = {openGacha}>
+    onClick = {openGacha}
+    href={'/gacha'}>
         <img src={"/sprites/generalAssets/GACHA.png"}></img>
-    </button>
+    </Link>
   );
 }
 
