@@ -214,7 +214,7 @@ class App extends Component<gameProps> {
       }
 
         return (
-            
+          <main style={Style}>
             <div style={{display: 'flex', flexDirection:'column'}}>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60%' }}>
                 <Sketch 
@@ -255,6 +255,7 @@ class App extends Component<gameProps> {
                 </div>          
 
             </div>
+            </main>
             
         );
     };
