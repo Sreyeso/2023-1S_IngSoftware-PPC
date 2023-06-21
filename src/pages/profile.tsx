@@ -7,7 +7,6 @@ import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import { useRouter } from 'next/router'
 import { ChangeableData, KeyOfChangeableData} from '@/authentication/variousTypes'
-import { json } from "stream/consumers";
 import PPCButton from "@/components/PPCButton";
 
 interface UserProps {
@@ -38,6 +37,19 @@ export default function Profile(props: UserProps){
             method: "DELETE",
         })
         router.push('/login')
+    }
+
+    //Still not working!
+
+    async function deleteAccount(){
+        const response = await fetch('/api/handleLogin',{
+            method: "DELETE",
+            body: userName,
+        });
+
+        console.log(response)
+        const resJson = await response.json();
+        alert(resJson)
     }
 
 
@@ -77,6 +89,11 @@ export default function Profile(props: UserProps){
                                         </div>
                                         <div className = {styles.buttonsContainer}>
                                             <PPCButton func={() => {router.push("/rankings")}} image="sprites/generalAssets/RANKINGS.png" st={{width:'60%'}}> </PPCButton>                                                                        
+                                        </div>
+                                        <div className = {styles.deleteAccount}>
+                                            <button onClick={deleteAccount}>
+                                                Eliminar Cuenta
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

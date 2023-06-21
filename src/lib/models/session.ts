@@ -49,14 +49,5 @@ export default class SessionModel{
     return deletedUser;
   }
 
-  async countHeromils(username:string){
-    const wow = this.collection.count({UserName: username})
-    return wow
-  }
-
-  async count(){
-    const count = this.collection.count();
-    return count;
-  }
 
 }

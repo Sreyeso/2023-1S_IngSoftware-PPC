@@ -97,10 +97,18 @@
     font-size: medium;
 }
 
-/* .buttonChanges{
-    border: 1px solid;
-    height: 80%;
-} */
+.skin{
+    box-sizing: border-box;
+    padding-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.skin img{
+    width: 20%;
+    align-self: center;
+}
 
 .rightPanel{
     /* border: 1px solid; */
@@ -122,19 +130,25 @@
     height: 20%;
 }
 
+.deleteAccount{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    padding-top: 4%;
+    
+}
+
+.deleteAccount button{
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 3%;
+    font-family: cinzel-regular;
+    font-size: 110%;
+}
+
 .returnToMenu{
     font-family: cinzel-regular;
 }
 
-.skin{
-    box-sizing: border-box;
-    padding-bottom: 5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.skin img{
-    width: 20%;
-    align-self: center;
-}
