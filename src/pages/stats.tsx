@@ -100,6 +100,16 @@ class Statistics extends Component<StatisticsProps>{
     }
   
     return (
+      <main>
+                        
+                <style jsx global>
+                  {`
+                      body {
+                          background: black;
+                          font-color:white;
+                      }
+                  `}
+                </style>
       <div>
       <div className={styles.all}>
         <div className={styles.statsContainer}>
@@ -150,6 +160,7 @@ class Statistics extends Component<StatisticsProps>{
           />
         </div>
         </div>
+        </main>
     );
   }
   
