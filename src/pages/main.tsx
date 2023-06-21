@@ -76,7 +76,7 @@ function StartButton(){
     return (
         <Link
         className={styles.PPCButton}
-        style={{ width: '15%' }}
+        style={{ width: '25%' }}
         onClick = {startGame}
         href={'/game'}>
             <img src={"/sprites/generalAssets/START GAME.png"}></img>
@@ -101,7 +101,7 @@ function ProfileButton(){
     return (
         <Link
         className={styles.PPCButton}
-        style={{ width: '15%' }}
+        style={{ width: '25%' }}
         onClick = {openProfile}
         href={'/gacha'}>
             <img src={"/sprites/generalAssets/PROFILE.png"}></img>
@@ -126,7 +126,7 @@ function RankingButton(){
     return (
         <Link
         className={styles.PPCButton}
-        style={{ width: '15%' }}
+        style={{ width: '25%' }}
         onClick = {openRanking}
         href={'/rankings'}>
             <img src={"/sprites/generalAssets/RANKINGS.png"}></img>
@@ -152,7 +152,7 @@ function AspectButton(){
     return (
         <Link
         className={styles.PPCButton}
-        style={{ width: '15%' }}
+        style={{ width: '25%' }}
         onClick = {openAspect}
         href={'/customization'}>
             <img src={"/sprites/generalAssets/ASPECT.png"}></img>
@@ -177,7 +177,7 @@ function GachaButton(){
     return (
         <Link
         className={styles.PPCButton}
-        style={{ width: '15%' }}
+        style={{ width: '25%' }}
         onClick = {openGacha}
         href={'/gacha'}>
             <img src={"/sprites/generalAssets/GACHA.png"}></img>
@@ -199,7 +199,7 @@ function LogOutButton(){
     return (
         <Link
         className={styles.PPCButton}
-        style={{ width: '15%' }}
+        style={{ width: '25%' }}
         onClick={logout}
         href={'/login'} 
                 >
