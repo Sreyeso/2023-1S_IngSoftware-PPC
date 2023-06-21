@@ -1,11 +1,8 @@
 import { Db, MongoClient } from 'mongodb'
-//const config = require('./config');
-//const Users = require('./Users');
-//const conf = config.get('mongodb');
 /**
  *  Database object, DONT FORGET TO CLOSE IT SOMEWHERE
- * @property {Function} init - Part of constructor,starts connection
- * @property {Function} end - USE IT MOFOS
+ * @property {Function} init - Part of constructor, starts connection
+ * @property {Function} ends the connections
  */
 export default class DBO {
   /** @type {MongoClient} */
@@ -36,11 +33,6 @@ export default class DBO {
  */
   async init() {
     await this.client.connect();
-    console.log('connected');
-    //this.db = this.client.db("PolloRunner");
-    //this.test=this.db.collections();
-    //this.Users = new Users(this.db);
   }
 }
 
-//module.exports = new MongoBot();

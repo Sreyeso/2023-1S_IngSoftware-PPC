@@ -235,7 +235,7 @@ function StartButton(props: ButtonProps) {
 
   return (
     <button className="btn btn-primary button" onClick={startGame}>
-      <Image src="/assets/START GAME.png" alt="lol, lmao" height="100" width="100"></Image>
+      <Image src="/sprites/generalAssets/START GAME.png" alt="lol, lmao" height="100" width="100"></Image>
     </button>
   );
 }
@@ -248,7 +248,7 @@ function ProfileButton(props: ButtonProps) {
 
   return (
     <button className="btn btn-primary button" onClick={openProfile}>
-      <Image src="/assets/PROFILE.png" alt="lol, lmao" height="100" width="100"></Image>
+      <Image src="/sprites/generalAssets/PROFILE.png" alt="lol, lmao" height="100" width="100"></Image>
     </button>
   );
 }
@@ -261,7 +261,7 @@ function GachaButton(props: ButtonProps) {
 
   return (
     <button className="btn btn-primary button" onClick={openGacha}>
-      <Image src="/assets/GACHA.png" alt="lol, lmao" height="100" width="100"></Image>
+      <Image src="/sprites/generalAssets/GACHA.png" alt="lol, lmao" height="100" width="100"></Image>
     </button>
   );
 }
@@ -274,7 +274,7 @@ function RankingButton(props: ButtonProps) {
 
   return (
     <button className="btn btn-primary button" onClick={openRanking}>
-      <Image src="/assets/RANKINGS.png" alt="lol, lmao" height="100" width="100"></Image>
+      <Image src="/sprites/generalAssets/RANKINGS.png" alt="lol, lmao" height="100" width="100"></Image>
     </button>
   );
 }

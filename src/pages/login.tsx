@@ -72,7 +72,7 @@ export default function Login(){
                                 e.preventDefault();
                                 sendCreds();
                             }}>
-                                <img src = '/assets/LOG-IN.png'></img>
+                                <img src = '/sprites/generalAssets/LOG-IN.png'></img>
                             </button>
                         </div>
                         <div className={styles.linksTest}>
