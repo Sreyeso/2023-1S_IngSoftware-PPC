@@ -111,7 +111,7 @@ export function Profiles({ datos, userName,userRank }: any) {
   const filteredDatos = datos.filter((dato: any) => dato !== undefined);
   return (
     <div className={styles.tablecontainer}>
-      <table>
+      <table className={styles.table}>
         <tbody>
         {filteredDatos.map((data: any, index: number) => (
         <Item
@@ -133,7 +133,7 @@ function Item({ datos, number, userName, userRank }: any) {
   const isTop10 = userRank !== -1;
   
   const itemStyle = {
-    backgroundColor: isUser ? (isTop10 ? 'red' : 'blue') : 'default',
+    backgroundColor: isUser ? (isTop10 ? 'goldenrod' : 'lightblue') : 'default',
   };
 
   return (
@@ -142,7 +142,7 @@ function Item({ datos, number, userName, userRank }: any) {
         <div className={styles.itemcontent}>
           <div className={styles.itemnumber}>{isUser ? "Tú:" : number}</div>
           <div className={styles.fulluser}>
-          <div className={styles.userhat}>
+            <div className={styles.userhat}>
               <img src={`/sprites/allHats/${datos.CurrentAspect[1]}`} alt="userGorro" />
             </div>
             <div className={styles.userskin}>
@@ -150,7 +150,7 @@ function Item({ datos, number, userName, userRank }: any) {
             </div>
           </div>
           <div className={styles.info}>
-            <h3 className={isUser ? styles.useritem : styles.userrank}>{datos.UserName}</h3>
+            <h3 className={isUser ? `${styles.useritem} ${styles.username}` : styles.userrank}>{datos.UserName}</h3>
             <div className={styles.region}>{datos.Region}</div>
           </div>
           <div className={styles.score}>Score: {datos.HiScore}</div>

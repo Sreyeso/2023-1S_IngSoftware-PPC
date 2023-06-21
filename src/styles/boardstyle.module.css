@@ -39,9 +39,7 @@
     width: 5rem;
 }
 
-#profile .flex .info {
-    padding: 0.5em;
-}
+
 
 .text {
     color: #2b2b27;
@@ -53,13 +51,10 @@
 }
 
 /* User-specific styles */
-.useritem {
-    background-color: #a3cee2;
-    border: 2px solid #1890ff;
-}
+
 
 .userrank {
-    color: #595959;
+    color: #2b2b27;
 }
 
 
@@ -79,18 +74,19 @@
     left: 0;
     z-index: 2;
   }
+
   .itemcontent {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Align elements horizontally with space between them */
+    justify-content: space-between;
     height: 100%;
   }
-  
-  .itemnumber,
-  .fulluser,
-  .info {
-    margin-right: 10px; /* Add spacing between the elements */
+
+  .itemnumber {
+    font-size: 50px; /* Add this line and adjust the value as needed */
+    color: #d60e0e;
   }
+
   
   .userskin,
   .userhat {
@@ -100,16 +96,27 @@
   
   .info {
     flex-grow: 1;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
   
   .region {
-    font-size: 12px;
+    font-size: 15px;
     margin-top: 5px;
+    text-align: center;
   }
   
   .score {
-    text-align: right;
-    margin-left: auto; /* Push the element to the right */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    padding: 10px;
   }
   .item {
     display: flex;
@@ -117,27 +124,33 @@
     justify-content: space-between;
     padding: 10px;
     width: 100%;
+    margin-bottom: -1px; /* Add this line */
   }
   
-  .all table {
-    table-layout: fixed;
-    border-collapse: collapse;
-    width: 50em;
-    height: 10em;
-    margin: auto;
-    margin-top: 2rem;
-    max-width: 100%;
-    border: 0.5em solid rgb(124, 30, 46);
+  .username {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 5px;
   }
 
-  .all td {
+  .table td {
     padding: 10px;
-    border: 1px solid #000;
-    width: 100%;
+    border: 1px solid rgb(124, 30, 46);
     box-sizing: border-box;
+    position: relative;
+    vertical-align: middle;
   }
 
   .tablecontainer {
     display: flex;
     justify-content: center;
+  }
+
+  .table {
+    width: 50em;
+    margin: auto;
+    margin-top: 2rem;
+    border: 0.5em solid rgb(124, 30, 46);
+    border-spacing: 0;
+    table-layout: fixed;
   }
