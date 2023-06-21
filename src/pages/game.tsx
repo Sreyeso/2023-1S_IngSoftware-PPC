@@ -285,12 +285,13 @@ function StartButton(props: ButtonProps) {
   }
 
   return(
-    <button
+    <Link
     className={styles.PPCButton}
     style={{ width: '15%' }}
-    onClick = {startGame}>
+    onClick = {startGame}
+    href={'/game'}>
         <img src={"/sprites/generalAssets/START GAME.png"}></img>
-    </button>
+    </Link>
   );
 }
 
@@ -301,12 +302,13 @@ function CustomizeButton(props: ButtonProps) {
   }
 
   return(
-    <button
+    <Link
     className={styles.PPCButton}
     style={{ width: '15%' }}
-    onClick = {openCustomization}>
+    onClick = {openCustomization}
+    href={'/customization'}>
         <img src={"/sprites/generalAssets/ASPECT.png"}></img>
-    </button>
+    </Link>
   );
 }
 
@@ -317,12 +319,13 @@ function ProfileButton(props: ButtonProps) {
   }
 
   return(
-    <button
+    <Link
     className={styles.PPCButton}
     style={{ width: '15%' }}
-    onClick = {openProfile}>
+    onClick = {openProfile}
+    href={'/gacha'}>
         <img src={"/sprites/generalAssets/PROFILE.png"}></img>
-    </button>
+    </Link>
   );
 }
 
@@ -351,12 +354,13 @@ function RankingButton(props: ButtonProps) {
 
 
   return(
-    <button
+    <Link
     className={styles.PPCButton}
     style={{ width: '15%' }}
-    onClick = {openRanking}>
+    onClick = {openRanking}
+    href={'/rankings'}>
         <img src={"/sprites/generalAssets/RANKINGS.png"}></img>
-    </button>
+    </Link>
   );
 }
 
