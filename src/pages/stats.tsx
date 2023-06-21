@@ -100,33 +100,36 @@ class Statistics extends Component<StatisticsProps>{
     }
   
     return (
-      <div>
-      <div className={styles.all}>
+    <div>
+      <div className={`${styles.all} ${styles.container}`}>
         <div className={styles.statsContainer}>
+          <div className={styles.tableWrapper}>
           <table>
             <tbody>
               <tr>
-                <th>Estadísticas</th>
+                <th className={`${styles.centered} ${styles.heading}`}>Estadísticas</th>
               </tr>
               <tr>
-                <td>Monedas obtenidas por todos los jugadores: {this.props.AllCoins}</td>
+                <td className={styles.centered}>Monedas obtenidas por todos los jugadores: {this.props.AllCoins}</td>
               </tr>
               <tr>
-                <td>Gemas obtenidas por todos los jugadores: {this.props.AllGems}</td>
+                <td className={styles.centered}>Gemas obtenidas por todos los jugadores: {this.props.AllGems}</td>
               </tr>
               <tr>
-                <td>Puntuación máxima personal: {this.props.maxScore}</td>
+                <td className={styles.centered}>Puntuación máxima personal: {this.props.maxScore}</td>
               </tr>
               <tr>
-                <td>Cantidad de skins desbloqueadas: {this.props.skinCount}</td>
+                <td className={styles.centered}>Cantidad de skins desbloqueadas: {this.props.skinCount}</td>
               </tr>
               <tr>
                 <td>Cantidad de gorros desbloqueados: {this.props.hatCount}</td>
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
+
         <div className={styles.flex}>
           <PPCButton
             func={() => router.push('/game')}
@@ -149,7 +152,7 @@ class Statistics extends Component<StatisticsProps>{
             st={{ width: '15%' }}
           />
         </div>
-        </div>
+      </div>
     );
   }
   
