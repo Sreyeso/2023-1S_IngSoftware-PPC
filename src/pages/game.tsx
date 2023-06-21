@@ -12,6 +12,7 @@ import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
 import Profile from "./profile";
+import Style from "./pages/styles/Game.module.css"
 
 // Will only import `react-p5` on client-side
 const Sketch = dynamic(() => import("react-p5").then((mod) => {
@@ -196,6 +197,7 @@ export default class App extends Component<Clients> {
     render() {
 
         return (
+            <body style={Style}>
             <div style={{display: 'flex', flexDirection:'column'}}>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60%' }}>
                 <Sketch 
@@ -214,6 +216,7 @@ export default class App extends Component<Clients> {
                 </div>          
               
             </div>
+            </body>
         );
     };
 
