@@ -86,7 +86,7 @@ function ProfileButton(){
 
     async function openProfile(){
         showMessageScreen({name: "Entrando al perfil del jugador..."})
-        window.location.href = '/game';
+        window.location.href = '/profile';
     }
     
     return (
@@ -109,7 +109,7 @@ function RankingButton(){
 
     async function openRanking(){
         showMessageScreen({name: "Entrando a el Ranking..."})
-        window.location.href = '/game';
+        window.location.href = '/rankings';
     }
     
     return (
