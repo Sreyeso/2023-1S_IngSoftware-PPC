@@ -138,7 +138,7 @@ function SubmitForm(props: DataProps){
                 onClick={sendNewUser}
                 className={styles.button}
                 >
-                    <img src = '/buttons/JOIN.png'></img>
+                    <img src = '/assets/JOIN.png'></img>
                 </button>
             </div>            
         </form>

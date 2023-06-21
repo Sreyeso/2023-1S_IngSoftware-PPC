@@ -30,4 +30,14 @@ export interface Credentials{
 
 export type KeyCredentials = keyof Credentials;
 
+// Para cambio de datos:
+
+export type ChangeableData = {
+    user: string,
+    email: string,
+    password: string
+}
+
+export type KeyOfChangeableData = keyof ChangeableData
+
 

@@ -1,0 +1,45 @@
+.PPCButton{
+    border: transparent;
+    background-color: transparent;
+    position: relative; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.PPCButton:hover{
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.PPCButton:active{
+    filter: brightness(0.98);
+    transform: scale(1.08);
+    cursor: pointer;
+}
+
+.PPCButton img{
+    width: 100%;
+}
+
+.link{
+    text-align: center;
+    font-family: cinzel-regular;
+}
+
+.link a{
+    color:mediumblue;
+    text-decoration: none;
+}
+
+.link a:hover{
+    text-decoration:underline;
+}
+
+.link a:active{
+    color:rgb(68, 68, 242);
+}
+
+.link:visited{
+    text-decoration:line-through;
+}
