@@ -41,7 +41,7 @@
 }
 
 .buttonDiv1 {
-    height: 14vh;
+    height: 24vh;
     display:flex;
     justify-content: center;
     margin: 5px;
@@ -49,7 +49,7 @@
 }
 
 .buttonDiv2 {
-    height: 14vh;
+    height: 24vh;
     display:flex;
     justify-content: center;
     margin: 5px;
