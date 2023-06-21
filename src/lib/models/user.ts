@@ -117,5 +117,10 @@ export default class UserModel{
     return result;
   }
 
+  async deleteUser(user:string){
+    const deletedUser = this.collection.deleteOne({UserName:user})
+    return deletedUser;
+  }
+
 }
 
