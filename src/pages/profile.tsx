@@ -45,16 +45,6 @@ export default function Profile(props: UserProps){
     )
 }
 
-function logOut(){
-    const options = {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        path: '/'
-    };
-
-}
-
 export function getServerSideProps(ctx: { req: any; }){
 
     const {req} = ctx;
