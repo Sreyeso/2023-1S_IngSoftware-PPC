@@ -5,6 +5,7 @@ import DBO from "@/lib/utils/dbo";
 import bcryptjs from 'bcryptjs' 
 import { Credentials } from '@/authentication/variousTypes'
 import { v4 as uuidv4 } from 'uuid'
+import { getCookies } from 'cookies-next'
 
 type Data={ name: string }
 
@@ -37,26 +38,48 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
         }
     }
 
-    if(req.method === "GET"){ //Para devolver si el usuario está o no logueado!
-        // Miramos si el usuario está autenticado:
+    // if(req.method === "GET"){ //Para devolver si el usuario está o no logueado!
+    //     // Miramos si el usuario está autenticado:
         
-        if ("cookie" in req.headers === false)
-            res.status(401).json({name: "No autenticado"})
+    //     if ("cookie" in req.headers === false)
+    //         res.status(401).json({name: "No autenticado"})
         
-        const cookies = req.headers["cookie"]
-        const sessionId: string | undefined = cookies?.split("=")[1].split(";")[0] 
-        if(!sessionId)
-            res.status(401).json({name: "No autenticado"})
-        else{
-        //OJO. BUSCAR ALGUNA LIBRERÍA QUE HAGA ESTO POR Mí    
+    //     const cookies = req.headers["cookie"]
+    //     const sessionId: string | undefined = cookies?.split("=")[1].split(";")[0] 
+    //     if(!sessionId)
+    //         res.status(401).json({name: "No autenticado"})
+    //     else{
+    //     //OJO. BUSCAR ALGUNA LIBRERÍA QUE HAGA ESTO POR Mí    
             
-            let session = await sessions.getSessionbyHash(sessionId)
+    //         let session = await sessions.getSessionbyHash(sessionId)
 
-            if (!session)
-                res.status(401).json({name: "No autenticado"})
-            else
-                res.status(201).json({name: session.sessionId})    
+    //         if (!session)
+    //             res.status(401).json({name: "No autenticado"})
+    //         else
+    //             res.status(201).json({name: session.sessionId})    
+    //     }
+    // }
+
+    if(req.method === "GET")
+        res.status(401).json({name: "PPC Games Joy"})
+
+    if(req.method === "DELETE"){
+        //Vamos a cerrar sesión
+
+        const cooks = getCookies({req,res})
+        const sesId = cooks.session;
+        console.log(cooks)
+
+        res.setHeader('Set-Cookie', `session=; Expires=Expires=Mon, 20 Mar 1967 00:00:00 GMT; path=/; HttpOnly; secure; SameSite=Strict`)
+        res.status(201).json({name: "PPCGames"})
+
+
+        if(sesId !== undefined){
+            sessions.deleteSessionByHash(sesId)
         }
+
+        const count = await sessions.count()
+        console.log(count)
     }
     
 }

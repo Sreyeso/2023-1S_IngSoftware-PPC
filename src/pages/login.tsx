@@ -26,7 +26,7 @@ export default function Login(){
         displayMessage([resText.name]);
     
         if(res.status === 200){
-            router.push('/game'); //Redirección al juego
+            router.push('/main'); //Redirección al juego
         }
     }
 
@@ -72,8 +72,7 @@ export default function Login(){
                                 e.preventDefault();
                                 sendCreds();
                             }}>
-                                <Image src = {'/buttons/LOG-IN.png'}alt="lol,lmao"height="100" width="100">
-                                </Image>
+                                <img src = '/assets/LOG-IN.png'></img>
                             </button>
                         </div>
                         <div className={styles.linksTest}>

@@ -1,0 +1,23 @@
+.PPCButton{
+    border: transparent;
+    background-color: transparent;
+    position: relative; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.PPCButton:hover{
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.PPCButton:active{
+    filter: brightness(0.98);
+    transform: scale(1.08);
+    cursor: pointer;
+}
+
+.PPCButton img{
+    width: 100%;
+}

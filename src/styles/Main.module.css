@@ -1,6 +1,6 @@
 .background::before{
     content:'';
-    background-image: url("../../public/pages_imgs/Fondo_juego.jpg");
+    background-image: url("../../public/backgrounds/Fondo_juego.jpg");
     opacity: 0.6;
     position: absolute;
     background-size: cover;

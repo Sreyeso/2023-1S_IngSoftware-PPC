@@ -1,17 +1,15 @@
 import styles from '../styles/Main.module.css';
 import Head from 'next/head'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import Sketch from 'react-p5';
+import { useRouter } from 'next/router'
 
 type jsAnswer = {
     name: string;
 }
 
-const startButton = '/buttons/start.png';
-const profileButton = '/buttons/PROFILE.png';
-const rankingButton = '/buttons/RANKINGS.png';
-const gachaButton = '/buttons/GACHA.png';
+const startButton = '/assets/START GAME.png';
+const profileButton = '/assets/PROFILE.png';
+const rankingButton = '/assets/RANKINGS.png';
+const gachaButton = '/assets/GACHA.png';
 
 export default function Main (){
     return (
@@ -26,7 +24,7 @@ export default function Main (){
                     <div className= {styles.allInside}>
                         <div className = {styles.logoDiv}>
                             <img 
-                                src="/pages_imgs/logo_PPC.png"
+                                src="/backgrounds/logo_PPC.png"
                                 className={styles.logo}>
                             </img> 
                         </div>
@@ -54,14 +52,15 @@ function Buttons() {
 function StartButton(){
     //Cuando se presiona el botón, se redirecciona al juego
 
+    const router = useRouter()
+
     function showMessageScreen (js: jsAnswer) {
         console.log(js);
     }   
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        window.open('sketch')
-        window.close()
+        router.push('/game')
     }
 
     return (
@@ -78,14 +77,15 @@ function StartButton(){
 function ProfileButton(){
     //Cuando se presiona el botón, se redirecciona al perfil del jugador
 
+    const router = useRouter()
+
     function showMessageScreen (js: jsAnswer) {
         console.log(js);
     }
 
     async function openProfile(){
         showMessageScreen({name: "Entrando al perfil del jugador..."})
-        window.open('sketch')
-        window.close()
+        router.push('/profile')
     }
     
     return (
@@ -102,14 +102,15 @@ function ProfileButton(){
 function RankingButton(){
     //Cuando se presiona el botón, se redirecciona a la tabla de ranking
 
+    const router = useRouter()
+
     function showMessageScreen (js: jsAnswer) {
         console.log(js);
     }
 
     async function openRanking(){
         showMessageScreen({name: "Entrando a el Ranking..."})
-        window.open('sketch')
-        window.close()
+        router.push('/rankings')
     }
     
     return (
@@ -126,14 +127,15 @@ function RankingButton(){
 function GachaButton(){
     //Cuando se presiona el botón, se redirecciona al gacha
 
+    const router = useRouter()
+ 
     function showMessageScreen (js: jsAnswer) {
         console.log(js);
     }
 
     async function openGacha(){
         showMessageScreen({name: "Entrando al GACHA..."})
-        window.open('gacha')
-        window.close()
+        router.push('/gacha')
     }
     
     return (

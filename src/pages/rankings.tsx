@@ -3,6 +3,7 @@ import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import Clients from "@/lib/models/user";
+import "@/styles/boardstyle.css"
 
 export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null;

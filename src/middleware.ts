@@ -42,7 +42,9 @@ export async function middleware(req: NextRequest, res: NextResponse){
     if(!cookie)
         cookie = '' as string
 
-    const protectedRoutes = ['/game','/profile','/gacha','/customization', '/rankings', '/stats']
+    console.log(req.url)
+
+    const protectedRoutes = ['/game','/profile','/gacha','/customization', '/rankings', '/stats', '/main']
         
     if (verifyPathname(protectedRoutes, req)){
         if(cookie === '' || user === null){
@@ -57,8 +59,11 @@ export async function middleware(req: NextRequest, res: NextResponse){
     }
     else if(verifyPathname(['/join_ppc','/login','/restore_password'],req) && cookie && user !== null){
         //El usuario está logueado, por lo que es necesario sacarlo de estas páginas
-        const response = NextResponse.redirect(new URL('/game', req.url));
+        
+        const response = NextResponse.redirect(new URL('/main', req.url));
         return response;
+
+        
     }
 
     return NextResponse.next()
@@ -74,5 +79,15 @@ function verifyPathname (listOfUrls: string[] = [], req: NextRequest){
 }
 
 export const config = {
-    matcher: ['/game','/profile','/restore_password','/join_ppc','/login','/gacha','/customization', '/rankings', '/stats']
+    matcher: [
+        '/game',
+        '/profile',
+        '/restore_password',
+        '/join_ppc',
+        '/login',
+        '/gacha',
+        '/customization'
+        ,'/rankings'
+        ,'/stats'
+        ,'/main']
 }
