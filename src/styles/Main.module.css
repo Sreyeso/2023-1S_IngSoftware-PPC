@@ -1,0 +1,86 @@
+.background::before{
+    content:'';
+    background-image: url("../../public/backgrounds/Main_BG.png");
+    opacity: 0.6;
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+    inset: 0;
+}
+
+.allInside{ 
+    isolation: isolate;
+}
+
+.logoDiv{
+    text-align: center;
+    margin-top: 3vh;
+    margin-bottom: 1vh;
+    height: 30vh;
+}
+
+.logo{
+    height: 100%;
+}
+
+.title {
+    text-align: center;
+    position: static;
+    justify-content: center;
+}
+
+.background h1{
+    text-align: center;
+    font-family: cinzel-bold;
+    font-size: 1.5em;
+    margin-top: 1.3vh;
+}
+
+.defaultSelectOption{
+    text-decoration: #999999;
+}
+
+.buttonDiv1 {
+    height: 14vh;
+    display:flex;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 25vh;
+}
+
+.buttonDiv2 {
+    height: 14vh;
+    display:flex;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 5vh;
+}
+ 
+.button{
+    border: transparent;
+    background-color: transparent;
+}
+
+.button img{
+    height: 100%;
+}
+
+.button:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.button:active{
+    filter: brightness(0.98);
+    cursor: pointer;
+}
+
+@font-face {
+    font-family: cinzel-regular;
+    src: url('../../public/fonts/cinzel/Cinzel-Regular.otf');
+}
+
+@font-face {
+    font-family: cinzel-bold;
+    src: url('../../public/fonts/cinzel/Cinzel-Bold.otf');
+}

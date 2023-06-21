@@ -1,0 +1,152 @@
+.background{
+    content:'';
+    background-image: url("../../public/backgrounds/profile_background.png");
+    opacity: 0.75;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    inset: 0;
+}
+
+.content{
+    opacity: 1;
+    background-color: white;
+    position: absolute;
+    border-color: black;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid;
+    box-sizing: border-box;
+    height: 84vh;
+    width: 46vw;
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome{
+    font-family: cinzel-bold;
+    position: relative;
+    font-size: 200%;
+}
+
+.mainFunctionality{
+    display:grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    
+    width: stretch;
+    /* border: 1px solid; */
+}
+
+.personalInformation{
+    /* border: 1px solid; */
+    font-family: cinzel-regular;
+    font-size:80%;
+    box-sizing: border-box;
+    padding:10%;
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    padding-bottom: 20%;
+    width: stretch;
+    height: stretch;
+}
+
+.nonEditable{
+    margin-top: -2%;
+}
+
+.nonEditable:nth-child(even){
+    margin-bottom: -2%;
+}
+
+.inputLabelDiv{
+    display: flex;
+    flex-direction: column;
+    height: 40%;
+}
+
+.inputLabelDiv h2{
+    margin-bottom: 2%;
+}
+
+.inputLabelDiv input{
+    height: 100%;
+    width: stretch;
+    padding:2%;
+    margin-bottom:-3%;
+    
+}
+
+.inputLabelDiv input::placeholder{
+    color:rgb(50,50,50)
+}
+
+.personalInformation button{
+    margin-top: 7.5%;
+    width: 45%;
+    align-self: center;
+    min-height: 11%;
+    font-family: cinzel-regular;
+    font-size: medium;
+}
+
+.skin{
+    box-sizing: border-box;
+    padding-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.skin img{
+    width: 20%;
+    align-self: center;
+}
+
+.rightPanel{
+    /* border: 1px solid; */
+    height: stretch;
+}
+
+.buttonsContainer{
+    /* border: 1px solid; */
+    width: stretch;
+    height: stretch;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: stretch;
+    height: 100;
+}
+
+.buttonsPanel{
+    height: 20%;
+}
+
+.deleteAccount{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    padding-top: 4%;
+    
+}
+
+.deleteAccount button{
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 3%;
+    font-family: cinzel-regular;
+    font-size: 100%;
+    margin-top:4%;
+}
+
+.returnToMenu{
+    font-family: cinzel-regular;
+}
+

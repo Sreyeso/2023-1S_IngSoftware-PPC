@@ -14,11 +14,16 @@ export interface Clients extends Document {
 }
 
 export default class UserModel{
+  userName:string="";
+  AllCoins:number=0;
+  AllGems:number=0;
+  skinCount:number=0;
+  hatCount:number=0;
   collection:any;
   userCoins:number=0;
   userGems:number=0;
-  userSkin:string[]=["default_ppc.png","default_ppc.png"];
-  gachaObjects:string[][]=[["default_ppc.png"],["default_ppc.png"]];
+  userSkin:string[]=["default_ppc.png","none.png"];
+  gachaObjects:string[][]=[["default_ppc.png"],["none.png"]];
   maxScore:number=0;
 
   constructor(db:Db) {
@@ -40,8 +45,8 @@ export default class UserModel{
     GemAmount: user[5],
     CoinAmount: user[6],
     HiScore: user[7],
-    CurrentAspect: ["default_ppc.png","default_ppc.png"],
-    GachaObjects: [["default_ppc.png"],["default_ppc.png"]],
+    CurrentAspect: ["default_ppc.png","none.png"],
+    GachaObjects: [["default_ppc.png"],["none.png"]],
   });
   return newUser;
 }
@@ -51,12 +56,25 @@ export default class UserModel{
  * @param {string}  user - Give the UserName to find the document
  * @returns {Object} Returns the object user, call the properties to get the individual values
  */
-  async getUser(user:string){
-    const  findUser= this.collection.findOne({UserName:user});
+  async getUser(user: string) {
+    const findUser = this.collection.findOne({ UserName: user }, { projection: { _id: 0 } });
     return findUser;
   }
-  async verifyMail(){
 
+
+  async getSkinsPercent(user:string){
+    const skins = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 0] } }}}]).toArray();
+    return skins;
+  }
+
+  async getHatsPercent(user:string){
+    const hats = this.collection.aggregate([{$match: {UserName: user}},{$project: {_id: 0,innerArrayLength: { $size: { $arrayElemAt: ["$GachaObjects", 1] } }}}]).toArray();
+    return hats;
+  }
+
+  async verifyMail(mail: string){
+    const findMail = this.collection.findOne({Mail: mail});
+    return findMail;
   }
   async setScore(user:string,score:number){
     const  nuScore= this.collection.updateOne({UserName:user},{$set: {HiScore:score}});
@@ -95,6 +113,12 @@ export default class UserModel{
       { $addToSet: { 'GachaObjects.1': gachaHat } }
     );
     return result;
+  }
+
+  async deleteUser(user:string){
+    const deletedUser = await this.collection.deleteOne({UserName:user})
+    console.log(deletedUser)
+    return deletedUser;
   }
 
 }

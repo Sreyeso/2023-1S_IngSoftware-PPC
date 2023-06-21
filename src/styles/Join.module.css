@@ -1,0 +1,151 @@
+.videoDiv video{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: 0.35;
+}
+
+.allInside{ 
+    position: fixed;
+    bottom: 0;
+    width:100%;
+}
+
+.logoDiv{
+    text-align: center;
+    margin-top: 3vh;
+    margin-bottom: 0px;
+    height: 28vh;
+}
+
+.logo{
+    height: 90%;
+}
+
+.allInside h2{
+    text-align: center;
+    font-family: cinzel-bold;
+    font-size: 3.2vh;
+    margin-top: 1.3vh;
+}
+
+.gridInputs{
+    margin-top: 5vh;
+    height: 25vh;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto auto;
+    row-gap: 1.2vh;
+    column-gap: 5vw;
+}
+
+.gridInputs input{
+    width: 27.6vh;
+    height: 3.1vh;
+    font-size: 2vh;
+    padding: 1.1vh;
+    border: solid 1px;  
+    justify-self: end;
+} 
+
+.gridInputs input:nth-child(even){
+    justify-self: start;
+} 
+
+.gridInputs select{
+    width: 30vh;
+    height: 5.7vh;
+    font-size: 2vh;
+    padding: 0.9vh;
+    border: solid 1px;  
+    justify-self: end;
+}
+
+.gridInputs select:nth-child(even){
+    justify-self: start;
+} 
+
+.defaultSelectOption{
+    text-decoration: #999999;
+}
+
+.gridInputs select[value=""]{
+    color:aliceblue;
+    text-decoration: #999999;
+}
+
+.gridInputs input:hover{
+    outline:solid 1.8px;
+}
+
+.gridInputs select:hover{
+    outline:solid 1.8px;
+}
+
+.submitForm h3{
+    text-align: center;
+    font-family: cinzel-regular;
+    font-size: 2.5vh;
+}
+
+.buttonDiv {
+    height: 8vh;
+    display:flex;
+    justify-content: center;
+    margin-top: 1vh;
+}
+ 
+.button{
+    border: transparent;
+    background-color: transparent;
+}
+
+.button img{
+    height: 90%;
+}
+
+.button:hover{
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.button:active{
+    filter: brightness(0.98);
+    transform: scale(1.08);
+    cursor: pointer;
+}
+
+.loginLink{
+    text-align: center;
+    font-family: cinzel-regular;
+    font-size: 1.8vh;
+}
+
+.loginLink a{
+    color:mediumblue;
+    text-decoration: none;
+}
+
+.loginLink a:hover{
+    text-decoration:underline;
+}
+
+.loginLink a:active{
+    color:rgb(68, 68, 242);
+}
+
+.loginLink:visited{
+    text-decoration:line-through;
+}
+
+.allInside footer{    
+    display:grid;
+    grid-template-columns: auto auto;
+    column-gap: 50vw;
+    margin-top: 4vh;
+    text-align: center;
+    font-family: cinzel-regular;
+    font-size: 2vh;
+}

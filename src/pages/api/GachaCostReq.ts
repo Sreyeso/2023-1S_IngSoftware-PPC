@@ -9,8 +9,8 @@ export async function connection(body: any) {
     DB = new DBO();
     const UDO = new UserModel(DB.db);
 
-    await UDO.addCoins("bingus",parseInt(body.coinCost));
-    await UDO.addGems("bingus",parseInt(body.gemCost));
+    await UDO.addCoins(body.user,parseInt(body.coinCost));
+    await UDO.addGems(body.user,parseInt(body.gemCost));
 
     return Promise.resolve();
   } catch (e) {

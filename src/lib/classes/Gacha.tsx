@@ -2,9 +2,10 @@ import p5 from 'p5';
 
 export default class Gacha {
 
-    p5:p5;
+    p5: p5;
 
     array: any[];
+    arrayNames: any[];
     squareSize: number;
     randomNumber: number;
     selectedValue: number;
@@ -14,27 +15,41 @@ export default class Gacha {
     scrollVelocity: number;
     selectedIndex: any;
     indicatorValue: any;
-    commonCuantities :any[];
+    commonCuantities: any[];
     rarityChances: any[];
 
-    width:number;
-    startX:number;
 
-    constructor(p5:any,array: any[], commonCuantities:any[], rarityChances: any[],width:number) {
-        this.p5=p5;
+    common: any[];
+    rare: any[];
+    epic: any[];
+    legendary: any[];
+
+    width: number;
+    startX: number;
+
+    constructor(p5: any, array: any[], arrayNames: any[], commonCuantities: any[], rarityChances: any[], rarities: any[], width: number) {
+        this.p5 = p5;
         this.array = array;
+        this.arrayNames = arrayNames;
+
         this.commonCuantities = commonCuantities;
         this.rarityChances = rarityChances;
+        this.common = rarities[0];
+        this.rare = rarities[1];
+        this.epic = rarities[2];
+        this.legendary = rarities[3];
+
         this.randomNumber = 0;
         this.selectedValue = 0;
         this.maxScrollAmount = 0;
         this.scrollAmount = 0;
         this.scrollCount = 0;
         this.scrollVelocity = 0;
-        this.width=width;
-        this.squareSize=Math.floor(this.width/100)*10;
-        this.startX=this.width/2 - this.squareSize*4.5;
+        this.width = width;
+        this.squareSize = Math.floor(this.width / 100) * 10;
+        this.startX = this.width / 2 - this.squareSize * 4.5;
         this.updateIndicatorValue();
+
     }
 
     generateRandomChoice() {
@@ -47,8 +62,8 @@ export default class Gacha {
 
         // Calculate the cumulative amounts
         const commonAmount = this.commonCuantities[0];
-        const rareAmount = commonAmount+this.commonCuantities[1];
-        const epicAmount = rareAmount+this.commonCuantities[2];
+        const rareAmount = commonAmount + this.commonCuantities[1];
+        const epicAmount = rareAmount + this.commonCuantities[2];
 
         // Determine the selected value based on the random number
         if (this.randomNumber < commonRarityPercentage) {
@@ -67,35 +82,65 @@ export default class Gacha {
         }
 
         // Calculate the random scroll amount
-        const randomScrollMultiplier = Math.floor(Math.random() * 5) + 5; // Random value between 5 and 10
+        const randomScrollMultiplier = Math.floor(Math.random() * 2) + 3; // Random value between 3 and 5
         this.maxScrollAmount = this.scrollAmount = Math.floor(scrollDistance + randomScrollMultiplier * this.array.length * this.squareSize + Math.random() * this.squareSize * 0.8);
 
     }
+
+    rarityColor(rarity: string) {
+        switch (rarity) {
+            case ("common"):
+                return "green";
+            case ("rare"):
+                return "blue";
+            case ("epic"):
+                return "purple";
+            case ("legendary"):
+                return "gold";
+            default:
+                return "red";
+        }
+    };
 
     drawArray(y: number) {
         for (let i = 0; i < this.array.length; i++) {
             const x = this.startX + i * (this.squareSize) + this.scrollCount;
             const value = this.array[i];
 
-            this.p5.image(value, x, y,this.squareSize,this.squareSize);
+            this.p5.image(value, x, y, this.squareSize, this.squareSize);
 
             this.p5.push();
             this.p5.noFill();
             if (i == this.selectedIndex) {
-                this.p5.strokeWeight(this.squareSize*0.1);
-                this.p5.stroke("gold");
+
+                console.log(this.arrayNames[i])
+
+                let rarity: string;
+
+                if (this.common.includes(this.arrayNames[i])) {
+                    rarity = "common";
+                } else if (this.rare.includes(this.arrayNames[i])) {
+                    rarity = "rare";
+                } else if (this.epic.includes(this.arrayNames[i])) {
+                    rarity = "epic";
+                } else if (this.legendary.includes(this.arrayNames[i])) {
+                    rarity = "legendary";
+                } else {
+                    rarity = "none"; // The skin name doesn't exist in any of the arrays
+                }
+                this.p5.strokeWeight(this.squareSize * 0.1);
+                this.p5.stroke(this.rarityColor(rarity));
             }
             this.p5.rect(x, y, this.squareSize, this.squareSize);
             this.p5.pop();
         }
 
         this.p5.fill("red");
-        this.p5.rect(this.width/2, y, 5, this.squareSize * 1.2);
+        this.p5.rect(this.width / 2, y, 5, this.squareSize * 1.2);
 
     }
 
-
-    updateScrollVelocity() {    
+    updateScrollVelocity() {
 
         // Check if the scroll amount reaches specific ranges
         const scrollRanges = [1, 0.5, 0.05, 0.02]; // Ranges in percentage
@@ -129,7 +174,7 @@ export default class Gacha {
         this.indicatorValue = this.array[this.selectedIndex];
     }
 
-    scroll(){
+    scroll() {
         if (this.scrollAmount > 0) {
             this.scrollCount -= this.scrollVelocity;
             this.scrollAmount -= this.scrollVelocity;
@@ -137,6 +182,7 @@ export default class Gacha {
 
         if (Math.abs(this.scrollCount) >= this.squareSize) {
             this.array.push(this.array.shift());
+            this.arrayNames.push(this.arrayNames.shift());
             this.scrollCount = 0;
             this.updateIndicatorValue();
         }

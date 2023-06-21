@@ -3,13 +3,20 @@
 import React, { Component } from "react";
 import dynamic from 'next/dynamic';
 import p5 from 'p5';
-
+import Link from 'next/link';
+import Image from 'next/image';
 //Class imports
 import GameLogic from "../lib/classes/GameLogic";
 import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
+import Profile from "./profile";
+import PPCButton from "@/components/PPCButton";
+
+import styles from '../styles/stats.module.css';
+import { withRouter, NextRouter } from 'next/router';
+
 
 // Will only import `react-p5` on client-side
 const Sketch = dynamic(() => import("react-p5").then((mod) => {
@@ -25,7 +32,7 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => {
 
 //Server prop function (backend)
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
   
   let isConnected = false;
@@ -39,7 +46,10 @@ export async function getServerSideProps() {
     DB = new DBO();
     // User data object
     const UDO = new UserModel(DB.db);
-    let userData = await UDO.getUser("bingus");
+    // Get logged user
+    const {req} = ctx;
+    const userName:string= req.headers.user;
+    let userData = await UDO.getUser(userName);
 
     if (userData) {
       userCoins = userData.CoinAmount;
@@ -52,7 +62,7 @@ export async function getServerSideProps() {
     }
 
     return {
-      props: { isConnected, userCoins, userGems, userSkin, maxScore },
+      props: { isConnected, userCoins, userGems, userSkin, maxScore, userName },
     };
   } catch (e) {
     console.error(e);
@@ -66,15 +76,54 @@ export async function getServerSideProps() {
   }
 }
 
-export default class App extends Component<Clients> {
+interface gameProps extends Clients {
+  router: NextRouter;
+}
+
+class App extends Component<gameProps> {
+
+      constructor(props:any) {
+        super(props);
+        // Bind the function to the class instance
+        
+        this.showMessageScreen = this.showMessageScreen.bind(this);
+      }
+
+      showMessageScreen(js:any) {
+        console.log(js);
+        // Call the function of the App class
+        this.game.gameSounds[0].stop();
+        this.game.playingMusic=false;
+        
+        if(this.gameFinished==true){
+          let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
+          let userName = this.props.userName;
+          const updateUser = () => {
+            fetch("/api/GameReq", {
+              method: "PUT",
+              body: JSON.stringify({
+                "coins":this.game.collectedCoins,
+                "gems":this.game.collectedGems,
+                "score":score,
+                "user":userName
+              }),
+              headers: {
+                "content-type": "application/json",
+              },
+            }).catch((e) => console.log(e));
+          };
+          updateUser();
+        }
+      }
 
       general_assets_names: string[] = ["pause.png","exit.png","start.png"];
       defaultTile_names: string[] = ["000.png","flo.png","fil.png","pla.png","spb.gif","spl.gif","spr.gif","spt.gif","coi.gif","gem.gif","cll.png","clr.png","ds0.gif","ds1.png","ds2.png","d00.png","d01.png","d10.png","d11.png","sus.png","error.png","bg.png"];
       
       generalAssets:any[]=[];
-      sound_names:string[] = ["main.mp3","boing2.mp3"];
+      sound_names:string[] = ["FindPou_MP_ 6amerWa7cher1980_Zakeh.mp3","sm64coin.mp3","spyrogem.mp3","gmoddeath.mp3"];
 
       player_Skin: any;
+      player_Hat: any;
       defaultLevel_Graphics: any[]=[];
       desertLevel_Graphics: any[]=[];
       hellLevel_Graphics: any[]=[];
@@ -85,6 +134,7 @@ export default class App extends Component<Clients> {
 
       game:GameLogic|any=undefined;
       gameFinished:boolean|undefined=false;
+      deathSound:boolean=false;
 
       //Debug control
       debug:boolean=false;
@@ -96,22 +146,24 @@ export default class App extends Component<Clients> {
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.defaultLevel_Graphics.push(p5.loadImage(`/sprites/defaultLevel/${this.defaultTile_names[i]}`));}
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.desertLevel_Graphics.push(p5.loadImage(`/sprites/desertLevel/${this.defaultTile_names[i]}`));}
         for (let i = 0; i < this.defaultTile_names.length; i++) {this.hellLevel_Graphics.push(p5.loadImage(`/sprites/hellLevel/${this.defaultTile_names[i]}`));}
-        //for (let i = 0; i < this.player_names.length; i++) {this.player_Skins.push(p5.loadImage(`/sprites/playerSkins/${this.player_names[i]}`));}
         this.player_Skin=p5.loadImage(`/sprites/allSkins/${this.props.userSkin[0]}`);
+        this.player_Hat=p5.loadImage(`/sprites/allHats/${this.props.userSkin[1]}`);
         for (let i = 0; i < this.sound_names.length; i++) {this.gameSounds.push(p5.loadSound(`/sounds/${this.sound_names[i]}`));}
         this.levelGraphics=[this.defaultLevel_Graphics,this.desertLevel_Graphics,this.hellLevel_Graphics];
       };
 
       windowResized = (p5:p5) =>  {
-        //game.resize();  //Resize the game
-        //p5.resizeCanvas(p5.windowWidth,p5.windowHeight);  //Resize the canvas
+        if(this.game){
+          p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
+        }
+        
       };
 
       setup = (p5:p5, canvasParentRef:Element) => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
 
         this.game = new GameLogic(
-          {userCoins:this.props.userCoins,userGems:this.props.userGems,image:this.player_Skin}, //userData
+          {userCoins:this.props.userCoins,userGems:this.props.userGems,skin:this.player_Skin,hat:this.player_Hat}, //userData
           {playerSizeModifier:0.5,gravityModifier:0.0098,maxscrollSpeed:5}, //gameDetails
           this.generalAssets,this.levelGraphics,this.levelLayouts,this.gameSounds,p5);
         p5.resizeCanvas(this.game.level.levelWidth-this.game.level.tile_size,this.game.level.levelHeight);  //Resize the canvas according to the viewable game size
@@ -120,19 +172,26 @@ export default class App extends Component<Clients> {
     draw = (p5:p5) => {
         p5.background('white');
         this.gameFinished=this.game.handleGame(this.debug);
+        if(this.gameFinished && !this.deathSound){
+          this.gameSounds[3].play();
+          this.deathSound=true;
+        }
+
     };
 
     keyPressed = (p5:p5) => {
       if(this.game){this.game.keyInteractions(p5.keyCode);}
       if(p5.keyCode && this.gameFinished==true){
         let score =  (this.game.score > this.props.maxScore) ? (this.game.score) : (this.props.maxScore);
+        let userName = this.props.userName;
         const updateUser = () => {
           fetch("/api/GameReq", {
             method: "PUT",
             body: JSON.stringify({
               "coins":this.game.collectedCoins,
               "gems":this.game.collectedGems,
-              "score":score
+              "score":score,
+              "user":userName
             }),
             headers: {
               "content-type": "application/json",
@@ -145,10 +204,18 @@ export default class App extends Component<Clients> {
     }
 
     render() {
+      const { router } = this.props;
+
+      async function logout() {
+        await fetch('/api/getSessions', {
+          method: "DELETE",
+        });
+        router.push('/login');
+      }
 
         return (
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <div style={{display: 'flex', flexDirection:'column'}}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60%' }}>
                 <Sketch 
                   preload={this.preload}
                   setup={this.setup}
@@ -156,11 +223,30 @@ export default class App extends Component<Clients> {
                   windowResized={this.windowResized}
                   keyPressed={this.keyPressed}
                   
-                />
+                />      
               </div>
+              <div className={styles.flex}>
+              <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/ASPECT.png" func={()=>{router.push('/customization')}} st={{width:'100%'}}></PPCButton>                  
+                </div>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/PROFILE.png" func={()=>{router.push('/profile')}} st={{width:'100%'}}></PPCButton>                  
+                </div>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/GACHA.png" func={()=>{router.push('/gacha')}} st={{width:'100%'}}></PPCButton>                  
+                </div>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/RANKINGS.png" func={()=>{router.push('/rankings')}} st={{width:'100%'}}></PPCButton>
+                </div>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/LOG-OUT.png" func={logout} st={{width:'100%'}}></PPCButton>
+                </div>
+              </div>          
+
             </div>
         );
     };
 
 }
 
+export default withRouter(App);
