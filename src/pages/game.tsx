@@ -214,9 +214,15 @@ class App extends Component<gameProps> {
       }
 
         return (
-          <body style={{background:'black'}}>
+          <main>
                         
-                
+                <style jsx global>
+                  {`
+                      body {
+                          background: black;
+                      }
+                  `}
+                </style>
             <div style={{display: 'flex', flexDirection:'column'}}>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60%' }}>
                 <Sketch 
@@ -257,7 +263,7 @@ class App extends Component<gameProps> {
                 </div>          
 
             </div>
-            </body>
+            </main>
 
             
         );
