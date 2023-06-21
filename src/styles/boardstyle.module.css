@@ -8,10 +8,9 @@
 
 .board {
     text-align: center;
-    
 }
 
-.board .leaderboard {
+.leaderboard {
     margin-bottom: 1em;
     align-items: center;
 }
@@ -19,6 +18,8 @@
 #profile {
     margin-top: 1em;
 }
+
+
 
 #profile .flex {
     display: flex;
@@ -29,7 +30,7 @@
     padding-left: 10em;
 }
 
-#profile .flex .item {
+.flex .item {
     display: flex;
     align-items: center;
 }
@@ -67,12 +68,12 @@
     justify-content: center;
 }
 
-.user-skin {
+.userskin {
     position: relative;
     z-index: 1;
   }
   
-  .user-hat {
+  .userhat {
     position: relative;
     top: 0;
     left: 0;
@@ -107,7 +108,7 @@
   }
   
   .score {
-    white-space: nowrap;
+    text-align: right;
     margin-left: auto; /* Push the element to the right */
   }
   .item {
