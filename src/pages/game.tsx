@@ -214,7 +214,7 @@ class App extends Component<gameProps> {
       }
 
         return (
-          <div style={{background:'black'}}>
+          <body style={{background:'black'}}>
                         
                 
             <div style={{display: 'flex', flexDirection:'column'}}>
@@ -257,7 +257,7 @@ class App extends Component<gameProps> {
                 </div>          
 
             </div>
-            </div>
+            </body>
 
             
         );
