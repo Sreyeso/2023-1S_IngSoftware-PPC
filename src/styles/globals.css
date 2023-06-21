@@ -7,6 +7,6 @@
   font-family: cinzel-bold;
   src: url('../../public/fonts/cinzel/Cinzel-Bold.otf');
 }
-*:not(.input){
+*:not(.input):not(.span) {
   background-color: black;
 }
