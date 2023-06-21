@@ -1,6 +1,8 @@
+import React, { Component } from "react";
 import styles from '../styles/Main.module.css';
 import Head from 'next/head'
-import Link from 'next/link'
+
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Sketch from 'react-p5';
 
@@ -60,8 +62,7 @@ function StartButton(){
 
     async function startGame(){
         showMessageScreen({name: "Iniciando Juego..."})
-        window.open('sketch')
-        window.close()
+        window.location.href = '/game';
     }
 
     return (
