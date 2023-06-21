@@ -12,7 +12,7 @@ import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
 import Profile from "./profile";
-import Style from "./pages/styles/Game.module.css"
+import Style from "@/styles/Game.module.css"
 
 // Will only import `react-p5` on client-side
 const Sketch = dynamic(() => import("react-p5").then((mod) => {
