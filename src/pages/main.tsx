@@ -44,7 +44,7 @@ export default function Main (){
 function Buttons() {
 
     return (
-        <div>
+        <div className={styles.flex} >
             <div className= {styles.buttonDiv1}> 
                 <StartButton/>
                 <ProfileButton/>
