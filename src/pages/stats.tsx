@@ -4,6 +4,8 @@ import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import Clients from "@/lib/models/user";
 import styles from '../styles/stats.module.css';
+import PPCButton from "@/components/PPCButton";
+import { withRouter, NextRouter } from 'next/router';
 
 export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
@@ -77,42 +79,80 @@ export async function getServerSideProps(ctx: { req: any; }) {
   }
 }
 
-
-  export default class Statistics extends Component<Clients>{
-    render() {
-    return(
-    <div className={styles.all}>
-    <div className={styles.stats}>
-    <table>
-        <tbody>
-        <tr>
-            <th>Estadísticas</th>
-        </tr>
-        <tr>
-            <td>Monedas obtenidas por todos los jugadores: {this.props.AllCoins}</td>
-        </tr>
-        <tr>
-            <td>Gemas obtenidas por todos los jugadores: {this.props.AllGems}</td>
-        </tr>
-        <tr>
-            <td>Puntuación máxima personal: {this.props.maxScore}</td>
-        </tr>
-        <tr>
-            <td>Cantidad de skins deesbloqueadas: {this.props.skinCount}</td>
-        </tr>
-        <tr>
-            <td>Cantidad de gorros deesbloqueados: {this.props.hatCount}</td>
-        </tr>
-        </tbody>
-    </table>
-    </div>
-      <div className={styles.flex}>
-          <button><img src="./sprites/generalAssets/LOG-OUT.png" alt="Iniciar Juego"/></button>
-          <button><img src="./sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
-          <a href="\rankings"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
-          <button><img src="./sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
-      </div>
-    </div>
-    );
-    }
+interface StatisticsProps{
+  router: NextRouter;
+  AllCoins:number;
+  AllGems:number;
+  maxScore:number;
+  skinCount:number;
+  hatCount:number;
 }
+
+class Statistics extends Component<StatisticsProps>{
+  render() {
+    const { router } = this.props;
+
+    async function logout() {
+      await fetch('/api/getSessions', {
+        method: "DELETE",
+      })
+      router.push('/login')
+    }
+  
+    return (
+      <div>
+      <div className={styles.all}>
+        <div className={styles.statsContainer}>
+          <table>
+            <tbody>
+              <tr>
+                <th>Estadísticas</th>
+              </tr>
+              <tr>
+                <td>Monedas obtenidas por todos los jugadores: {this.props.AllCoins}</td>
+              </tr>
+              <tr>
+                <td>Gemas obtenidas por todos los jugadores: {this.props.AllGems}</td>
+              </tr>
+              <tr>
+                <td>Puntuación máxima personal: {this.props.maxScore}</td>
+              </tr>
+              <tr>
+                <td>Cantidad de skins desbloqueadas: {this.props.skinCount}</td>
+              </tr>
+              <tr>
+                <td>Cantidad de gorros desbloqueados: {this.props.hatCount}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+        <div className={styles.flex}>
+          <PPCButton
+            func={() => router.push('/game')}
+            image="./sprites/generalAssets/START GAME.png"
+            st={{ width: '15%' }}
+          />
+          <PPCButton
+            func={() => router.push('/profile')}
+            image="./sprites/generalAssets/PROFILE.png"
+            st={{ width: '15%' }}
+          />
+          <PPCButton
+            func={() => router.push('/rankings')}
+            image="./sprites/generalAssets/RANKINGS.png"
+            st={{ width: '15%' }}
+          />
+          <PPCButton
+            func={logout}
+            image="./sprites/generalAssets/LOG-OUT.png"
+            st={{ width: '15%' }}
+          />
+        </div>
+        </div>
+    );
+  }
+  
+}  
+
+export default withRouter(Statistics);

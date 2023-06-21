@@ -7,13 +7,14 @@ import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import { useRouter } from 'next/router'
 import { ChangeableData, KeyOfChangeableData} from '@/authentication/variousTypes'
-import { json } from "stream/consumers";
+import PPCButton from "@/components/PPCButton";
 
 interface UserProps {
     userName: string,
     region: string,
     gender: string,
     mail: string
+    userSkin: string;
 }
 
 let changes: ChangeableData = {
@@ -25,7 +26,8 @@ let changes: ChangeableData = {
 
 export default function Profile(props: UserProps){
 
-    const {userName, region, gender, mail} = props;
+    const {userName, region, gender, mail, userSkin } = props;
+
     const router = useRouter();
 
     async function logout(){
@@ -35,11 +37,24 @@ export default function Profile(props: UserProps){
         router.push('/login')
     }
 
+    //Still not working!
+
+    async function deleteAccount(){
+        const response = await fetch('/api/handleLogin',{
+            method: "DELETE",
+            body: userName,
+        });
+
+        console.log(response)
+        const resJson = await response.json();
+        alert(resJson)
+    }
+
 
     return(
         <>
             <Head>
-                <title>Your PPC profile</title>
+                <title>Your profile</title>
                 <meta name="description" content="Login PPC Games" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
@@ -56,28 +71,34 @@ export default function Profile(props: UserProps){
                                     <ChangeableInfo label="Usuario" currentValue = {userName} jsonField="user"></ChangeableInfo>                                    
                                     <ChangeableInfo label="Email" currentValue = {mail} jsonField="email"></ChangeableInfo>                                    
                                     <ChangeableInfo label="Contraseña" currentValue = {"Cambia tu contraseña"} jsonField="password"></ChangeableInfo>                                    
-                                    <div className={styles.buttonChanges}>
-                                        <button>
-                                            Enviar Datos
-                                        </button>
-                                    </div>
+                                    <button onClick={()=>{}}>
+                                        Enviar Datos
+                                    </button>
                                 </form>
 
-                                <div className={styles.buttonsPanel}>
-                                    {/* <div className = {styles.buttonsContainer}>
-                                        <button
-                                        className={generalStyles.PPCButton}
-                                        style={{width:'40%', justifySelf:'center'}}
-                                        onClick = {logout}>
-                                            <img src="/assets/LOG-OUT.png"></img>
-                                        </button>
-                                    </div> */}
-                                    <PPCButton func={logout} image= "/assets/LOG-OUT.png"></PPCButton>
-                                    <PPCButton func={logout} image="/assets/RANKINGS.png"></PPCButton>
+                                <div className={styles.rightPanel}>
+                                    <div className={styles.skin}>
+                                        <img src={`/sprites/allHats/${userSkin[1]}`} alt="userGorro" />                                    
+                                        <img src={`/sprites/allSkins/${userSkin[0]}`} alt="userSkin" />
+                                    </div>  
+                                    <div className={styles.buttonsPanel}>                                  
+                                        <div className= {styles.buttonsContainer}>
+                                            <PPCButton func={logout} image="sprites/generalAssets/LOG-OUT.png" st={{width:'60%'}}></PPCButton>
+                                        </div>
+                                        <div className = {styles.buttonsContainer}>
+                                            <PPCButton func={() => {router.push("/rankings")}} image="sprites/generalAssets/RANKINGS.png" st={{width:'60%'}}> </PPCButton>                                                                        
+                                        </div>
+                                        <div className = {styles.buttonsContainer}>
+                                            <PPCButton func={() => {router.push("/stats")}} image="sprites/generalAssets/STATS.png" st={{width:'60%'}}> </PPCButton>                                                                        
+                                        </div>
+                                        <div className = {styles.deleteAccount}>
+                                            <button onClick={deleteAccount}>
+                                                Eliminar Cuenta
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                         </div>
-
-
                             <Link 
                             className={generalStyles.link}
                             style={{fontSize:'120%', marginTop:'2%'}}
@@ -110,22 +131,6 @@ function ChangeableInfo(props:any){
         </div>
     )
 }
-
-function PPCButton(props: any){
-    const {func, image} = props;
-    
-    return (
-        <div className = {styles.buttonsContainer}>
-        <button
-        className={generalStyles.PPCButton}
-        style={{width:'40%', justifySelf:'center'}}
-        onClick = {func}>
-            <img src={image}></img>
-        </button>
-    </div>
-    )
-}
-
 
 export async function getServerSideProps(ctx: { req: any; }){
 

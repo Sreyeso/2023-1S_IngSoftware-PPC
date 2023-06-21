@@ -21,7 +21,6 @@ export default class SessionModel{
  * @returns {string} returns the database response
  */
 
-
  async addSession(session: any[]) {
   const newSession = this.collection.insertOne({
     UserName: session[0],
@@ -47,16 +46,6 @@ export default class SessionModel{
   async deleteSessionByHash(sessionId:string){
     const deletedUser = this.collection.deleteMany({sessionId:sessionId})
     return deletedUser;
-  }
-
-  async countHeromils(username:string){
-    const wow = this.collection.count({UserName: username})
-    return wow
-  }
-
-  async count(){
-    const count = this.collection.count();
-    return count;
   }
 
 }

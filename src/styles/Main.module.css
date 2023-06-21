@@ -1,6 +1,6 @@
 .background::before{
     content:'';
-    background-image: url("../../public/backgrounds/Fondo_juego.jpg");
+    background-image: url("../../public/backgrounds/Main_BG.png");
     opacity: 0.6;
     position: absolute;
     background-size: cover;
@@ -32,7 +32,7 @@
 .background h1{
     text-align: center;
     font-family: cinzel-bold;
-    font-size: 3.2vh;
+    font-size: 1.5em;
     margin-top: 1.3vh;
 }
 
@@ -40,12 +40,20 @@
     text-decoration: #999999;
 }
 
-.buttonDiv {
+.buttonDiv1 {
     height: 14vh;
     display:flex;
     justify-content: center;
-    margin: 10px;
-    margin-top: 40vh;
+    margin: 5px;
+    margin-top: 25vh;
+}
+
+.buttonDiv2 {
+    height: 14vh;
+    display:flex;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 5vh;
 }
  
 .button{

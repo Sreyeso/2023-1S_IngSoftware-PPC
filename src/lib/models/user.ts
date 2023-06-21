@@ -22,8 +22,6 @@ export default class UserModel{
   collection:any;
   userCoins:number=0;
   userGems:number=0;
-  ranks:any;
-  userRank:any;
   userSkin:string[]=["default_ppc.png","none.png"];
   gachaObjects:string[][]=[["default_ppc.png"],["none.png"]];
   maxScore:number=0;
@@ -115,6 +113,11 @@ export default class UserModel{
       { $addToSet: { 'GachaObjects.1': gachaHat } }
     );
     return result;
+  }
+
+  async deleteUser(user:string){
+    const deletedUser = this.collection.deleteOne({UserName:user})
+    return deletedUser;
   }
 
 }

@@ -88,25 +88,67 @@
     color:rgb(50,50,50)
 }
 
-.buttonChanges{
-    border: 1px solid;
-    height: 80%;
+.personalInformation button{
+    margin-top: 7.5%;
+    width: 45%;
+    align-self: center;
+    min-height: 11%;
+    font-family: cinzel-regular;
+    font-size: medium;
 }
 
-.buttonsPanel{
-    border: 1px solid;
+.skin{
+    box-sizing: border-box;
+    padding-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.skin img{
+    width: 20%;
+    align-self: center;
+}
+
+.rightPanel{
+    /* border: 1px solid; */
     height: stretch;
 }
 
 .buttonsContainer{
-    border: 1px solid;
+    /* border: 1px solid; */
     width: stretch;
     height: stretch;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    width: stretch;
+    height: 100;
+}
+
+.buttonsPanel{
+    height: 20%;
+}
+
+.deleteAccount{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    padding-top: 4%;
+    
+}
+
+.deleteAccount button{
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 3%;
+    font-family: cinzel-regular;
+    font-size: 110%;
 }
 
 .returnToMenu{
     font-family: cinzel-regular;
 }
+
