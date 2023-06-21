@@ -81,6 +81,7 @@ function StartButton(){
         href={'/game'}>
             <img src={"/sprites/generalAssets/START GAME.png"}></img>
         </Link>
+    )
 }
 
 function ProfileButton(){
@@ -152,7 +153,7 @@ function AspectButton(){
         <Link
         className={styles.PPCButton}
         style={{ width: '15%' }}
-        onClick = {openCustomization}
+        onClick = {openAspect}
         href={'/customization'}>
             <img src={"/sprites/generalAssets/ASPECT.png"}></img>
         </Link>
