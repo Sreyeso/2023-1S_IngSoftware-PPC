@@ -54,6 +54,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
       } else { // User is in the top 10
         userRank = userIndex + 1;
       }
+
     }
 
     return {
@@ -130,7 +131,7 @@ export function Profiles({ datos, userName,userRank }: any) {
 function Item({ datos, number, userName, userRank }: any) {
   const isUser = datos.UserName === userName;
   const isTop10 = userRank !== -1;
-
+  
   const itemStyle = {
     backgroundColor: isUser ? (isTop10 ? 'red' : 'blue') : 'default',
   };
