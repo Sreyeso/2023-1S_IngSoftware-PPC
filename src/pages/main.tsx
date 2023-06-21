@@ -1,6 +1,8 @@
 import styles from '../styles/Main.module.css';
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import Link from 'next/link';
+import Image from 'next/image';
 
 type jsAnswer = {
     name: string;
@@ -72,14 +74,13 @@ function StartButton(){
     }
 
     return (
-        <button 
-            type="button"
-            onClick={startGame} 
-            className={styles.button}
-        >
-            <img src = {startButton}></img>    
-        </button>
-    );
+        <Link
+        className={styles.PPCButton}
+        style={{ width: '15%' }}
+        onClick = {startGame}
+        href={'/game'}>
+            <img src={"/sprites/generalAssets/START GAME.png"}></img>
+        </Link>
 }
 
 function ProfileButton(){
@@ -97,13 +98,13 @@ function ProfileButton(){
     }
     
     return (
-        <button 
-            type="button"
-            onClick={openProfile} 
-            className={styles.button}
-        >
-            <img src = {profileButton}></img>    
-        </button>
+        <Link
+        className={styles.PPCButton}
+        style={{ width: '15%' }}
+        onClick = {openProfile}
+        href={'/gacha'}>
+            <img src={"/sprites/generalAssets/PROFILE.png"}></img>
+        </Link>
     );
 }
 
@@ -122,13 +123,13 @@ function RankingButton(){
     }
     
     return (
-        <button 
-            type="button"
-            onClick={openRanking} 
-            className={styles.button}
-        >
-            <img src = {rankingButton}></img>    
-        </button>
+        <Link
+        className={styles.PPCButton}
+        style={{ width: '15%' }}
+        onClick = {openRanking}
+        href={'/rankings'}>
+            <img src={"/sprites/generalAssets/RANKINGS.png"}></img>
+        </Link>
     );
 }
 
@@ -148,13 +149,13 @@ function AspectButton(){
     }
     
     return (
-        <button 
-            type="button"
-            onClick={openAspect} 
-            className={styles.button}
-        >
-            <img src = {aspectButton}></img>    
-        </button>
+        <Link
+        className={styles.PPCButton}
+        style={{ width: '15%' }}
+        onClick = {openCustomization}
+        href={'/customization'}>
+            <img src={"/sprites/generalAssets/ASPECT.png"}></img>
+        </Link>
     );
 }
 
@@ -173,13 +174,13 @@ function GachaButton(){
     }
     
     return (
-        <button 
-            type="button"
-            onClick={openGacha} 
-            className={styles.button}
-        >
-            <img src = {gachaButton}></img>    
-        </button>
+        <Link
+        className={styles.PPCButton}
+        style={{ width: '15%' }}
+        onClick = {openGacha}
+        href={'/gacha'}>
+            <img src={"/sprites/generalAssets/GACHA.png"}></img>
+        </Link>
     );
 }
 
@@ -195,12 +196,13 @@ function LogOutButton(){
     }
     
     return (
-        <button 
-            type="button"
-            onClick={logout} 
-            className={styles.button}
-        >
-            <img src = {logoutButton}></img>    
-        </button>
+        <Link
+        className={styles.PPCButton}
+        style={{ width: '15%' }}
+        onClick={logout}
+        href={'/login'} 
+                >
+            <img src={"/sprites/generalAssets/LOG-OUT.png"} alt="Logout Button" />
+        </Link>
     );
 }
