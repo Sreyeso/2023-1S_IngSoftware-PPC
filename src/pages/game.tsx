@@ -251,13 +251,15 @@ class App extends Component<gameProps> {
                   </div>
 
                   <div className = {styles.buttonContainer}>
-                  <button
+                  <Link
                   className={styles.PPCButton}
                   style={{ width: '15%' }}
                   onClick={logout}
+                  href={'/login'}
+                  
                 >
                   <img src={"/sprites/generalAssets/LOG-OUT.png"} alt="Logout Button" />
-                </button>
+                </Link>
                 </div>
                 </div>          
 
