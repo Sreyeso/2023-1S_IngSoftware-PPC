@@ -1,3 +1,6 @@
+*{
+    background-color: #00000000;
+}
 .videoDiv video{
     position: fixed;
     right: 0;
@@ -22,7 +25,7 @@
     grid-template-columns: 0.8fr 1.2fr;
     grid-template-rows: 1fr;
     padding: 0%;
-    background-color: white;
+    background-color: #00000000;
 }
 
 .logoPPC{
