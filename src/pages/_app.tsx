@@ -1,7 +1,5 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import '@/styles/boardstyle.css';
-import '@/styles/stats.css'
 
 export default function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />

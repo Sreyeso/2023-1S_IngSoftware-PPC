@@ -23,8 +23,7 @@ export default function Profile(props: UserProps){
                     <button 
                     className = {styles.logoutButton}
                     onClick={e => {}}>
-                        {/* <Image src='/buttons/LOG-OUT.png'alt="lol,lmao"></Image> */}
-                        
+                        <img src='/buttons/LOG-OUT.png'></img>
                     </button>
                 </div>
             </main>

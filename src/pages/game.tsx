@@ -196,8 +196,8 @@ export default class App extends Component<Clients> {
     render() {
 
         return (
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60vh' }}>
+            <div style={{display: 'flex', flexDirection:'column'}}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60%' }}>
                 <Sketch 
                   preload={this.preload}
                   setup={this.setup}
@@ -207,7 +207,7 @@ export default class App extends Component<Clients> {
                   
                 />      
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1vh' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
                   <GachaButton showMessageScreen={this.showMessageScreen} />
                   <ProfileButton showMessageScreen={this.showMessageScreen} />
                   <RankingButton showMessageScreen={this.showMessageScreen} />
