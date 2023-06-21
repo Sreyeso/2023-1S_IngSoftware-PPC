@@ -86,9 +86,11 @@ export default class Leaderboard extends Component<Clients> {
         </div>
         <div>
         <div className={styles.buttoncontainer}>
-          <button>
-            <img src="/sprites/generalAssets/PROFILE.png" alt="Perfil" />
-          </button>
+          <a href="\profile">
+            <button>
+              <img src="/sprites/generalAssets/PROFILE.png" alt="Perfil" />
+            </button>
+          </a>  
           <a href="\leaderboard">
             <button>
               <img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings" />

@@ -5,7 +5,6 @@ import DBO from "@/lib/utils/dbo";
 import bcryptjs from 'bcryptjs' 
 import { Credentials } from '@/authentication/variousTypes'
 import { v4 as uuidv4 } from 'uuid'
-import { getCookies } from 'cookies-next'
 
 type Data={ name: string }
 
@@ -40,25 +39,6 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
 
     if(req.method === "GET")
         res.status(401).json({name: "PPC Games Joy"})
-
-    if(req.method === "DELETE"){
-        //Vamos a cerrar sesión
-
-        const cooks = getCookies({req,res})
-        const sesId = cooks.session;
-        console.log(cooks)
-
-        res.setHeader('Set-Cookie', `session=; Expires=Expires=Mon, 20 Mar 1967 00:00:00 GMT; path=/; HttpOnly; secure; SameSite=Strict`)
-        res.status(201).json({name: "PPCGames"})
-
-
-        if(sesId !== undefined){
-            sessions.deleteSessionByHash(sesId)
-        }
-
-        const count = await sessions.count()
-        console.log(count)
-    }
     
 }
 
