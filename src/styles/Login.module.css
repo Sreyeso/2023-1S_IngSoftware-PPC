@@ -126,8 +126,7 @@
 }
 
 .buttonDiv{
-    /* border: 1px solid; */
-    height: 14%;
+    height: 16%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -139,13 +138,13 @@
     background-color: transparent;
     position: relative;
     height: 87%;
+    
     bottom: 0;
 }
 
 .buttonDiv button img{
-    /* position: absolute; */
-    /* bottom: 0; */
     height: 78%;
+    width: 100%;
 }
 
 .buttonDiv button:hover{
@@ -175,14 +174,6 @@
 
 .link a:active{
     color:rgb(68, 68, 242);
-}
-
-.link:nth-child(odd){
-    margin-bottom:1.52%;
-}
-
-.link:nth-child(even){
-    margin-top: 1.5%;
 }
 
 @media (max-width: 1024px){

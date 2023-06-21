@@ -116,7 +116,8 @@ export default class UserModel{
   }
 
   async deleteUser(user:string){
-    const deletedUser = this.collection.deleteOne({UserName:user})
+    const deletedUser = await this.collection.deleteOne({UserName:user})
+    console.log(deletedUser)
     return deletedUser;
   }
 

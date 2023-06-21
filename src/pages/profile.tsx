@@ -40,16 +40,22 @@ export default function Profile(props: UserProps){
     //Still not working!
 
     async function deleteAccount(){
-        const response = await fetch('/api/handleLogin',{
-            method: "DELETE",
-            body: userName,
-        });
 
-        console.log(response)
-        const resJson = await response.json();
-        alert(resJson)
+        alert("Funcionalidad no disponible por el momento")
+
+        // const response = await fetch(`/api/handleLogin/`,{
+        //     method: "DELETE",
+        //     body: JSON.stringify({user: userName}),
+        // });
+
+        // console.log(response)
+        //const resJson = await response.json();
+        //alert(resJson)
     }
 
+    function sendData(){
+        confirm("Funcionalidad no disponible por el momento")
+    }
 
     return(
         <>
@@ -59,54 +65,50 @@ export default function Profile(props: UserProps){
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <main>
-                <div className = {styles.background}>
-                    <div className = {styles.allInside}>
-                        <div className = {styles.content}>
-                            <h2 className = {styles.welcome}>{`Hola ${userName}`}</h2>
-                            <div className={styles.mainFunctionality}>
+                <div className = {styles.background}></div>
+                <div className = {styles.content}>
+                    <h2 className = {styles.welcome}>{`Hola ${userName}`}</h2>
+                    <div className={styles.mainFunctionality}>
+                        <form className={styles.personalInformation}>                                                                        
+                            <h2 className={styles.nonEditable}>Región: {region}</h2>
+                            <h2 className={styles.nonEditable}>Género: {gender}</h2>
+                            <ChangeableInfo label="Usuario" currentValue = {userName} jsonField="user" type="text"></ChangeableInfo>                                    
+                            <ChangeableInfo label="Email" currentValue = {mail} jsonField="email" type="email"></ChangeableInfo>                                    
+                            <ChangeableInfo label="Contraseña" currentValue = {"Cambia tu contraseña"} jsonField="password" type="password"></ChangeableInfo>                                    
+                            <button onClick={sendData}>
+                                Enviar Datos
+                            </button>
+                        </form>
 
-                                <form className={styles.personalInformation}>                                                                        
-                                    <h2 className={styles.nonEditable}>Región: {region}</h2>
-                                    <h2 className={styles.nonEditable}>Género: {gender}</h2>
-                                    <ChangeableInfo label="Usuario" currentValue = {userName} jsonField="user"></ChangeableInfo>                                    
-                                    <ChangeableInfo label="Email" currentValue = {mail} jsonField="email"></ChangeableInfo>                                    
-                                    <ChangeableInfo label="Contraseña" currentValue = {"Cambia tu contraseña"} jsonField="password"></ChangeableInfo>                                    
-                                    <button onClick={()=>{}}>
-                                        Enviar Datos
-                                    </button>
-                                </form>
-
-                                <div className={styles.rightPanel}>
-                                    <div className={styles.skin}>
-                                        <img src={`/sprites/allHats/${userSkin[1]}`} alt="userGorro" />                                    
-                                        <img src={`/sprites/allSkins/${userSkin[0]}`} alt="userSkin" />
-                                    </div>  
-                                    <div className={styles.buttonsPanel}>                                  
-                                        <div className= {styles.buttonsContainer}>
-                                            <PPCButton func={logout} image="sprites/generalAssets/LOG-OUT.png" st={{width:'60%'}}></PPCButton>
-                                        </div>
-                                        <div className = {styles.buttonsContainer}>
-                                            <PPCButton func={() => {router.push("/rankings")}} image="sprites/generalAssets/RANKINGS.png" st={{width:'60%'}}> </PPCButton>                                                                        
-                                        </div>
-                                        <div className = {styles.buttonsContainer}>
-                                            <PPCButton func={() => {router.push("/stats")}} image="sprites/generalAssets/STATS.png" st={{width:'60%'}}> </PPCButton>                                                                        
-                                        </div>
-                                        <div className = {styles.deleteAccount}>
-                                            <button onClick={deleteAccount}>
-                                                Eliminar Cuenta
-                                            </button>
-                                        </div>
-                                    </div>
+                        <div className={styles.rightPanel}>
+                            <div className={styles.skin}>
+                                <img src={`/sprites/allHats/${userSkin[1]}`} alt="userGorro" />                                    
+                                <img src={`/sprites/allSkins/${userSkin[0]}`} alt="userSkin" />
+                            </div>  
+                            <div className={styles.buttonsPanel}>                                  
+                                <div className= {styles.buttonsContainer}>
+                                    <PPCButton func={logout} image="sprites/generalAssets/LOG-OUT.png" st={{width:'60%', marginTop:'4%'}}></PPCButton>
                                 </div>
-                        </div>
-                            <Link 
-                            className={generalStyles.link}
-                            style={{fontSize:'120%', marginTop:'2%'}}
-                            href="/main">
-                                Volver al Menú Principal
-                            </Link>
+                                <div className = {styles.buttonsContainer}>
+                                    <PPCButton func={() => {router.push("/rankings")}} image="sprites/generalAssets/RANKINGS.png" st={{width:'60%', marginTop:'4%'}}> </PPCButton>                                                                        
+                                </div>
+                                <div className = {styles.buttonsContainer}>
+                                    <PPCButton func={() => {router.push("/stats")}} image="sprites/generalAssets/STATS.png" st={{width:'60%', marginTop:'4%'}}> </PPCButton>                                                                        
+                                </div>
+                                <div className = {styles.deleteAccount}>
+                                    <button onClick={deleteAccount}>
+                                        Eliminar Cuenta
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <Link 
+                    className={generalStyles.link}
+                    style={{fontSize:'120%', marginTop:'2%'}}
+                    href="/main">
+                        Volver al Menú Principal
+                    </Link>
                 </div>
             </main>
         </>
@@ -114,13 +116,13 @@ export default function Profile(props: UserProps){
 }
 
 function ChangeableInfo(props:any){
-    const { label, currentValue, jsonField } = props;
+    const { label, currentValue, jsonField, type } = props;
 
     return (
         <div className={styles.inputLabelDiv}>
             <h2 className={styles.label}>{label}</h2>
             <input 
-            type="text" 
+            type={type}
             placeholder={currentValue}
             onChange={e => {
                 e.preventDefault()
@@ -154,8 +156,6 @@ export async function getServerSideProps(ctx: { req: any; }){
       const {req} = ctx;
       const userName:string= req.headers.user;
       let userData = await UDO.getUser(userName);
-
-     console.log(userData)
 
       if (userData) {
         userCoins = userData.CoinAmount;

@@ -8,7 +8,7 @@ import path from 'path'
 import UserModel from '@/lib/models/user'
 import DBO from "@/lib/utils/dbo";
 import authData from '@/authentication/joinParams'
-import { Data, UserFromFrontend, KeyUserFromFrontend} from '@/authentication/variousTypes'
+import { Data, UserFromFrontend, KeyUserFromFrontend, ChangeableData} from '@/authentication/variousTypes'
 import insults from '@/authentication/insults'
 
 type UserToSave = [string, string, string, string, string, number, number, number]
@@ -45,6 +45,17 @@ export default async function handler(
         if(code === 201 && user !== null)
           sendWelcomeMail(user);
       })
+    }
+
+    if(req.method==="POST"){
+      let dataReceived;
+      try{
+        dataReceived = JSON.parse(req.body);
+        res.status(400).json({name: "No sirve por el momento"});
+      }catch(error){
+        console.log (error)
+        res.status(400).json({name: "Invalid Request"});
+      }
     }
   
 }
@@ -227,3 +238,18 @@ async function sendWelcomeMail(user: UserToSave){
   .then(() => console.log("Correo Enviado"))
   .catch(error => console.log(error));
 }
+
+// async function changeData (dataReceived: ChangeableData): Promise<[number, string, null | UserToSave]>{
+//   if(dataReceived.email !== ''){
+
+//   }
+
+//   if(dataReceived.user !== ''){
+    
+//   }
+
+//   if(dataReceived.password !== ''){
+    
+//   }
+
+// }

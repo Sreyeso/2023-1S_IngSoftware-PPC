@@ -14,6 +14,7 @@ import UserModel from "@/lib/models/user";
 import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
 import Gacha from "@/lib/classes/Gacha";
+import PPCButton from "@/components/PPCButton";
 
 //Main sketch fuction (AKA Game)
 const Sketch = dynamic(() => import("react-p5").then((mod) => {   // Sketch object
@@ -832,125 +833,28 @@ class App extends Component<gachaProps> {
           />
         </div>
         <div className={styles.flex}>
-                  <div className = {styles.buttonContainer}>
-                    <StartButton showMessageScreen={this.showMessageScreen} />                                                                     
-                  </div>
-                  
-                  <div className = {styles.buttonContainer}>
-                  <ProfileButton showMessageScreen={this.showMessageScreen} />
-                  </div>
-
-                  <div className = {styles.buttonContainer}>
-                  <CustomizeButton showMessageScreen={this.showMessageScreen} />
-                  </div>
-                  
-                  <div className = {styles.buttonContainer}>
-                  <RankingButton showMessageScreen={this.showMessageScreen} />
-                  </div>
-
-                  <div className = {styles.buttonContainer}>
-                  <button
-                  className={styles.PPCButton}
-                  style={{ width: '15%' }}
-                  onClick={logout}
-                >
-                  <img src={"/sprites/generalAssets/LOG-OUT.png"} alt="Logout Button" />
-                </button>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/START GAME.png" func={()=>{router.push('/game')}} st={{width:'100%'}}></PPCButton>                  
                 </div>
-                </div>          
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/PROFILE.png" func={()=>{router.push('/profile')}} st={{width:'100%'}}></PPCButton>                  
+                </div>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/ASPECT.png" func={()=>{router.push('/aspect')}} st={{width:'100%'}}></PPCButton>                  
+                </div>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/RANKINGS.png" func={()=>{router.push('/rankings')}} st={{width:'100%'}}></PPCButton>
+                </div>
+                <div style={{width:'12%'}} className={styles.buttonContainer}>
+                  <PPCButton image="/sprites/generalAssets/LOG-OUT.png" func={logout} st={{width:'100%'}}></PPCButton>
+                </div>
+                </div>   
+                          
 
             </div>
     );
   }
 
-}
-
-type jsAnswer = {
-    name: string;
-}
-
-type ButtonProps = {
-  showMessageScreen: (js: jsAnswer) => void;
-};
-function StartButton(props: ButtonProps) {
-  async function startGame() {
-    props.showMessageScreen({ name: 'Iniciando Juego...' });
-    window.location.href = '/game';
-  }
-
-  return(
-    <button
-    className={styles.PPCButton}
-    style={{ width: '15%' }}
-    onClick = {startGame}>
-        <img src={"/sprites/generalAssets/START GAME.png"}></img>
-    </button>
-  );
-}
-
-function CustomizeButton(props: ButtonProps) {
-  async function openCustomization() {
-    props.showMessageScreen({ name: 'Abriendo personalizacion...' });
-    window.location.href = '/customization';
-  }
-
-  return(
-    <button
-    className={styles.PPCButton}
-    style={{ width: '15%' }}
-    onClick = {openCustomization}>
-        <img src={"/sprites/generalAssets/ASPECT.png"}></img>
-    </button>
-  );
-}
-
-function ProfileButton(props: ButtonProps) {
-  async function openProfile() {
-    props.showMessageScreen({ name: 'Entrando al perfil del jugador...' });
-    window.location.href = '/customization';
-  }
-
-  return(
-    <button
-    className={styles.PPCButton}
-    style={{ width: '15%' }}
-    onClick = {openProfile}>
-        <img src={"/sprites/generalAssets/PROFILE.png"}></img>
-    </button>
-  );
-}
-
-function GachaButton(props: ButtonProps) {
-  async function openGacha() {
-    props.showMessageScreen({ name: 'Entrando al GACHA...' });
-    window.location.href = '/gacha';
-  }
-
-  return(
-    <button
-    className={styles.PPCButton}
-    style={{ width: '15%' }}
-    onClick = {openGacha}>
-        <img src={"/sprites/generalAssets/GACHA.png"}></img>
-    </button>
-  );
-}
-
-function RankingButton(props: ButtonProps) {
-  async function openRanking() {
-    props.showMessageScreen({ name: 'Entrando al Ranking...' });
-    window.location.href = '/rankings';
-  }
-
-
-  return(
-    <button
-    className={styles.PPCButton}
-    style={{ width: '15%' }}
-    onClick = {openRanking}>
-        <img src={"/sprites/generalAssets/RANKINGS.png"}></img>
-    </button>
-  );
 }
 
 export default withRouter(App);

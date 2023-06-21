@@ -10,7 +10,7 @@ import { UserFromFrontend, KeyUserFromFrontend } from '@/authentication/variousT
 let inputFields = [ //Para poner los nombres por defecto de los campos,
     //y el nombre de la correspondiente propiedad en userToSend
     ["Usuario", "username","text"],
-    ["Correo", "email","text"],
+    ["Correo", "email","email"],
     ["Género","gender","select"],
     ["Región","region","select"], 
     ["Contraseña","password","password"],
@@ -138,7 +138,7 @@ function SubmitForm(props: DataProps){
                 onClick={sendNewUser}
                 className={styles.button}
                 >
-                    <img src = '/assets/JOIN.png'></img>
+                    <img src = '/sprites/generalAssets/JOIN.png'></img>
                 </button>
             </div>            
         </form>

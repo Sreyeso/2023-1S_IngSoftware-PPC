@@ -79,9 +79,6 @@ export default function Login(){
                             <h3 className={styles.link}>
                                 <Link href="/join_ppc">¿Aún no tienes una cuenta? Crea una</Link>
                             </h3>
-                            <h3 className = {styles.link}>
-                                <Link href="/restore_password">¿Has olvidado tu contraseña?</Link>
-                            </h3>
                         </div>
                     </form>
                 </div>    

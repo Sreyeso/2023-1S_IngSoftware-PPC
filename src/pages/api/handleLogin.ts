@@ -40,22 +40,23 @@ export default async function handleLogin(req: NextApiRequest, res: NextApiRespo
     if(req.method === "GET")
         res.status(401).json({name: "PPC Games Joy"})
 
-    if(req.method === "DELETE"){
-        const user = req.body;
+    // if(req.method === "DELETE"){
+    //     const {userID} = req.query;
+    //     console.log(userID)
+        
+    //     const user = req.body.user;
 
-        console.log(`xd ${user}`)
+    //     console.log(`xd ${user}`)
 
-        try{
-            const deletedUser = await userModel.deleteUser(user)
-            res.status(200).json({name: "Usuario eliminado correctamente"})
-        }catch(error){
-            console.log(error)
-            res.status(500).json({name: "Error. No se pudo eliminar la cuenta"})
-        }
+    //     try{
+    //         const deletedUser = await userModel.deleteUser(user)
+    //         res.status(200).json({name: "Usuario eliminado correctamente"})
+    //     }catch(error){
+    //         console.log(error)
+    //         res.status(500).json({name: "Error. No se pudo eliminar la cuenta"})
+    //     }
 
-
-
-    }
+    // }
     
 }
 
