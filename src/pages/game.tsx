@@ -13,6 +13,10 @@ import { GetServerSideProps } from "next";
 import Clients from "@/lib/models/user";
 import Profile from "./profile";
 
+import styles from '../styles/stats.module.css';
+import { withRouter, NextRouter } from 'next/router';
+
+
 // Will only import `react-p5` on client-side
 const Sketch = dynamic(() => import("react-p5").then((mod) => {
 
@@ -71,11 +75,16 @@ export async function getServerSideProps(ctx: { req: any; }) {
   }
 }
 
-export default class App extends Component<Clients> {
+interface gameProps extends Clients {
+  router: NextRouter;
+}
+
+class App extends Component<gameProps> {
 
       constructor(props:any) {
         super(props);
         // Bind the function to the class instance
+        
         this.showMessageScreen = this.showMessageScreen.bind(this);
       }
 
@@ -194,6 +203,14 @@ export default class App extends Component<Clients> {
     }
 
     render() {
+      const { router } = this.props;
+
+      async function logout() {
+        await fetch('/api/getSessions', {
+          method: "DELETE",
+        });
+        router.push('/login');
+      }
 
         return (
             <div style={{display: 'flex', flexDirection:'column'}}>
@@ -207,12 +224,34 @@ export default class App extends Component<Clients> {
                   
                 />      
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40%' }}>
-                  <GachaButton showMessageScreen={this.showMessageScreen} />
+              <div className={styles.flex}>
+                  <div className = {styles.buttonContainer}>
+                    <GachaButton showMessageScreen={this.showMessageScreen} />                                                                     
+                  </div>
+                  
+                  <div className = {styles.buttonContainer}>
                   <ProfileButton showMessageScreen={this.showMessageScreen} />
+                  </div>
+
+                  <div className = {styles.buttonContainer}>
+                  <CustomizeButton showMessageScreen={this.showMessageScreen} />
+                  </div>
+                  
+                  <div className = {styles.buttonContainer}>
                   <RankingButton showMessageScreen={this.showMessageScreen} />
+                  </div>
+
+                  <div className = {styles.buttonContainer}>
+                  <button
+                  className={styles.PPCButton}
+                  style={{ width: '15%' }}
+                  onClick={logout}
+                >
+                  <img src={"/sprites/generalAssets/LOG-OUT.png"} alt="Logout Button" />
+                </button>
+                </div>
                 </div>          
-              
+
             </div>
         );
     };
@@ -233,9 +272,28 @@ function StartButton(props: ButtonProps) {
     window.location.href = '/game';
   }
 
-  return (
-    <button className="btn btn-primary button" onClick={startGame}>
-      <Image src="/sprites/generalAssets/START GAME.png" alt="lol, lmao" height="100" width="100"></Image>
+  return(
+    <button
+    className={styles.PPCButton}
+    style={{ width: '15%' }}
+    onClick = {startGame}>
+        <img src={"/sprites/generalAssets/START GAME.png"}></img>
+    </button>
+  );
+}
+
+function CustomizeButton(props: ButtonProps) {
+  async function openCustomization() {
+    props.showMessageScreen({ name: 'Abriendo personalizacion...' });
+    window.location.href = '/customization';
+  }
+
+  return(
+    <button
+    className={styles.PPCButton}
+    style={{ width: '15%' }}
+    onClick = {openCustomization}>
+        <img src={"/sprites/generalAssets/ASPECT.png"}></img>
     </button>
   );
 }
@@ -246,9 +304,12 @@ function ProfileButton(props: ButtonProps) {
     window.location.href = '/customization';
   }
 
-  return (
-    <button className="btn btn-primary button" onClick={openProfile}>
-      <Image src="/sprites/generalAssets/PROFILE.png" alt="lol, lmao" height="100" width="100"></Image>
+  return(
+    <button
+    className={styles.PPCButton}
+    style={{ width: '15%' }}
+    onClick = {openProfile}>
+        <img src={"/sprites/generalAssets/PROFILE.png"}></img>
     </button>
   );
 }
@@ -259,9 +320,12 @@ function GachaButton(props: ButtonProps) {
     window.location.href = '/gacha';
   }
 
-  return (
-    <button className="btn btn-primary button" onClick={openGacha}>
-      <Image src="/sprites/generalAssets/GACHA.png" alt="lol, lmao" height="100" width="100"></Image>
+  return(
+    <button
+    className={styles.PPCButton}
+    style={{ width: '15%' }}
+    onClick = {openGacha}>
+        <img src={"/sprites/generalAssets/GACHA.png"}></img>
     </button>
   );
 }
@@ -272,9 +336,15 @@ function RankingButton(props: ButtonProps) {
     window.location.href = '/rankings';
   }
 
-  return (
-    <button className="btn btn-primary button" onClick={openRanking}>
-      <Image src="/sprites/generalAssets/RANKINGS.png" alt="lol, lmao" height="100" width="100"></Image>
+
+  return(
+    <button
+    className={styles.PPCButton}
+    style={{ width: '15%' }}
+    onClick = {openRanking}>
+        <img src={"/sprites/generalAssets/RANKINGS.png"}></img>
     </button>
   );
 }
+
+export default withRouter(App);

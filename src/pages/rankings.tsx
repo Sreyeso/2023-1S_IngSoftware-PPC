@@ -4,6 +4,8 @@ import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import Clients from "@/lib/models/user";
 import styles from '../styles/boardstyle.module.css';
+import PPCButton from "@/components/PPCButton";
+import { withRouter, NextRouter } from 'next/router';
 
 export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null;
@@ -74,10 +76,25 @@ export async function getServerSideProps(ctx: { req: any; }) {
 
 //tuto tomado de: https://www.youtube.com/watch?v=p_046Qe19p0
 
-export default class Leaderboard extends Component<Clients> {
-  render() {
-    const { ranks, userName,userRank } = this.props;
 
+interface LeaderboardProps extends Clients{
+  router: NextRouter;
+  ranks: any[];
+  userRank: number | undefined;
+}
+
+class Leaderboard extends Component<LeaderboardProps> {
+
+  render() {
+    const { ranks, userName, userRank, router } = this.props;
+
+    async function logout() {
+      await fetch('/api/getSessions', {
+        method: "DELETE",
+      })
+      router.push('/login')
+    }
+    
     return (
       <div className={styles.all}>
         <div className={styles.board}>
@@ -85,22 +102,29 @@ export default class Leaderboard extends Component<Clients> {
           <Profiles datos={ranks} userName={userName} userRank={userRank} />
         </div>
         <div>
-        <div className={styles.buttoncontainer}>
-          <a href="\profile">
-            <button>
-              <img src="/sprites/generalAssets/PROFILE.png" alt="Perfil" />
-            </button>
-          </a>  
-          <a href="\leaderboard">
-            <button>
-              <img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings" />
-            </button>
-          </a>
-          <a href="\stats">
-            <button>
-              <img src="/sprites/generalAssets/GACHA.png" alt="Gacha" />
-            </button>
-          </a>
+          <div className={styles.flex}>
+          <div className={styles.buttoncontainer}>
+            <PPCButton
+              func={() => router.push("/profile")}
+              image="sprites/generalAssets/PROFILE.png"
+              st={{ width: '15%' }}
+            />
+            <PPCButton
+              func={() => router.push("/game")}
+              image="sprites/generalAssets/START GAME.png"
+              st={{ width: '15%' }}
+            />
+            <PPCButton
+              func={() => router.push("/stats")}
+              image="sprites/generalAssets/STATS.png"
+              st={{ width: '15%' }}
+            />
+            <PPCButton
+              func={logout}
+              image="sprites/generalAssets/LOG-OUT.png"
+              st={{ width: '15%' }}
+            />
+          </div>
         </div>
         </div>
       </div>
@@ -161,3 +185,5 @@ function Item({ datos, number, userName, userRank }: any) {
     </tr>
   );
 }
+
+export default withRouter(Leaderboard);

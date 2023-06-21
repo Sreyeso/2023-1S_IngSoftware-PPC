@@ -4,8 +4,15 @@
 .all{
   font-family: "Poppins", cursive;
   margin: 0;
+  display: flex;
+  justify-content: center; /* horizontally center the content */
+  align-items: center; /* vertically center the content */
 }
 
+.statsContainer {
+    /* ... existing styles ... */
+    text-align: center; /* center the table content */
+  }
 
 .all table {
     border: 0.5em solid rgb(124, 30, 46);
@@ -28,3 +35,10 @@
 .stats {
     display: flex;
 }
+
+.flex {
+    /* ... existing styles ... */
+    display: flex;
+    justify-content: center; /* center the buttons horizontally */
+    margin-top: 20px; /* add some spacing between the table and buttons */
+  }

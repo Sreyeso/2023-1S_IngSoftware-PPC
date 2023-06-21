@@ -28,8 +28,6 @@ export default function Profile(props: UserProps){
 
     const {userName, region, gender, mail, userSkin } = props;
 
-
-    console.log(userSkin)
     const router = useRouter();
 
     async function logout(){
@@ -56,7 +54,7 @@ export default function Profile(props: UserProps){
     return(
         <>
             <Head>
-                <title>Your PPC profile</title>
+                <title>Your profile</title>
                 <meta name="description" content="Login PPC Games" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
@@ -89,6 +87,9 @@ export default function Profile(props: UserProps){
                                         </div>
                                         <div className = {styles.buttonsContainer}>
                                             <PPCButton func={() => {router.push("/rankings")}} image="sprites/generalAssets/RANKINGS.png" st={{width:'60%'}}> </PPCButton>                                                                        
+                                        </div>
+                                        <div className = {styles.buttonsContainer}>
+                                            <PPCButton func={() => {router.push("/stats")}} image="sprites/generalAssets/STATS.png" st={{width:'60%'}}> </PPCButton>                                                                        
                                         </div>
                                         <div className = {styles.deleteAccount}>
                                             <button onClick={deleteAccount}>
