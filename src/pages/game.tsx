@@ -211,7 +211,8 @@ export default class App extends Component<Clients> {
                   <GachaButton showMessageScreen={this.showMessageScreen} />
                   <ProfileButton showMessageScreen={this.showMessageScreen} />
                   <RankingButton showMessageScreen={this.showMessageScreen} />
-              </div>          
+                </div>          
+              
             </div>
         );
     };
