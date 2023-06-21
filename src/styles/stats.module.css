@@ -5,31 +5,49 @@
   font-family: "Poppins", cursive;
   margin: 0;
   display: flex;
-  justify-content: center; /* horizontally center the content */
-  align-items: center; /* vertically center the content */
+  flex-direction: column; /* Change flex direction to column */
+  justify-content: center;
+  align-items: center;
+}
+
+.container{
+  
+  height: 100;
 }
 
 .statsContainer {
-    /* ... existing styles ... */
-    text-align: center; /* center the table content */
+  text-align: center; /* center the table content */
+  background-color: rgba(255, 255, 255, 0.8);  
+  flex: 1;
+}
+
+  .all table {
+    width: 100%; /* Adjust the width to fill the wrapper div */
+    height: 100%;
+    border-collapse: collapse;
   }
 
-.all table {
-    border: 0.5em solid rgb(124, 30, 46);
-    width: 50em;
-    height: 10em;
-    margin: auto;
-    margin-top: 2rem;
+  .all th.heading {
+    font-size: 24px; /* Adjust the font size as needed */
+  }
+
+.all .tableWrapper {
+  border: 0.5em solid rgb(124, 30, 46);
+  margin: auto;
+  margin-top: 2rem;
+  overflow: auto; /* Add overflow property to allow scrolling if the content is larger than the table */
+  
 }
  
 .all th {
     border-bottom: 0.5em solid rgb(189, 45, 45);
-    text-align: center;
+    padding: 0.5em;
 }
  
 .all td {
-    text-align: center;
-    display: flex;
+    text-align: center; /* center the table cell content */
+    padding: 0.5em; /* add padding for spacing */
+    border: 1px solid rgb(124, 30, 46);
 }
 
 .stats {
@@ -41,4 +59,10 @@
     display: flex;
     justify-content: center; /* center the buttons horizontally */
     margin-top: 20px; /* add some spacing between the table and buttons */
+    margin-bottom: 20px; /* Add margin-bottom to create space between the table and buttons */
   }
+
+/* stats.module.css */
+.centered {
+  text-align: center;
+}
