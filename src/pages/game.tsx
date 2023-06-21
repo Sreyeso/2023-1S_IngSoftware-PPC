@@ -214,7 +214,7 @@ class App extends Component<gameProps> {
       }
 
         return (
-          <div className={styles.background}>
+          <div style={{background:'black'}}>
                         
                 
             <div style={{display: 'flex', flexDirection:'column'}}>
