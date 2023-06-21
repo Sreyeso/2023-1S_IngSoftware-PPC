@@ -820,6 +820,14 @@ class App extends Component<gachaProps> {
     }
 
     return (
+      <main>
+      <style jsx global>
+                  {`
+                      body {
+                          background: black;
+                      }
+                  `}
+                </style>
       <div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <Sketch
@@ -860,6 +868,7 @@ class App extends Component<gachaProps> {
                 </div>          
 
             </div>
+            </main>
     );
   }
 

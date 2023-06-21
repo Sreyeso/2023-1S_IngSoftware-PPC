@@ -96,6 +96,14 @@ class Leaderboard extends Component<LeaderboardProps> {
     }
     
     return (
+      <main>
+        <style jsx global>
+                  {`
+                      body {
+                          background: black;
+                      }
+                  `}
+                </style>
       <div className={styles.all}>
         <div className={styles.board}>
           <h1 className={styles.leaderboard}>Rankings</h1>
@@ -128,6 +136,7 @@ class Leaderboard extends Component<LeaderboardProps> {
         </div>
         </div>
       </div>
+      </main>
     );
   }
 }
@@ -151,6 +160,7 @@ export function Profiles({ datos, userName,userRank }: any) {
         </tbody>
       </table>
       </div>
+      
   );
 }
 

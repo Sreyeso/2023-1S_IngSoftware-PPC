@@ -610,6 +610,14 @@ class App extends Component<customizationProps> {
       router.push('/login');
     }
     return (
+      <main>
+      <style jsx global>
+                  {`
+                      body {
+                          background: black;
+                      }
+                  `}
+                </style>
       <div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <Sketch
@@ -651,6 +659,7 @@ class App extends Component<customizationProps> {
                 </div>          
 
             </div>
+            </main>
     );
   };
 

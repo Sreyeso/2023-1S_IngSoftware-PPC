@@ -38,6 +38,7 @@ export default function Login(){
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <main>
+                
                 <div className={styles.videoDiv}>
                         <video autoPlay loop muted>
                             <source src="backgrounds/gameplay3.mp4" type="video/mp4"></source>

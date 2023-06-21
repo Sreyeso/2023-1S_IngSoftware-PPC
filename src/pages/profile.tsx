@@ -59,6 +59,7 @@ export default function Profile(props: UserProps){
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <main>
+                
                 <div className = {styles.background}>
                     <div className = {styles.allInside}>
                         <div className = {styles.content}>
