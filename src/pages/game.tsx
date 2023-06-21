@@ -197,7 +197,7 @@ export default class App extends Component<Clients> {
     render() {
 
         return (
-            <body style={Style}>
+            <body style={{backgroundColor:'black'}}>
             <div style={{display: 'flex', flexDirection:'column'}}>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'top', height: '60%' }}>
                 <Sketch 
