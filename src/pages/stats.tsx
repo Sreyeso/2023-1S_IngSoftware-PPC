@@ -3,6 +3,7 @@ import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import Clients from "@/lib/models/user";
+import styles from '../styles/stats.module.css';
 
 export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null; // Initialize DB variable with null
@@ -80,8 +81,8 @@ export async function getServerSideProps(ctx: { req: any; }) {
   export default class Statistics extends Component<Clients>{
     render() {
     return(
-    <div>
-    <div className="stats">
+    <div className={styles.all}>
+    <div className={styles.stats}>
     <table>
         <tbody>
         <tr>
@@ -105,10 +106,10 @@ export async function getServerSideProps(ctx: { req: any; }) {
         </tbody>
     </table>
     </div>
-      <div className="flex">
+      <div className={styles.flex}>
           <button><img src="./sprites/generalAssets/LOG-OUT.png" alt="Iniciar Juego"/></button>
           <button><img src="./sprites/generalAssets/PROFILE.png" alt="Perfil"/></button>
-          <a href="\webleader"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
+          <a href="\rankings"><button><img src="./sprites/generalAssets/RANKINGS.png" alt="Rankings"/></button></a>
           <button><img src="./sprites/generalAssets/GACHA.png" alt="Gacha"/></button>
       </div>
     </div>

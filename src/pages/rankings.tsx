@@ -3,6 +3,7 @@ import DBO from "@/lib/utils/dbo";
 import UserModel from "@/lib/models/user";
 import StatsModel from "@/lib/models/stats";
 import Clients from "@/lib/models/user";
+import styles from '../styles/boardstyle.module.css';
 
 export async function getServerSideProps(ctx: { req: any; }) {
   let DB: DBO | null = null;
@@ -53,6 +54,7 @@ export async function getServerSideProps(ctx: { req: any; }) {
       } else { // User is in the top 10
         userRank = userIndex + 1;
       }
+
     }
 
     return {
@@ -77,15 +79,13 @@ export default class Leaderboard extends Component<Clients> {
     const { ranks, userName,userRank } = this.props;
 
     return (
-      <div>
-        <div className="board">
-          <h1 className="leaderboard">Rankings</h1>
+      <div className={styles.all}>
+        <div className={styles.board}>
+          <h1 className={styles.leaderboard}>Rankings</h1>
           <Profiles datos={ranks} userName={userName} userRank={userRank} />
         </div>
         <div>
-          <button>
-            <img src="/sprites/generalAssets/LOG-OUT.png" alt="Logout" />
-          </button>
+        <div className={styles.buttoncontainer}>
           <button>
             <img src="/sprites/generalAssets/PROFILE.png" alt="Perfil" />
           </button>
@@ -100,6 +100,7 @@ export default class Leaderboard extends Component<Clients> {
             </button>
           </a>
         </div>
+        </div>
       </div>
     );
   }
@@ -109,8 +110,10 @@ export function Profiles({ datos, userName,userRank }: any) {
   // Filter out undefined elements
   const filteredDatos = datos.filter((dato: any) => dato !== undefined);
   return (
-    <div id="profile">
-      {filteredDatos.map((data: any, index: number) => (
+    <div className={styles.tablecontainer}>
+      <table className={styles.table}>
+        <tbody>
+        {filteredDatos.map((data: any, index: number) => (
         <Item
           key={index}
           datos={data}
@@ -119,34 +122,40 @@ export function Profiles({ datos, userName,userRank }: any) {
           userRank={userRank}
         />
       ))}
-    </div>
+        </tbody>
+      </table>
+      </div>
   );
 }
 
 function Item({ datos, number, userName, userRank }: any) {
   const isUser = datos.UserName === userName;
   const isTop10 = userRank !== -1;
-
+  
   const itemStyle = {
-    backgroundColor: isUser ? (isTop10 ? 'red' : 'blue') : 'default',
+    backgroundColor: isUser ? (isTop10 ? 'goldenrod' : 'lightblue') : 'default',
   };
 
   return (
-    <div className="flex">
-      <div className="item" style={itemStyle}>
-        <h1>{isUser ? 'Tú:' : number}</h1>
-        <div className="fulluser">
-          <img src={`/sprites/allHats/${datos.CurrentAspect[1]}`} alt="userGorro" />
-          <img src={`/sprites/allSkins/${datos.CurrentAspect[0]}`} alt="userSkin" />
+    <tr className={styles.flex}>
+      <td className={styles.item} style={itemStyle}>
+        <div className={styles.itemcontent}>
+          <div className={styles.itemnumber}>{isUser ? "Tú:" : number}</div>
+          <div className={styles.fulluser}>
+            <div className={styles.userhat}>
+              <img src={`/sprites/allHats/${datos.CurrentAspect[1]}`} alt="userGorro" />
+            </div>
+            <div className={styles.userskin}>
+              <img src={`/sprites/allSkins/${datos.CurrentAspect[0]}`} alt="userSkin" />
+            </div>
+          </div>
+          <div className={styles.info}>
+            <h3 className={isUser ? `${styles.useritem} ${styles.username}` : styles.userrank}>{datos.UserName}</h3>
+            <div className={styles.region}>{datos.Region}</div>
+          </div>
+          <div className={styles.score}>Score: {datos.HiScore}</div>
         </div>
-        <div className="info">
-          <h3 className={isUser ? 'user-item' : 'user-rank'}>{datos.UserName}</h3>
-          <span>Región: {datos.Region}</span>
-        </div>
-      </div>
-      <div className="item">
-        <span className={isUser ? '' : 'below-top-10'}>Score: {datos.HiScore}</span>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 }

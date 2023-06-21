@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+
+.all{
+  font-family: "Poppins", cursive;
+  margin: 0;
+}
+
+
+.all table {
+    border: 0.5em solid rgb(124, 30, 46);
+    width: 50em;
+    height: 10em;
+    margin: auto;
+    margin-top: 2rem;
+}
+ 
+.all th {
+    border-bottom: 0.5em solid rgb(189, 45, 45);
+    text-align: center;
+}
+ 
+.all td {
+    text-align: center;
+    display: flex;
+}
+
+.stats {
+    display: flex;
+}
